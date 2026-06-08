@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CitizenReady — Pass Your Canadian Citizenship Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#F2EFE9;font-family:'Source Sans 3',sans-serif;color:#0A1628}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#F2EFE9}
+::-webkit-scrollbar-thumb{background:#D52B1E;border-radius:3px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes leafSpin{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.1)}100%{transform:rotate(360deg) scale(1)}}
+.fade-up{animation:fadeUp 0.4s ease both}
+.card-hover{transition:transform 0.2s,box-shadow 0.2s;cursor:pointer}
+.card-hover:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(10,22,40,0.13)}
+.opt-btn{transition:all 0.15s;cursor:pointer;width:100%;border-radius:10px;padding:14px 16px;text-align:left;font-size:15px;display:flex;align-items:center;gap:12px}
+.opt-btn:active{transform:scale(0.98)}
+.nav-link{transition:all 0.15s;background:transparent;color:#FAFAF8;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit}
+.nav-link:hover{background:rgba(255,255,255,0.08)}
+.nav-link.active{background:#D52B1E}
+#app{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1}
+@media(max-width:700px){
+  .hide-mobile{display:none!important}
+  .mobile-full{width:100%!important}
+  .mobile-col{flex-direction:column!important}
+  .mobile-h1{font-size:28px!important}
+  .mobile-grid{grid-template-columns:1fr!important}
+  .show-mobile{display:block!important}
+}
+.show-mobile{display:none}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+// ─── CONSTANTS ────────────────────────────────────────────────────────────────
+const C = {
+  red:"#D52B1E",redDark:"#A8221A",redLight:"#FDECEA",maple:"#FF6B35",gold:"#C8973A",
+  navy:"#0A1628",navyMid:"#152340",navyLight:"#1E3A5F",white:"#FAFAF8",offWhite:"#F2EFE9",
+  grey:"#8A8A8A",greyLight:"#E8E4DC",green:"#2D6A4F",greenLight:"#E8F5E9"
+};
+
+const PROVINCES = [
+  {id:"all",name:"All of Canada",flag:"🍁",capital:null},
+  {id:"on",name:"Ontario",flag:"🏛️",capital:"Toronto"},
+  {id:"qc",name:"Quebec",flag:"⚜️",capital:"Quebec City"},
+  {id:"bc",name:"British Columbia",flag:"🌲",capital:"Victoria"},
+  {id:"ab",name:"Alberta",flag:"🏔️",capital:"Edmonton"},
+  {id:"mb",name:"Manitoba",flag:"🦬",capital:"Winnipeg"},
+  {id:"sk",name:"Saskatchewan",flag:"🌾",capital:"Regina"},
+  {id:"ns",name:"Nova Scotia",flag:"⚓",capital:"Halifax"},
+  {id:"nb",name:"New Brunswick",flag:"🌿",capital:"Fredericton"},
+  {id:"nl",name:"Newfoundland & Labrador",flag:"🐟",capital:"St. John's"},
+  {id:"pe",name:"Prince Edward Island",flag:"🌿",capital:"Charlottetown"},
+  {id:"yt",name:"Yukon",flag:"⛰️",capital:"Whitehorse"},
+  {id:"nt",name:"Northwest Territories",flag:"❄️",capital:"Yellowknife"},
+  {id:"nu",name:"Nunavut",flag:"🧊",capital:"Iqaluit"},
+];
+
+const PROVINCE_QUESTIONS = {
+  on:[141,145,149,154,155,172,173,175,176,177,199],
+  qc:[46,59,60,62,71,72,80,133,152,173,174,195],
+  bc:[143,150,207,211],ab:[153,156,196,206],mb:[51,52,153,160],sk:[153,159,196],
+  ns:[158,162,180],nb:[163,174,180],nl:[37,38,165,180],pe:[151,164,180,208],
+  yt:[56,166],nt:[119,120,121,167],nu:[119,120,121,168,225],
+};
+
+const ALL_QUESTIONS = [
+  {id:1,category:"Rights & Responsibilities",q:"What are the two official languages of Canada?",options:["English and French","English and Spanish","French and Indigenous languages","English and Indigenous languages"],answer:0},
+  {id:2,category:"Rights & Responsibilities",q:"Which document protects the rights and freedoms of Canadians?",options:["The Constitution Act","The Canadian Charter of Rights and Freedoms","The British North America Act","The Magna Carta"],answer:1},
+  {id:3,category:"Rights & Responsibilities",q:"At what age can Canadians vote in federal elections?",options:["16","17","18","21"],answer:2},
+  {id:4,category:"Rights & Responsibilities",q:"Which of the following is NOT a responsibility of Canadian citizenship?",options:["Obeying the law","Voting in elections","Speaking both official languages","Paying taxes"],answer:2},
+  {id:5,category:"Rights & Responsibilities",q:"What is the name of Canada's national anthem?",options:["God Save the King","The Maple Leaf Forever","O Canada","True North Strong"],answer:2},
+  {id:6,category:"Rights & Responsibilities",q:"What does the Charter of Rights and Freedoms protect?",options:["Only French language rights","Only voting rights","Fundamental rights and freedoms of all people in Canada","Only citizens' rights"],answer:2},
+  {id:7,category:"Rights & Responsibilities",q:"What are the three main groups of Aboriginal peoples in Canada?",options:["Inuit, Métis, and First Nations","Algonquin, Cree, and Mohawk","First Nations, Inuit, and Acadian","Indigenous, Métis, and Northern peoples"],answer:0},
+  {id:8,category:"Rights & Responsibilities",q:"What is the duty of every Canadian citizen during a trial?",options:["To testify","To serve on a jury if called","To pay for the trial","To attend as a witness"],answer:1},
+  {id:9,category:"Rights & Responsibilities",q:"Which freedom allows Canadians to follow any religion?",options:["Freedom of expression","Freedom of association","Freedom of conscience and religion","Freedom of peaceful assembly"],answer:2},
+  {id:10,category:"Rights & Responsibilities",q:"What is one responsibility that comes with Canadian citizenship?",options:["Learning both official languages fluently","Filing income taxes","Serving in the military","Moving to the capital"],answer:1},
+  {id:11,category:"Rights & Responsibilities",q:"Can a Canadian citizen be deported?",options:["Yes, for any crime","Yes, but only if they also hold another citizenship","No, Canadian citizens cannot be deported","Yes, at the government's discretion"],answer:2},
+  {id:12,category:"Rights & Responsibilities",q:"What is the highest law of Canada?",options:["The Criminal Code","The Constitution of Canada","The Charter of Rights","Parliament's decisions"],answer:1},
+  {id:13,category:"Rights & Responsibilities",q:"What do we call the right of Canadians to move, live, and work anywhere in Canada?",options:["Democratic rights","Mobility rights","Legal rights","Equality rights"],answer:1},
+  {id:14,category:"Rights & Responsibilities",q:"Serving in the Canadian Forces is:",options:["Mandatory for citizens","A right and privilege of citizenship","Forbidden without special permission","Only for permanent residents"],answer:1},
+  {id:15,category:"Rights & Responsibilities",q:"What is the role of citizens in a democracy?",options:["To follow government orders","To vote, volunteer, and participate in civic life","To pay taxes only","To work for the government"],answer:1},
+  {id:16,category:"Rights & Responsibilities",q:"Freedom of peaceful assembly means:",options:["You can hold weapons at protests","Canadians can gather and demonstrate peacefully","Only union members can assemble","Protests are only allowed with permits"],answer:1},
+  {id:17,category:"Rights & Responsibilities",q:"What language rights does the Charter guarantee?",options:["Everyone must speak English","The right to use English or French with the federal government","Only English is protected federally","Provincial languages are officially recognized"],answer:1},
+  {id:18,category:"Rights & Responsibilities",q:"What does it mean to be subject to the rule of law?",options:["Citizens must obey all government orders","Everyone including governments must follow the law","Only elected officials are bound by law","Courts can override the Constitution"],answer:1},
+  {id:19,category:"Rights & Responsibilities",q:"What is meant by 'mobility rights'?",options:["The right to drive anywhere in Canada","The right to move, live, and work in any province or territory","The right to travel abroad","The right to immigrate to Canada"],answer:1},
+  {id:20,category:"Rights & Responsibilities",q:"Why is jury duty important?",options:["It generates income for jurors","It ensures citizens participate in the justice system","It replaces the need for lawyers","It is optional for most citizens"],answer:1},
+  {id:21,category:"Rights & Responsibilities",q:"What protects Canadians from unreasonable search and seizure?",options:["The Criminal Code","The Privacy Act","The Charter's legal rights","The RCMP regulations"],answer:2},
+  {id:22,category:"Rights & Responsibilities",q:"What is Aboriginal title?",options:["A government certificate for Indigenous peoples","The right of Aboriginal peoples to land they have used since before European contact","A type of land deed","A provincial land designation"],answer:1},
+  {id:23,category:"Rights & Responsibilities",q:"At what age can a Canadian run for Parliament?",options:["16","18","21","25"],answer:1},
+  {id:24,category:"Rights & Responsibilities",q:"What are legal rights under the Charter?",options:["Rights to own property","Rights related to life, liberty, security, and justice","Rights to vote and hold office","Rights to use both official languages"],answer:1},
+  {id:25,category:"Rights & Responsibilities",q:"What does 'equality before the law' mean?",options:["Everyone gets the same punishment for crimes","All individuals are treated equally by the law regardless of background","Only citizens have equal rights","Men and women have identical roles"],answer:1},
+  {id:26,category:"Rights & Responsibilities",q:"What is the purpose of the Canadian Human Rights Act?",options:["To set immigration quotas","To prohibit discrimination in federal areas based on protected grounds","To establish official languages","To govern labour unions"],answer:1},
+  {id:27,category:"Rights & Responsibilities",q:"What is multiculturalism in Canada?",options:["Having one national culture","The policy of maintaining a heritage of diverse cultures","Requiring immigrants to adopt Canadian customs","A law about religious freedom only"],answer:1},
+  {id:28,category:"Rights & Responsibilities",q:"What does the Oath of Citizenship commit you to?",options:["Speaking English and French","Being loyal to Canada and respecting its laws","Serving in the military","Living in Canada permanently"],answer:1},
+  {id:29,category:"Rights & Responsibilities",q:"What is the role of the Official Languages Commissioner?",options:["To translate laws into French","To protect the rights of Canadians to use English or French with the federal government","To teach both languages in schools","To appoint bilingual judges"],answer:1},
+  {id:30,category:"Rights & Responsibilities",q:"Democratic rights in the Charter ensure:",options:["Citizens can own property","The right to vote and stand for election","Freedom from taxation","Free travel across borders"],answer:1},
+  {id:31,category:"Canadian History",q:"Who were the first people to live in Canada?",options:["French settlers","British explorers","Aboriginal peoples","Viking settlers"],answer:2},
+  {id:32,category:"Canadian History",q:"What year did Canada become a country (Confederation)?",options:["1776","1812","1867","1931"],answer:2},
+  {id:33,category:"Canadian History",q:"Who was the first Prime Minister of Canada?",options:["Wilfrid Laurier","George Brown","John A. Macdonald","Louis-Hippolyte LaFontaine"],answer:2},
+  {id:34,category:"Canadian History",q:"What were the 'Fathers of Confederation'?",options:["The first Cabinet ministers","Leaders who united the colonies into Canada in 1867","Military leaders who defended Canada","Early explorers of Canadian territory"],answer:1},
+  {id:35,category:"Canadian History",q:"Which Act created Canada in 1867?",options:["The Constitution Act, 1982","The Statute of Westminster","The British North America Act","The Confederation Agreement"],answer:2},
+  {id:36,category:"Canadian History",q:"What was the significance of the Battle of Vimy Ridge?",options:["Canada's first naval victory","A key WWI battle where Canadians captured a ridge, building national pride","A War of 1812 battle","Canada's entry into WWII"],answer:1},
+  {id:37,category:"Canadian History",q:"Which province was the last to join Confederation?",options:["British Columbia","Alberta","Prince Edward Island","Newfoundland and Labrador"],answer:3},
+  {id:38,category:"Canadian History",q:"What year did Newfoundland and Labrador join Confederation?",options:["1867","1905","1931","1949"],answer:3},
+  {id:39,category:"Canadian History",q:"What is the significance of the year 1982 in Canadian history?",options:["Canada declared independence","The Charter of Rights and Freedoms was enacted and the Constitution was patriated","Canada joined the United Nations","The last province joined Confederation"],answer:1},
+  {id:40,category:"Canadian History",q:"Who was John A. Macdonald's key partner from Quebec at Confederation?",options:["Louis Riel","George-Étienne Cartier","Wilfrid Laurier","Honoré Mercier"],answer:1},
+  {id:41,category:"Canadian History",q:"What was the Underground Railroad?",options:["A subway in Toronto","A secret network helping enslaved Black Americans escape to Canada","A rail line in Nova Scotia","An early CN Rail route"],answer:1},
+  {id:42,category:"Canadian History",q:"Why is the Canadian Pacific Railway historically significant?",options:["It connected Canada coast to coast and aided westward settlement","It was the first electric railway","It was built entirely by Canadian-born workers","It linked Canada to the United States"],answer:0},
+  {id:43,category:"Canadian History",q:"What was the 'Persons Case' of 1929?",options:["A Supreme Court ruling on criminal law","A landmark ruling declaring women are 'persons' eligible for Senate","A case about Indigenous rights","A case defining Canadian citizenship"],answer:1},
+  {id:44,category:"Canadian History",q:"In which war did Canada's military first gain international recognition?",options:["The War of 1812","The South African War (Boer War)","World War I","The Korean War"],answer:2},
+  {id:45,category:"Canadian History",q:"What happened during the War of 1812?",options:["Canada declared independence from Britain","The United States invaded Canada; Canadians and British repelled the attacks","France invaded Quebec","Canada annexed part of the United States"],answer:1},
+  {id:46,category:"Canadian History",q:"What was the 'Quiet Revolution' in Quebec?",options:["A peaceful separation movement","A period of rapid social and political change in Quebec in the 1960s","A French-language protest movement","A major religious revival"],answer:1},
+  {id:47,category:"Canadian History",q:"What was the Chinese head tax?",options:["An honorary tax for community leaders","A discriminatory fee charged to Chinese immigrants after the CPR was completed","A trade tariff with China","A fee for Chinese-owned businesses"],answer:1},
+  {id:48,category:"Canadian History",q:"Who were the Loyalists?",options:["French settlers who stayed after 1763","American colonists who remained loyal to Britain and came to Canada after 1776","Indigenous peoples who supported British rule","British soldiers who settled in Canada"],answer:1},
+  {id:49,category:"Canadian History",q:"What is the significance of 1931's Statute of Westminster?",options:["Canada adopted the metric system","Canada gained full legislative independence from Britain","Canada joined the League of Nations","The first national flag was adopted"],answer:1},
+  {id:50,category:"Canadian History",q:"What were Residential Schools?",options:["Elite private schools for Indigenous leaders","Government-funded schools that forcibly separated Indigenous children from their families","Boarding schools for immigrants","Community schools in remote areas"],answer:1},
+  {id:51,category:"Canadian History",q:"Who led the Métis in the Red River Resistance?",options:["Gabriel Dumont","Big Bear","Louis Riel","Poundmaker"],answer:2},
+  {id:52,category:"Canadian History",q:"What province did Louis Riel help create?",options:["Saskatchewan","Alberta","Manitoba","British Columbia"],answer:2},
+  {id:53,category:"Canadian History",q:"When did women first get the right to vote federally in Canada?",options:["1867","1918","1929","1940"],answer:1},
+  {id:54,category:"Canadian History",q:"What is 'responsible government' in Canadian history?",options:["A government that balances budgets","The principle that the government must have the support of elected representatives","Government that controls spending","A system of government accountability to voters directly"],answer:1},
+  {id:55,category:"Canadian History",q:"Who was William Lyon Mackenzie King?",options:["Canada's longest-serving Prime Minister","The first Prime Minister of Canada","Leader of the Métis resistance","A Father of Confederation"],answer:0},
+  {id:56,category:"Canadian History",q:"What was the Klondike Gold Rush?",options:["A gold rush in Ontario in 1850","A major gold rush in Yukon in the late 1890s drawing thousands of prospectors","A BC gold rush that founded Vancouver","A gold rush that led to Alberta's creation"],answer:1},
+  {id:57,category:"Canadian History",q:"What role did Canada play in the Korean War?",options:["Canada was neutral","Canada sent troops as part of the UN force","Canada hosted peace negotiations","Canada provided only financial aid"],answer:1},
+  {id:58,category:"Canadian History",q:"Who was Lester B. Pearson and what did he win?",options:["First PM of Canada; won the Order of Canada","PM who won the Nobel Peace Prize for his UN peacekeeping plan during the Suez Crisis","PM during Confederation; won a military medal","Governor General who won the King's Medal"],answer:1},
+  {id:59,category:"Canadian History",q:"What was the October Crisis of 1970?",options:["A stock market crash","A Quebec separatist crisis where the FLQ kidnapped officials; PM Trudeau invoked the War Measures Act","A constitutional debate","A major flood in Quebec City"],answer:1},
+  {id:60,category:"Canadian History",q:"Which Prime Minister introduced the Canadian Charter of Rights and Freedoms in 1982?",options:["John Diefenbaker","Brian Mulroney","Pierre Elliott Trudeau","Lester Pearson"],answer:2},
+  {id:61,category:"Canadian History",q:"What was 'New France'?",options:["A modern Quebec independence movement","A French colony in North America from the 1500s to 1763","A region of France named after Canada","A post-Confederation French-Canadian settlement area"],answer:1},
+  {id:62,category:"Canadian History",q:"What was the Battle of the Plains of Abraham?",options:["A WWI battle in Alberta","The 1759 battle where the British defeated the French near Quebec City, ending French rule","A War of 1812 engagement","A battle during the Red River Resistance"],answer:1},
+  {id:63,category:"Canadian History",q:"What was the significance of D-Day for Canada?",options:["Canada led the Allied invasion of Normandy","Canadian forces stormed Juno Beach on June 6, 1944, making a major WWII contribution","Canada declared war on Germany","Canada signed the peace treaty"],answer:1},
+  {id:64,category:"Canadian History",q:"What are 'treaties' in the context of Canadian history?",options:["Trade agreements with other nations","Agreements between the Crown and First Nations regarding land and rights","Provincial agreements on resource sharing","Military alliances"],answer:1},
+  {id:65,category:"Canadian History",q:"What year did Canada adopt its current maple leaf flag?",options:["1867","1931","1965","1982"],answer:2},
+  {id:66,category:"Canadian History",q:"What was 'Expo 67'?",options:["A trade fair","A world's fair held in Montreal celebrating Canada's centennial","A political conference","Canada's first Olympic Games"],answer:1},
+  {id:67,category:"Canadian History",q:"What did the Indian Act of 1876 do?",options:["Granted Indigenous peoples full citizenship","Controlled many aspects of First Nations life and restricted rights and self-governance","Created the residential school system legally","Established treaties with First Nations"],answer:1},
+  {id:68,category:"Canadian History",q:"What role did Black Canadians play in WWI?",options:["They were excluded from military service","Many served despite discrimination, including in No. 2 Construction Battalion","They served only as nurses","They served only in the navy"],answer:1},
+  {id:69,category:"Canadian History",q:"What is Remembrance Day commemorated on?",options:["July 1","September 3","November 11","December 11"],answer:2},
+  {id:70,category:"Canadian History",q:"What happened at the Oka Crisis in 1990?",options:["A land claim dispute between Mohawk people and the Quebec government escalated into a standoff","An Indigenous language rights protest","A treaty signing ceremony","A flood on the Ottawa River"],answer:0},
+  {id:71,category:"Canadian History",q:"Who was the first French-Canadian Prime Minister?",options:["George-Étienne Cartier","Louis-Hippolyte LaFontaine","Wilfrid Laurier","Pierre Trudeau"],answer:2},
+  {id:72,category:"Canadian History",q:"What is the 'Two Solitudes' concept in Canada?",options:["Canada's two coastlines","The cultural and social divide between English and French Canada","Two founding nations of Canada","The relationship between provinces and territories"],answer:1},
+  {id:73,category:"Canadian History",q:"What was the National Policy of Sir John A. Macdonald?",options:["Free trade with the US","A protective tariff, transcontinental railway, and western settlement to build Canada","Universal suffrage for all citizens","Bilingualism and biculturalism policy"],answer:1},
+  {id:74,category:"Canadian History",q:"When did Canada become fully independent from Britain?",options:["1867","1931","1949","1982"],answer:3},
+  {id:75,category:"Canadian History",q:"What is the 'Truth and Reconciliation Commission'?",options:["A commission to review immigration policy","A process to acknowledge and address the harms of Residential Schools on Indigenous peoples","A commission to update the Constitution","A committee on French-English relations"],answer:1},
+  {id:76,category:"Canadian History",q:"Who built the majority of the Canadian Pacific Railway?",options:["British workers","American engineers","Chinese labourers","French-Canadian workers"],answer:2},
+  {id:77,category:"Canadian History",q:"What was the Royal Proclamation of 1763?",options:["A document establishing Confederation","A British document that recognized Indigenous land rights and set boundaries in North America","A proclamation creating Quebec","A declaration of war against France"],answer:1},
+  {id:78,category:"Canadian History",q:"What is the historical significance of Samuel de Champlain?",options:["He was the first Governor General","He founded New France and established Quebec City in 1608","He led the Plains of Abraham battle","He negotiated the first treaties with First Nations"],answer:1},
+  {id:79,category:"Canadian History",q:"What event triggered Canada's entry into World War II?",options:["The bombing of Pearl Harbor","Germany's invasion of Poland in 1939","The fall of France","Britain's declaration of war in 1938"],answer:1},
+  {id:80,category:"Canadian History",q:"What was the Meech Lake Accord?",options:["An environmental agreement","A failed 1987 constitutional amendment that would have recognized Quebec as a 'distinct society'","A trade deal with the US","A federal-provincial health agreement"],answer:1},
+  {id:81,category:"Government",q:"Canada is a federal state, which means:",options:["The federal government controls everything","Powers are divided between federal and provincial governments","Only the provinces have real power","The Prime Minister has unlimited authority"],answer:1},
+  {id:82,category:"Government",q:"What are the three branches of Canadian government?",options:["Federal, provincial, and municipal","Legislative, executive, and judicial","Senate, House of Commons, and Supreme Court","The Crown, Parliament, and the Cabinet"],answer:1},
+  {id:83,category:"Government",q:"What is the role of the Governor General?",options:["Head of government","Represents the King, grants Royal Assent to bills, swears in the PM","Leads the Senate","Head of the Supreme Court"],answer:1},
+  {id:84,category:"Government",q:"How many seats are in the House of Commons?",options:["100","265","338","400"],answer:2},
+  {id:85,category:"Government",q:"What is the role of the Senate?",options:["Elect the Prime Minister","Review, debate, and vote on legislation passed by the House of Commons","Appoint judges","Set the federal budget"],answer:1},
+  {id:86,category:"Government",q:"How are Senators appointed?",options:["Elected by citizens","Appointed by the Governor General on the advice of the Prime Minister","Appointed by provincial governments","Elected by Members of Parliament"],answer:1},
+  {id:87,category:"Government",q:"What is the role of the Prime Minister?",options:["Head of state","Head of government; leader of the party with most seats","Speaker of the House","President of the Senate"],answer:1},
+  {id:88,category:"Government",q:"What is a majority government?",options:["Any government with over 200 seats","A government where one party holds more than half the seats in the House","A government supported by two or more parties","A government with no opposition"],answer:1},
+  {id:89,category:"Government",q:"What is a minority government?",options:["A government formed by a small party","A government where the governing party holds fewer seats than all opposition parties combined","A government with fewer than 150 seats","A government with no Senate majority"],answer:1},
+  {id:90,category:"Government",q:"What is the 'Confidence of the House'?",options:["Trust between the PM and the Senate","The requirement that the government must maintain the support of the majority of MPs","The Speaker's authority","Public approval ratings for the government"],answer:1},
+  {id:91,category:"Government",q:"What is a Member of Parliament (MP)?",options:["A provincial representative","An elected representative in the federal House of Commons","A senator","A municipal councillor"],answer:1},
+  {id:92,category:"Government",q:"What is an electoral district (riding)?",options:["A political party division","A geographic area represented by one MP in the House of Commons","A provincial voting zone","A municipal ward"],answer:1},
+  {id:93,category:"Government",q:"What does a Cabinet Minister do?",options:["Chairs the Senate","Leads a government department and is responsible for specific policy areas","Presides over the House","Appoints judges"],answer:1},
+  {id:94,category:"Government",q:"What is the role of the Official Opposition?",options:["To support all government bills","To scrutinize and challenge the government's actions and policies","To appoint the Governor General","To run the Senate"],answer:1},
+  {id:95,category:"Government",q:"What are the three main federal political parties traditionally in Canada?",options:["Liberal, NDP, Bloc Québécois","Conservative, Liberal, NDP","Green, Liberal, Conservative","Liberal, Conservative, Reform"],answer:1},
+  {id:96,category:"Government",q:"How often must a federal election be held in Canada?",options:["Every 2 years","Every 3 years","At least every 5 years","Every 6 years"],answer:2},
+  {id:97,category:"Government",q:"What is the 'first-past-the-post' electoral system?",options:["Ranked choice voting","The candidate with the most votes in a riding wins, even without a majority","Proportional representation","Run-off voting system"],answer:1},
+  {id:98,category:"Government",q:"What is the purpose of Elections Canada?",options:["To count tax returns","To administer federal elections and referendums fairly and independently","To register political parties","To set campaign spending limits only"],answer:1},
+  {id:99,category:"Government",q:"What is a by-election?",options:["A provincial election","An election held between general elections to fill a vacant seat","A municipal election","A referendum"],answer:1},
+  {id:100,category:"Government",q:"What is the role of the Speaker of the House?",options:["To lead the governing party","To preside over House of Commons debates and maintain order","To represent the King","To chair the Senate"],answer:1},
+  {id:101,category:"Government",q:"What is the Supreme Court of Canada?",options:["A provincial court","The highest court in Canada; final authority on constitutional questions","The federal criminal court","An international arbitration body"],answer:1},
+  {id:102,category:"Government",q:"How many judges sit on the Supreme Court of Canada?",options:["5","7","9","11"],answer:2},
+  {id:103,category:"Government",q:"What is the role of the Auditor General?",options:["To set the federal budget","To audit government spending and report to Parliament on waste and mismanagement","To investigate criminal activity","To review immigration cases"],answer:1},
+  {id:104,category:"Government",q:"What is 'Question Period' in Parliament?",options:["A public consultation process","Daily sessions where MPs question Cabinet ministers on government actions","A Senate review process","The budget debate"],answer:1},
+  {id:105,category:"Government",q:"What is responsible government in modern Canada?",options:["Government spending responsibly","The requirement that the executive must maintain the confidence of elected representatives","Balanced budgets","Ethical conduct by ministers"],answer:1},
+  {id:106,category:"Government",q:"What are Crown corporations?",options:["Royal family businesses","Government-owned enterprises that deliver public services (e.g., CBC, Canada Post)","Private companies with royal warrants","Federally regulated banks"],answer:1},
+  {id:107,category:"Government",q:"What is the role of lieutenant-governors?",options:["Federal representatives in provinces","Provincial representatives of the Crown who perform ceremonial and constitutional functions","Provincial premiers","Provincial attorneys general"],answer:1},
+  {id:108,category:"Government",q:"Who has the right to vote in a federal election?",options:["All residents of Canada aged 18+","Canadian citizens aged 18 or older","Canadian citizens aged 16 or older","Permanent residents and citizens aged 18+"],answer:1},
+  {id:109,category:"Government",q:"What is a coalition government?",options:["A government led by a single large party","Two or more parties forming a government together","A minority government","A government supported by the Senate"],answer:1},
+  {id:110,category:"Government",q:"What is the federal government responsible for?",options:["Education and healthcare","Defence, criminal law, banking, and interprovincial trade","Provincial roads and housing","Municipal services"],answer:1},
+  {id:111,category:"Government",q:"What are provincial governments responsible for?",options:["National defence and criminal law","Education, healthcare, property and civil rights, and natural resources","Banking and currency","Foreign policy"],answer:1},
+  {id:112,category:"Government",q:"What is municipal government responsible for?",options:["Criminal law and policing","Local services like roads, water, sewage, and parks","Education funding","Provincial taxation"],answer:1},
+  {id:113,category:"Government",q:"What is the Governor General's role during an election?",options:["To campaign for the government","To dissolve Parliament and issue election writs on the advice of the PM","To certify election results","To debate election issues"],answer:1},
+  {id:114,category:"Government",q:"What is the Privy Council Office?",options:["The King's personal advisory board","The administrative body supporting the PM and Cabinet","The Senate secretariat","The Supreme Court administration"],answer:1},
+  {id:115,category:"Government",q:"What happens during Royal Assent?",options:["The King visits Canada","The Governor General formally approves a bill, making it law","The Senate passes a budget","MPs are sworn in"],answer:1},
+  {id:116,category:"Government",q:"What is a 'prorogation' of Parliament?",options:["A law limiting Parliament's powers","When Parliament is suspended between sessions by the Governor General on PM's advice","An early election","A Senate filibuster"],answer:1},
+  {id:117,category:"Government",q:"What is the role of the Clerk of the House of Commons?",options:["To write legislation","To advise the Speaker and MPs on parliamentary procedure and rules","To manage the Senate","To record Cabinet decisions"],answer:1},
+  {id:118,category:"Government",q:"How many provinces does Canada have?",options:["9","10","11","13"],answer:1},
+  {id:119,category:"Government",q:"How many territories does Canada have?",options:["2","3","4","5"],answer:1},
+  {id:120,category:"Government",q:"What are the three territories of Canada?",options:["Yukon, Northwest Territories, and Nunavut","Yukon, Nunavut, and Labrador","Yukon, Alberta, and NWT","NWT, Nunavut, and Newfoundland"],answer:0},
+  {id:121,category:"Government",q:"What is the difference between territories and provinces?",options:["Territories have more power than provinces","Territories are governed by federal legislation, while provinces have constitutional powers","There is no difference","Territories elect provincial-style legislatures"],answer:1},
+  {id:122,category:"Government",q:"What is the 'notwithstanding clause'?",options:["A clause protecting Indigenous rights","Section 33 of the Charter allowing legislatures to override certain Charter rights temporarily","A Senate veto power","A clause allowing constitutional amendments"],answer:1},
+  {id:123,category:"Government",q:"What is the amending formula for the Constitution?",options:["A simple majority in Parliament","Generally requires approval of federal Parliament and 7 of 10 provinces representing 50% of population","PM's approval only","A national referendum"],answer:1},
+  {id:124,category:"Government",q:"What is Cabinet solidarity?",options:["Cabinet members must all vote the same way publicly and resign if they disagree","Cabinet members always agree on policy","Cabinet meetings are public","Ministers must be from the same party"],answer:0},
+  {id:125,category:"Government",q:"What does 'non-partisan' mean in Canadian governance?",options:["Against political parties","Not affiliated with or biased toward any political party","Supporting all parties equally","A form of proportional representation"],answer:1},
+  {id:126,category:"Government",q:"What is the mandate of the Canadian Human Rights Commission?",options:["To set employment law","To protect Canadians from discrimination in federally regulated areas","To oversee immigration","To monitor police conduct"],answer:1},
+  {id:127,category:"Government",q:"What is the role of the RCMP?",options:["Municipal police only","Canada's national police force, also providing provincial policing in many provinces","A military organization","A border security agency"],answer:1},
+  {id:128,category:"Government",q:"What is the role of the Chief Electoral Officer?",options:["To count MP votes in Parliament","To administer federal elections independently and impartially","To oversee political party finances","To register voters"],answer:1},
+  {id:129,category:"Government",q:"How is the Prime Minister chosen?",options:["Directly elected by all Canadians","The leader of the party commanding the confidence of the House of Commons","Appointed by the Governor General without conditions","Elected by MPs in Parliament"],answer:1},
+  {id:130,category:"Government",q:"What is 'Hansard'?",options:["A parliamentary procedure","The official verbatim record of debates in Parliament","The Senate rulebook","A law compendium"],answer:1},
+  {id:131,category:"Government",q:"What is a private member's bill?",options:["A bill introduced by a Cabinet minister","A bill introduced by an MP who is not in Cabinet","A Senate bill","A bill requiring a referendum"],answer:1},
+  {id:132,category:"Government",q:"What is the role of the government Whip?",options:["A parliamentary disciplinarian","An MP who ensures party members attend votes and follow party positions","An advisor to the PM","The person who runs Question Period"],answer:1},
+  {id:133,category:"Government",q:"What is the National Assembly of Quebec?",options:["Quebec's federal delegation","Quebec's provincial legislature","A consultative body on French language","A national heritage organization"],answer:1},
+  {id:134,category:"Government",q:"What does 'separation of powers' mean?",options:["Provinces having independent powers","The division of government into legislative, executive, and judicial branches with distinct roles","Federal and provincial governments being separate","The division of party and government roles"],answer:1},
+  {id:135,category:"Government",q:"What is the purpose of Standing Committees in Parliament?",options:["To elect committee chairs","To study legislation and government activities in detail, propose amendments","To manage Senate appointments","To conduct elections"],answer:1},
+  {id:136,category:"Government",q:"What is the role of the Department of Finance Canada?",options:["To print money","To advise the government on fiscal and economic policy and prepare the federal budget","To regulate banks directly","To collect income tax"],answer:1},
+  {id:137,category:"Government",q:"What is a 'writ of election'?",options:["A court order to hold a new election","An official document issued by the Governor General that triggers a federal election","A petition from voters","A legal challenge to election results"],answer:1},
+  {id:138,category:"Government",q:"What is judicial independence?",options:["Judges can make any ruling they want","Judges make decisions based on law without political interference or pressure","Courts can override Parliament","Judges are elected by citizens"],answer:1},
+  {id:139,category:"Government",q:"What is the role of a Senator?",options:["To represent a political party","To provide sober second thought on legislation and represent regional interests","To replace an MP when elected","To lead a government department"],answer:1},
+  {id:140,category:"Government",q:"What is a 'free vote' in Parliament?",options:["A vote requiring no fee to participate","A vote where MPs are not required to follow party direction","An election with no cost","A unanimous vote"],answer:1},
+  {id:141,category:"Geography",q:"What is the capital of Canada?",options:["Toronto","Montreal","Ottawa","Vancouver"],answer:2},
+  {id:142,category:"Geography",q:"What is the largest province in Canada by land area?",options:["Ontario","British Columbia","Quebec","Alberta"],answer:2},
+  {id:143,category:"Geography",q:"Which ocean borders Canada on the west?",options:["Arctic Ocean","Atlantic Ocean","Pacific Ocean","Indian Ocean"],answer:2},
+  {id:144,category:"Geography",q:"Which ocean borders Canada on the east?",options:["Pacific Ocean","Arctic Ocean","Indian Ocean","Atlantic Ocean"],answer:3},
+  {id:145,category:"Geography",q:"What is the largest city in Canada?",options:["Ottawa","Montreal","Toronto","Vancouver"],answer:2},
+  {id:146,category:"Geography",q:"How many provinces and territories does Canada have in total?",options:["10","11","12","13"],answer:3},
+  {id:147,category:"Geography",q:"What is the longest river in Canada?",options:["Ottawa River","St. Lawrence River","Mackenzie River","Fraser River"],answer:2},
+  {id:148,category:"Geography",q:"What mountain range is in western Canada?",options:["The Appalachians","The Laurentians","The Rockies","The Shield Mountains"],answer:2},
+  {id:149,category:"Geography",q:"What is the capital of Ontario?",options:["Ottawa","Hamilton","Toronto","London"],answer:2},
+  {id:150,category:"Geography",q:"What is the capital of British Columbia?",options:["Vancouver","Kelowna","Surrey","Victoria"],answer:3},
+  {id:151,category:"Geography",q:"What body of water separates Prince Edward Island from the mainland?",options:["Hudson Bay","Northumberland Strait","Bay of Fundy","Gulf of St. Lawrence"],answer:1},
+  {id:152,category:"Geography",q:"What is the capital of Quebec?",options:["Montreal","Sherbrooke","Laval","Quebec City"],answer:3},
+  {id:153,category:"Geography",q:"What are the Prairie provinces?",options:["BC, Alberta, Manitoba","Alberta, Saskatchewan, Manitoba","Saskatchewan, Manitoba, Ontario","Alberta, Saskatchewan, Ontario"],answer:1},
+  {id:154,category:"Geography",q:"Where are the Great Lakes located?",options:["Western Canada","Northern Canada","Between Ontario and the United States","Between Quebec and the Maritime provinces"],answer:2},
+  {id:155,category:"Geography",q:"What is Canada's second-largest city?",options:["Vancouver","Calgary","Ottawa","Montreal"],answer:3},
+  {id:156,category:"Geography",q:"What is the capital of Alberta?",options:["Calgary","Red Deer","Edmonton","Lethbridge"],answer:2},
+  {id:157,category:"Geography",q:"What country does Canada share its southern border with?",options:["Mexico","Russia","The United States","Greenland"],answer:2},
+  {id:158,category:"Geography",q:"What is the capital of Nova Scotia?",options:["Truro","Sydney","Dartmouth","Halifax"],answer:3},
+  {id:159,category:"Geography",q:"What is the capital of Saskatchewan?",options:["Saskatoon","Moose Jaw","Prince Albert","Regina"],answer:3},
+  {id:160,category:"Geography",q:"What is the capital of Manitoba?",options:["Brandon","Portage la Prairie","Thompson","Winnipeg"],answer:3},
+  {id:161,category:"Geography",q:"What is the name of Canada's Arctic archipelago territory?",options:["Hudson Bay Islands","Queen Elizabeth Islands","Baffin Islands","Northwest Islands"],answer:1},
+  {id:162,category:"Geography",q:"What is the Bay of Fundy known for?",options:["Oil reserves","Salmon fishing","The world's highest tides","A major shipping port"],answer:2},
+  {id:163,category:"Geography",q:"What is the capital of New Brunswick?",options:["Moncton","Saint John","Fredericton","Bathurst"],answer:2},
+  {id:164,category:"Geography",q:"What is the capital of Prince Edward Island?",options:["Summerside","Montague","Charlottetown","Souris"],answer:2},
+  {id:165,category:"Geography",q:"What is the capital of Newfoundland and Labrador?",options:["Corner Brook","Happy Valley-Goose Bay","Gander","St. John's"],answer:3},
+  {id:166,category:"Geography",q:"What is the capital of Yukon?",options:["Dawson City","Watson Lake","Whitehorse","Mayo"],answer:2},
+  {id:167,category:"Geography",q:"What is the capital of Northwest Territories?",options:["Inuvik","Fort Smith","Hay River","Yellowknife"],answer:3},
+  {id:168,category:"Geography",q:"What is the capital of Nunavut?",options:["Rankin Inlet","Cambridge Bay","Baker Lake","Iqaluit"],answer:3},
+  {id:169,category:"Geography",q:"What is the St. Lawrence Seaway?",options:["A river in Quebec","A system of locks and channels connecting the Great Lakes to the Atlantic Ocean","A shipping route in BC","A canal between Ontario and New York"],answer:1},
+  {id:170,category:"Geography",q:"What physical feature dominates the Canadian Shield?",options:["Flat prairie land","Tropical forests","Ancient rock, lakes, and boreal forest","Mountain ranges"],answer:2},
+  {id:171,category:"Geography",q:"What is the largest lake located entirely within Canada?",options:["Lake Superior","Lake Winnipeg","Great Bear Lake","Lake Huron"],answer:2},
+  {id:172,category:"Geography",q:"What is the Trans-Canada Highway?",options:["A highway from Ottawa to Washington","A highway connecting all provinces from Victoria, BC to St. John's, NL","A highway only in Ontario","A planned route not yet complete"],answer:1},
+  {id:173,category:"Geography",q:"What province has the most French speakers?",options:["Ontario","New Brunswick","Manitoba","Quebec"],answer:3},
+  {id:174,category:"Geography",q:"Which province is the only officially bilingual province?",options:["Quebec","Ontario","New Brunswick","Manitoba"],answer:2},
+  {id:175,category:"Geography",q:"What is the Niagara Falls region known for?",options:["Skiing and winter sports","Powerful waterfalls on the Ontario-US border and hydroelectric power","A major oil refinery","Canada's largest port"],answer:1},
+  {id:176,category:"Geography",q:"What is the name of Canada's national capital region?",options:["Ottawa Metro","Greater Ottawa","The National Capital Region","The Capital District"],answer:2},
+  {id:177,category:"Geography",q:"Which province has the most population?",options:["Quebec","British Columbia","Alberta","Ontario"],answer:3},
+  {id:178,category:"Geography",q:"What is the subarctic region of Canada characterized by?",options:["Dense tropical forests","Long cold winters, permafrost, and boreal forests","Desert conditions","Mild year-round climate"],answer:1},
+  {id:179,category:"Geography",q:"What is the name of the mountain that is the highest in Canada?",options:["Mount Robson","Mount Logan","Mount Columbia","Mount Fairweather"],answer:1},
+  {id:180,category:"Geography",q:"What are the Atlantic provinces?",options:["NB, NS, PEI and NL","NB, NS, PEI and QC","NS, NB, NL and ON","NS, NB, PEI only"],answer:0},
+  {id:181,category:"Economy & Symbols",q:"What is the official currency of Canada?",options:["US Dollar","Pound Sterling","Canadian Dollar","Euro"],answer:2},
+  {id:182,category:"Economy & Symbols",q:"What are Canada's main trading partners?",options:["The European Union and China","The United States and Mexico","The United Kingdom and France","Japan and South Korea"],answer:1},
+  {id:183,category:"Economy & Symbols",q:"What is Canada's largest industry by GDP?",options:["Agriculture","Manufacturing","Real estate, mining, and energy","Fishing"],answer:2},
+  {id:184,category:"Economy & Symbols",q:"What does Canada export in large quantities?",options:["Cars and electronics","Natural resources including oil, gas, minerals, timber, and grain","Textiles and clothing","Pharmaceuticals"],answer:1},
+  {id:185,category:"Economy & Symbols",q:"What is the Bank of Canada?",options:["A commercial bank","The central bank of Canada that manages monetary policy and issues currency","A bank for government employees","A crown savings institution"],answer:1},
+  {id:186,category:"Economy & Symbols",q:"What is NAFTA/CUSMA?",options:["A military agreement","A free trade agreement between Canada, the US, and Mexico","A financial institution","A trade agreement with Europe"],answer:1},
+  {id:187,category:"Economy & Symbols",q:"What is the maple leaf a symbol of?",options:["Canadian forests","Canada's cold climate","Canada as a nation","The Conservative Party"],answer:2},
+  {id:188,category:"Economy & Symbols",q:"What colours appear on Canada's national flag?",options:["Blue and white","Red, white, and blue","Red and white","Green and white"],answer:2},
+  {id:189,category:"Economy & Symbols",q:"What animal is on the Canadian coat of arms?",options:["Moose and beaver","Lion and unicorn","Beaver and eagle","Bear and maple leaf"],answer:1},
+  {id:190,category:"Economy & Symbols",q:"What is the beaver a symbol of?",options:["Canadian winter","Canada's Indigenous peoples","Canada's industriousness and early fur trade heritage","National pride"],answer:2},
+  {id:191,category:"Economy & Symbols",q:"What is the Canadian Broadcasting Corporation (CBC)?",options:["A private television company","Canada's publicly funded national broadcaster, providing TV and radio in English and French","A federal ministry","A provincial network"],answer:1},
+  {id:192,category:"Economy & Symbols",q:"What is the role of the Canada Revenue Agency (CRA)?",options:["To print money","To administer tax laws and collect taxes for the federal and provincial governments","To regulate banks","To manage employment insurance"],answer:1},
+  {id:193,category:"Economy & Symbols",q:"What does CRTC stand for and do?",options:["Canadian Radio-Television and Telecommunications Commission; regulates broadcasting and telecom","Canadian Revenue Tax Commission; manages tax disputes","Canadian Retail Trade Council; oversees commerce","Canadian Regional Transport Commission; oversees rail"],answer:0},
+  {id:194,category:"Economy & Symbols",q:"What is Canada's national sport, officially?",options:["Hockey only","Lacrosse only","Both hockey (winter) and lacrosse (summer)","Curling"],answer:2},
+  {id:195,category:"Economy & Symbols",q:"What does the fleur-de-lis symbolize in Canada?",options:["The monarchy","French heritage and identity, especially in Quebec","The fur trade","Federal bilingualism"],answer:1},
+  {id:196,category:"Economy & Symbols",q:"What are the main natural resources of the Prairie provinces?",options:["Fisheries and forestry","Oil, natural gas, potash, and wheat","Gold and diamonds","Uranium and copper"],answer:1},
+  {id:197,category:"Economy & Symbols",q:"What is the 'loonie' and 'toonie'?",options:["Nicknames for $1 and $2 coins","The one-dollar and two-dollar bills","Nicknames for inflation measures","Popular Canadian foods"],answer:0},
+  {id:198,category:"Economy & Symbols",q:"What is free trade?",options:["Trade with no money exchanged","Trade between countries with few or no tariffs and restrictions","Government-funded trade programs","Trading only within Canada"],answer:1},
+  {id:199,category:"Economy & Symbols",q:"What is the significance of the CN Tower?",options:["Canada's tallest mountain","A famous Toronto landmark and communications tower, once the world's tallest","A monument to Confederation","A federal government building"],answer:1},
+  {id:200,category:"Economy & Symbols",q:"What does 'O Canada' speak to?",options:["Canada's military history","Canadian patriotism and love of the land","The French language","The monarchy"],answer:1},
+  {id:201,category:"Economy & Symbols",q:"What is Canada's universal healthcare system called?",options:["MediCare Plus","Obamacare","The Health Act","Medicare, governed by the Canada Health Act"],answer:3},
+  {id:202,category:"Economy & Symbols",q:"What is the Canadian Pension Plan (CPP)?",options:["A private savings plan","A federal retirement savings program funded by employee and employer contributions","A provincial benefit","An insurance program"],answer:1},
+  {id:203,category:"Economy & Symbols",q:"What is Employment Insurance (EI)?",options:["A private insurance plan","A federal program providing income support to unemployed or qualifying Canadians","A provincial savings plan","A bank benefit"],answer:1},
+  {id:204,category:"Economy & Symbols",q:"What is a tariff?",options:["A type of income tax","A tax on imported or exported goods","A provincial sales tax","A financial penalty"],answer:1},
+  {id:205,category:"Economy & Symbols",q:"What is the GST (Goods and Services Tax)?",options:["A provincial sales tax","A federal tax applied to most goods and services in Canada","An income tax surcharge","A business tax only"],answer:1},
+  {id:206,category:"Economy & Symbols",q:"What is Alberta known for economically?",options:["Fisheries and forestry","Oil sands, natural gas, and energy production","Aerospace and technology","Agriculture and manufacturing"],answer:1},
+  {id:207,category:"Economy & Symbols",q:"What is British Columbia's most valuable industry?",options:["Fishing only","Agriculture only","Forestry, mining, and technology/film","Manufacturing and automotive"],answer:2},
+  {id:208,category:"Economy & Symbols",q:"What is the significance of Confederation Bridge?",options:["It connects Ontario to Quebec","It connects PEI to New Brunswick","It connects Nova Scotia to New Brunswick","It connects Newfoundland to Labrador"],answer:1},
+  {id:209,category:"Economy & Symbols",q:"What major sporting event does Canada host in honour of hockey?",options:["The FIFA World Cup","The Stanley Cup","The Grey Cup","The Memorial Cup"],answer:1},
+  {id:210,category:"Economy & Symbols",q:"What is the significance of the poppy in Canada?",options:["A symbol of spring","A symbol of remembrance for fallen soldiers, worn on Remembrance Day","A national flower","A symbol of peace"],answer:1},
+  {id:211,category:"Economy & Symbols",q:"What is the Trans-Mountain Pipeline controversy about?",options:["A proposed pipeline from Ontario to Quebec","Expanding a pipeline carrying Alberta oil to BC's coast, involving environmental and Indigenous rights debates","A natural gas pipeline across the Prairies","A cross-border pipeline with the US"],answer:1},
+  {id:212,category:"Economy & Symbols",q:"What is Canada Day celebrated on?",options:["June 24","July 1","August 1","September 1"],answer:1},
+  {id:213,category:"Economy & Symbols",q:"What does Canada Day commemorate?",options:["Canada's victory in WWI","The anniversary of Confederation in 1867","The adoption of the Charter","Canada's Olympic gold medal"],answer:1},
+  {id:214,category:"Economy & Symbols",q:"What is the role of the Canadian Armed Forces?",options:["To enforce immigration law","To defend Canada, support allies, and assist in emergencies and peacekeeping","To police the borders","To manage natural disasters only"],answer:1},
+  {id:215,category:"Economy & Symbols",q:"What is the Order of Canada?",options:["A military medal","Canada's highest civilian honour, awarded for outstanding contributions to Canada","A federal work program","A provincial recognition"],answer:1},
+  {id:216,category:"Economy & Symbols",q:"What are the colours of the provinces and territories represented in the coat of arms?",options:["Red and white only","The colours and symbols of each region's official flag","Blue and gold","Green and silver"],answer:1},
+  {id:217,category:"Economy & Symbols",q:"What is Winterlude?",options:["A winter storm warning system","Ottawa's winter festival featuring ice sculptures and skating on the Rideau Canal","A Quebec winter sports event","A Canadian ski competition"],answer:1},
+  {id:218,category:"Economy & Symbols",q:"What is the significance of the 'True North' in Canadian identity?",options:["Canada's northernmost territory","A phrase from O Canada symbolizing Canada's northern geography and strength","A political party","A railway route"],answer:1},
+  {id:219,category:"Economy & Symbols",q:"What is Canada's Gross Domestic Product (GDP) rank globally?",options:["3rd","5th","9th","15th"],answer:2},
+  {id:220,category:"Economy & Symbols",q:"What is the significance of the beaver in Canadian history?",options:["A symbol of wilderness","The fur trade drove exploration and settlement; the beaver was essential to early commerce","A military symbol","A symbol of multiculturalism"],answer:1},
+  {id:221,category:"Economy & Symbols",q:"What is the purpose of the Canadian Museum of History?",options:["To showcase military history","To preserve and share Canada's human history and cultural heritage","To focus on First Nations art","To document political history"],answer:1},
+  {id:222,category:"Economy & Symbols",q:"What is Victoria Day?",options:["A BC provincial holiday","A federal holiday honouring Queen Victoria, celebrated on the Monday before May 25","A national parade day","Queen Elizabeth II's birthday celebration"],answer:1},
+  {id:223,category:"Economy & Symbols",q:"What is the national bird of Canada?",options:["Bald eagle","Canada Goose","Common Loon","Snowy Owl"],answer:2},
+  {id:224,category:"Economy & Symbols",q:"What is the national animal of Canada?",options:["Moose","Bear","Beaver","Wolf"],answer:2},
+  {id:225,category:"Economy & Symbols",q:"What is Nunavut's significance?",options:["Canada's newest province","Canada's largest territory, created in 1999 as a self-governing homeland for the Inuit","Canada's oldest territory","The most populated northern region"],answer:1},
+  {id:226,category:"Economy & Symbols",q:"What is the Canadian flag's white square in the centre called?",options:["The Canadian Cross","The Crown","The Canadian Pale","The Centre Panel"],answer:2},
+];
+
+const CATEGORIES = ["All","Rights & Responsibilities","Canadian History","Government","Geography","Economy & Symbols"];
+
+const STUDY_GUIDE = [
+  {title:"Rights & Responsibilities",icon:"📜",color:C.red,topics:["The Canadian Charter of Rights and Freedoms (1982) protects fundamental freedoms, democratic rights, mobility rights, legal rights, and equality rights","Fundamental freedoms include: religion, expression, peaceful assembly, and association","Democratic rights: every citizen 18+ can vote and run for office; elections every 5 years","Mobility rights: live, work, and move anywhere in Canada","Legal rights include: life, liberty, security; protection from unreasonable search; right to remain silent; right to counsel; fair trial","Equality rights: equal before the law regardless of race, sex, religion, disability","Responsibilities: obey laws, vote, pay taxes, serve on juries, respect others' rights, help your community"]},
+  {title:"Canadian History",icon:"📚",color:C.gold,topics:["Aboriginal peoples were Canada's first inhabitants — First Nations, Métis, and Inuit","New France was established in the 1600s; fell to British in 1763 (Battle of Plains of Abraham)","Loyalists came to Canada after the American Revolution (1776)","Confederation: Canada became a country on July 1, 1867, through the British North America Act","First PM: Sir John A. Macdonald; CPR completed 1885 with Chinese labour","Women gained federal vote in 1918; 'Persons Case' in 1929 allowed women in Senate","WWI: Vimy Ridge (1917); WWII: D-Day Juno Beach (1944)","1982: Constitution patriated; Charter of Rights and Freedoms enacted by PM Pierre Trudeau","Truth and Reconciliation Commission addressed harms of Residential Schools"]},
+  {title:"Government",icon:"🏛️",color:C.navyLight,topics:["Canada is a constitutional monarchy, federal state, and parliamentary democracy","Three branches: Legislative (Parliament), Executive (Cabinet/PM), Judicial (Courts)","Parliament: the King (Governor General), Senate (105 senators), House of Commons (338 MPs)","PM is head of government; Governor General represents the King","Elections: first-past-the-post; federal election at least every 5 years","Federal powers: defence, criminal law, banking, immigration, trade","Provincial powers: education, healthcare, property, civil rights","Three territories have powers delegated by the federal government","Supreme Court: 9 judges; final court of appeal; interprets the Constitution"]},
+  {title:"Geography",icon:"🗺️",color:C.green,topics:["Canada is the world's second-largest country by area","10 provinces and 3 territories; capital is Ottawa, Ontario","Bordered by Atlantic (east), Pacific (west), and Arctic (north) oceans; USA to the south","Prairie provinces: Alberta, Saskatchewan, Manitoba","Atlantic provinces: New Brunswick, Nova Scotia, PEI, Newfoundland & Labrador","Largest province by area: Quebec; most populous: Ontario","Important features: Rocky Mountains, Canadian Shield, Great Lakes, St. Lawrence Seaway","Highest peak: Mount Logan, Yukon; Longest river: Mackenzie River"]},
+  {title:"Economy & Symbols",icon:"🍁",color:C.maple,topics:["Canada's flag: red and white with maple leaf (adopted 1965)","National anthem: O Canada; national sports: hockey (winter) and lacrosse (summer)","National animal: beaver; national bird: Common Loon","Currency: Canadian dollar (loonie = $1 coin, toonie = $2 coin)","Major exports: oil, natural gas, minerals, timber, grain, vehicles","Top trading partner: United States (CUSMA free trade agreement)","Universal healthcare: Medicare, governed by the Canada Health Act","Canada Day: July 1 — celebrates Confederation (1867)","Remembrance Day: November 11 — honours fallen soldiers (wear a poppy)"]}
+];
+
+const QUIZ_SIZES = [
+  {label:"20 Questions",desc:"Quick practice",value:20},
+  {label:"50 Questions",desc:"Standard session",value:50},
+  {label:"100 Questions",desc:"Deep dive",value:100},
+  {label:"All 226",desc:"Full mock exam",value:226},
+];
+
+// ─── UTILITY ──────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function el(tag, attrs={}, ...children) {
+  const e=document.createElement(tag);
+  for(const[k,v]of Object.entries(attrs)){
+    if(k==='style'&&typeof v==='object'){Object.assign(e.style,v);}
+    else if(k.startsWith('on')&&typeof v==='function'){e.addEventListener(k.slice(2).toLowerCase(),v);}
+    else if(k==='class'){e.className=v;}
+    else if(k==='html'){e.innerHTML=v;}
+    else{e.setAttribute(k,v);}
+  }
+  for(const c of children){
+    if(c==null||c===false)continue;
+    if(typeof c==='string'||typeof c==='number'){e.appendChild(document.createTextNode(c));}
+    else if(c instanceof Node){e.appendChild(c);}
+  }
+  return e;
+}
+
+function mapleLeaf(size=24,color=C.red,spin=false){
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('width',size);svg.setAttribute('height',size);svg.setAttribute('viewBox','0 0 100 100');svg.setAttribute('fill',color);
+  if(spin)svg.style.animation='leafSpin 3s linear infinite';
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d','M50 5 L56 35 L85 20 L68 45 L95 50 L68 55 L85 80 L56 65 L50 95 L44 65 L15 80 L32 55 L5 50 L32 45 L15 20 L44 35 Z');
+  svg.appendChild(path);
+  return svg;
+}
+
+// ─── APP STATE ────────────────────────────────────────────────────────────────
+let currentPage = 'home';
+let quizState = null;
+
+function setPage(page) {
+  currentPage = page;
+  window.scrollTo({top:0,behavior:'smooth'});
+  render();
+}
+
+// ─── NAV ──────────────────────────────────────────────────────────────────────
+function renderNav() {
+  const links = [
+    {id:'home',label:'Home'},{id:'guide2026',label:'2026 Guide'},{id:'how-to-pass',label:'How to Pass'},
+    {id:'rights',label:'Rights & Duties'},{id:'government-explained',label:'Government'},
+    {id:'provinces-guide',label:'Provinces'},{id:'interview',label:'Interview'},
+    {id:'practice',label:'Practice'},{id:'study',label:'Study Guide'},{id:'faq',label:'FAQ'},
+  ];
+  let mobileOpen=false;
+  const nav=el('nav',{style:{background:C.navy,position:'sticky',top:0,zIndex:1000,boxShadow:'0 2px 12px rgba(0,0,0,0.2)'}});
+  const inner=el('div',{style:{maxWidth:1200,margin:'0 auto',padding:'0 16px',display:'flex',alignItems:'center',justifyContent:'space-between',height:52}});
+  const logo=el('div',{style:{display:'flex',alignItems:'center',gap:8,cursor:'pointer'},onClick:()=>setPage('home')});
+  logo.appendChild(mapleLeaf(22,C.red));
+  logo.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:18,fontWeight:700},html:"Citizen<span style='color:"+C.red+"'>Ready</span>"}));
+  const desktop=el('div',{class:'hide-mobile',style:{display:'flex',gap:2,flexWrap:'wrap'}});
+  links.forEach(l=>{
+    const btn=el('button',{class:'nav-link'+(currentPage===l.id?' active':''),onClick:()=>setPage(l.id)},l.label);
+    if(currentPage===l.id)btn.style.background=C.red;
+    desktop.appendChild(btn);
+  });
+  const hamburger=el('button',{class:'show-mobile',style:{background:'transparent',border:'none',color:C.white,fontSize:22,cursor:'pointer',padding:'4px 8px'},onClick:()=>{mobileOpen=!mobileOpen;mobileMenu.style.display=mobileOpen?'block':'none';}},'☰');
+  inner.appendChild(logo);inner.appendChild(desktop);inner.appendChild(hamburger);
+  nav.appendChild(inner);
+  const mobileMenu=el('div',{style:{display:'none',background:C.navyMid,borderTop:'1px solid rgba(255,255,255,0.1)'}});
+  links.forEach(l=>{
+    const item=el('div',{style:{padding:'10px 20px',color:currentPage===l.id?C.red:C.white,cursor:'pointer',fontSize:14},onClick:()=>{setPage(l.id);mobileOpen=false;mobileMenu.style.display='none';}},l.label);
+    mobileMenu.appendChild(item);
+  });
+  nav.appendChild(mobileMenu);
+  return nav;
+}
+
+// ─── FOOTER ──────────────────────────────────────────────────────────────────
+function renderFooter() {
+  const footer=el('footer',{style:{background:C.navy,marginTop:40,padding:'28px 20px'}});
+  const inner=el('div',{style:{maxWidth:1100,margin:'0 auto',display:'flex',justifyContent:'space-between',flexWrap:'wrap',gap:24,marginBottom:20}});
+  const brand=el('div');
+  const bLogo=el('div',{style:{display:'flex',alignItems:'center',gap:8,marginBottom:8}});
+  bLogo.appendChild(mapleLeaf(18,C.red));
+  bLogo.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:17,fontWeight:700},html:"Citizen<span style='color:"+C.red+"'>Ready</span>"}));
+  brand.appendChild(bLogo);
+  brand.appendChild(el('p',{style:{color:'rgba(250,250,248,0.45)',fontSize:12,maxWidth:200,lineHeight:1.5}},'Free Canadian citizenship test prep.'));
+  inner.appendChild(brand);
+  const cols=[
+    {title:'Guides',links:[['2026 Guide','guide2026'],['How to Pass','how-to-pass'],['Rights & Duties','rights'],['Government','government-explained']]},
+    {title:'Reference',links:[['Provinces','provinces-guide'],['Interview Prep','interview'],['FAQ','faq']]},
+    {title:'Practice',links:[['Study Guide','study'],['Practice Tests','practice']]},
+  ];
+  const colsDiv=el('div',{style:{display:'flex',gap:32,flexWrap:'wrap'}});
+  cols.forEach(col=>{
+    const c=el('div');
+    c.appendChild(el('div',{style:{color:C.greyLight,fontWeight:700,fontSize:11,textTransform:'uppercase',letterSpacing:1,marginBottom:8}},col.title));
+    col.links.forEach(([label,pg])=>{
+      const d=el('div',{style:{color:'rgba(250,250,248,0.55)',fontSize:13,marginBottom:6,cursor:'pointer'},onClick:()=>setPage(pg)},label);
+      d.addEventListener('mouseover',()=>d.style.color=C.white);
+      d.addEventListener('mouseout',()=>d.style.color='rgba(250,250,248,0.55)');
+      c.appendChild(d);
+    });
+    colsDiv.appendChild(c);
+  });
+  inner.appendChild(colsDiv);
+  footer.appendChild(inner);
+  const bottom=el('div',{style:{borderTop:'1px solid rgba(255,255,255,0.1)',paddingTop:14,display:'flex',justifyContent:'space-between',flexWrap:'wrap',gap:8}});
+  bottom.appendChild(el('p',{style:{color:'rgba(250,250,248,0.3)',fontSize:12}},'© 2026 CitizenReady. For educational use only.'));
+  bottom.appendChild(el('p',{style:{color:'rgba(250,250,248,0.3)',fontSize:12},html:"Based on <em>Discover Canada</em> by IRCC."}));
+  footer.appendChild(bottom);
+  return footer;
+}
+
+// ─── HOME PAGE ────────────────────────────────────────────────────────────────
+function renderHome() {
+  const wrap=el('div');
+  // Hero
+  const hero=el('div',{style:{background:'linear-gradient(135deg,'+C.navy+' 0%,'+C.navyMid+' 60%,'+C.navyLight+' 100%)',padding:'60px 20px',textAlign:'center',position:'relative',overflow:'hidden'}});
+  const badge=el('div',{style:{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(213,43,30,0.15)',border:'1px solid rgba(213,43,30,0.3)',borderRadius:20,padding:'4px 14px',marginBottom:16}});
+  badge.appendChild(mapleLeaf(12,C.red));
+  badge.appendChild(el('span',{style:{color:C.red,fontSize:12,fontWeight:700,letterSpacing:1}},'CANADA CITIZENSHIP 2026'));
+  hero.appendChild(badge);
+  hero.appendChild(el('h1',{class:'mobile-h1',style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:46,fontWeight:900,lineHeight:1.15,marginBottom:16,maxWidth:700,margin:'0 auto 16px'},html:"Pass Your <span style='color:"+C.red+"'>Citizenship Test</span> With Confidence"}));
+  hero.appendChild(el('p',{style:{color:'rgba(250,250,248,0.75)',fontSize:16,lineHeight:1.7,marginBottom:28,maxWidth:560,margin:'0 auto 28px'}},'Everything you need: 226 practice questions, complete study guides, province-specific quizzes, interview prep, and more. Free, always.'));
+  const btns=el('div',{style:{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}});
+  const b1=el('button',{style:{background:C.red,color:C.white,border:'none',padding:'14px 28px',borderRadius:10,fontSize:16,fontWeight:700,cursor:'pointer'},onClick:()=>setPage('practice')},'Start Practice Test →');
+  const b2=el('button',{style:{background:'transparent',color:C.white,border:'2px solid rgba(255,255,255,0.3)',padding:'14px 28px',borderRadius:10,fontSize:16,fontWeight:600,cursor:'pointer'},onClick:()=>setPage('guide2026')},'2026 Guide');
+  btns.appendChild(b1);btns.appendChild(b2);
+  hero.appendChild(btns);
+  wrap.appendChild(hero);
+  // Stats bar
+  const statsBar=el('div',{style:{background:C.red,padding:'14px 20px',display:'flex',justifyContent:'center',gap:40,flexWrap:'wrap'}});
+  [['226','Questions'],['10','Study Pages'],['13','Provinces'],['Free','Always']].forEach(([n,l])=>{
+    const s=el('div',{style:{textAlign:'center'}});
+    s.appendChild(el('div',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:24,fontWeight:700}},n));
+    s.appendChild(el('div',{style:{color:'rgba(255,255,255,0.75)',fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:1}},l));
+    statsBar.appendChild(s);
+  });
+  wrap.appendChild(statsBar);
+  // Cards
+  const pages=[
+    {icon:'📋',title:'2026 Citizenship Guide',desc:'Complete overview of eligibility, application steps, and what to expect.',page:'guide2026',color:C.red},
+    {icon:'🎯',title:'How to Pass the Test',desc:'Proven strategies, test-day tips, and scoring breakdown.',page:'how-to-pass',color:C.navy},
+    {icon:'📜',title:'Rights & Responsibilities',desc:'Deep dive into the Charter, your freedoms, and civic duties.',page:'rights',color:C.gold},
+    {icon:'🏛️',title:'Canadian Government Explained',desc:'Clear breakdown of Parliament, the PM, Cabinet, and more.',page:'government-explained',color:C.navyLight},
+    {icon:'🗺️',title:'Provinces & Territories Guide',desc:'Every province and territory: capitals, economy, key facts.',page:'provinces-guide',color:C.green},
+    {icon:'🗣️',title:'Citizenship Interview Questions',desc:'Prepare for the interview with model Q&A.',page:'interview',color:C.maple},
+    {icon:'✏️',title:'Practice Tests',desc:'Take quizzes by category, chapter, or province focus.',page:'practice',color:C.red},
+    {icon:'📚',title:'Study Guide',desc:'Structured topic-by-topic review of all five exam categories.',page:'study',color:C.gold},
+    {icon:'❓',title:'FAQ',desc:'Answers to the most common questions about the citizenship process.',page:'faq',color:C.navy},
+  ];
+  const cardArea=el('div',{style:{maxWidth:1100,margin:'40px auto',padding:'0 16px'}});
+  cardArea.appendChild(el('h2',{style:{fontFamily:"'Playfair Display',serif",fontSize:28,color:C.navy,textAlign:'center',marginBottom:8}},'Everything You Need to Succeed'));
+  cardArea.appendChild(el('p',{style:{color:C.grey,textAlign:'center',marginBottom:28,fontSize:15}},'Explore all resources — free, no signup required.'));
+  const grid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:16}});
+  pages.forEach(p=>{
+    const card=el('div',{class:'card-hover',style:{background:C.white,borderRadius:14,padding:'22px 20px',border:'1px solid '+C.greyLight,cursor:'pointer'},onClick:()=>setPage(p.page)});
+    card.appendChild(el('div',{style:{fontSize:32,marginBottom:10}},p.icon));
+    card.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",fontSize:17,marginBottom:8,color:C.navy}},p.title));
+    card.appendChild(el('p',{style:{color:C.grey,lineHeight:1.6,marginBottom:14,fontSize:13}},p.desc));
+    card.appendChild(el('span',{style:{color:p.color,fontWeight:700,fontSize:13}},'Explore →'));
+    grid.appendChild(card);
+  });
+  cardArea.appendChild(grid);
+  wrap.appendChild(cardArea);
+  // Pro tip
+  const tip=el('div',{style:{background:C.offWhite,borderTop:'1px solid '+C.greyLight,padding:'20px',textAlign:'center'}});
+  tip.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.7,maxWidth:600,margin:'0 auto'},html:"<strong>💡 Pro Tip:</strong> The real citizenship test is 20 questions drawn from the <em>Discover Canada</em> study guide. You need 15/20 (75%) to pass. Practice here until you consistently score 90%+."}));
+  wrap.appendChild(tip);
+  return wrap;
+}
+
+// ─── 2026 GUIDE ──────────────────────────────────────────────────────────────
+function renderGuide2026() {
+  const steps=[
+    {n:'1',title:'Check Your Eligibility',icon:'✅',items:['You must be a permanent resident (PR) of Canada','You must have been physically present in Canada for at least 1,095 days (3 years) in the last 5 years','You must have filed income taxes for at least 3 years in the last 5 years (if required)','You must be 18 or older to apply on your own (minors can be included in a parent\'s application)','You must not be prohibited from applying due to criminal history or immigration violations']},
+    {n:'2',title:'Gather Documents',icon:'📄',items:['Valid passport and travel history documents (all passports from last 5 years)','PR card (both sides)','Travel history outside Canada for the last 5 years','Tax filing documents from the CRA','Two passport-quality photos','If applicable: legal name change documents, court records, police certificates']},
+    {n:'3',title:'Complete the Application',icon:'📝',items:['Apply online through the IRCC (Immigration, Refugees and Citizenship Canada) portal','Complete form CIT 0002 (Application for Canadian Citizenship) accurately','List all absences from Canada over the last 5 years with exact dates','Pay the application fee (as of 2026: $630 for adults; $100 for minors under 18)','Submit all required supporting documents digitally']},
+    {n:'4',title:'Biometrics & Processing',icon:'🔍',items:['You may be required to provide biometrics (fingerprints and photo) if not previously given','IRCC will acknowledge receipt of your application','Processing times vary — check the IRCC website for current estimates','You may receive requests for additional information','Keep your contact information updated with IRCC during this time']},
+    {n:'5',title:'Take the Citizenship Test',icon:'📋',items:['You\'ll be invited to a test centre (or online) to take the citizenship knowledge test','The test has 20 multiple-choice questions from the Discover Canada study guide','You need 15/20 (75%) to pass','The test covers: rights & responsibilities, history, government, geography, economy & symbols','You have 30 minutes to complete the test','If you\'re between 55–64, you may still be required to take the test; those 65+ are exempt']},
+    {n:'6',title:'Attend an Interview (if required)',icon:'🗣️',items:['Some applicants are called for an in-person interview with a citizenship officer','This can happen if your application raises questions, if you failed the test, or if you\'re in a specific age group','You may be asked about your background, travels, and knowledge of Canada','Bring all original documents requested in your interview letter','Dress appropriately and answer questions honestly']},
+    {n:'7',title:'Take the Oath of Citizenship',icon:'🍁',items:['If approved, you\'ll be invited to a citizenship ceremony','You\'ll take the Oath of Citizenship, pledging allegiance to Canada','Ceremonies may be in-person or virtual','You\'ll receive your Certificate of Canadian Citizenship','Congratulations — you are now a Canadian citizen!']},
+  ];
+  const wrap=el('div',{style:{maxWidth:860,margin:'0 auto',padding:'32px 16px'}});
+  const hdr=el('div',{style:{textAlign:'center',marginBottom:32}});
+  hdr.appendChild(mapleLeaf(36,C.red));
+  hdr.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:36,color:C.navy,margin:'12px 0 8px'}},'2026 Citizenship Guide'));
+  hdr.appendChild(el('p',{style:{color:C.grey,fontSize:16,maxWidth:600,margin:'0 auto'}},'Your complete step-by-step guide to becoming a Canadian citizen in 2026.'));
+  wrap.appendChild(hdr);
+  const alert=el('div',{style:{background:C.redLight,borderRadius:12,padding:'16px 20px',marginBottom:24}});
+  alert.appendChild(el('p',{html:"<strong style='color:"+C.red+"'>⚠️ Important:</strong> <span style='color:"+C.navyMid+"'>Always verify current requirements at <strong>ircc.canada.ca</strong> — fees and processing times change.</span>"}));
+  wrap.appendChild(alert);
+  steps.forEach((s,i)=>{
+    const card=el('div',{style:{background:C.white,borderRadius:14,marginBottom:16,border:'1px solid '+C.greyLight,overflow:'hidden'}});
+    const hd=el('div',{style:{background:'linear-gradient(90deg,'+C.navy+','+C.navyMid+')',padding:'14px 20px',display:'flex',alignItems:'center',gap:12}});
+    const num=el('div',{style:{background:C.red,color:C.white,borderRadius:'50%',width:32,height:32,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:16,flexShrink:0}},s.n);
+    hd.appendChild(num);
+    hd.appendChild(el('span',{style:{fontSize:20}},s.icon));
+    hd.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:18}},s.title));
+    card.appendChild(hd);
+    const body=el('div',{style:{padding:'16px 20px'}});
+    s.items.forEach(item=>{
+      const row=el('div',{style:{display:'flex',gap:10,marginBottom:8,alignItems:'flex-start'}});
+      row.appendChild(el('div',{style:{color:C.red,fontWeight:700,fontSize:16,flexShrink:0,marginTop:1}},'•'));
+      row.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.65}},item));
+      body.appendChild(row);
+    });
+    card.appendChild(body);
+    wrap.appendChild(card);
+  });
+  const cta=el('div',{style:{background:C.navy,borderRadius:14,padding:'24px',textAlign:'center',marginTop:8}});
+  cta.appendChild(mapleLeaf(28,C.red));
+  cta.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:22,margin:'12px 0 8px'}},'Ready to Practice?'));
+  cta.appendChild(el('p',{style:{color:'rgba(255,255,255,0.7)',fontSize:14,marginBottom:16}},'The most important step: know your material.'));
+  const btn=el('button',{style:{background:C.red,color:C.white,border:'none',padding:'12px 28px',borderRadius:10,fontSize:15,fontWeight:700,cursor:'pointer'},onClick:()=>setPage('practice')},'Start Practice Test →');
+  cta.appendChild(btn);
+  wrap.appendChild(cta);
+  return wrap;
+}
+
+// ─── HOW TO PASS ──────────────────────────────────────────────────────────────
+function renderHowToPass() {
+  const tips=[
+    {icon:'📖',title:'Know the Source Material',body:'The test is based entirely on Discover Canada: The Rights and Responsibilities of Citizenship, the official IRCC study guide. Read it cover to cover at least once. Everything in this app comes from that guide.'},
+    {icon:'📋',title:'Focus on the 5 Key Topics',body:'Rights & Responsibilities, Canadian History, Government, Geography, and Economy & Symbols. Know each category well — the test draws from all five.'},
+    {icon:'⏱️',title:'Practice Daily with Timed Quizzes',body:'Take 20-question timed practice tests daily. The real test is 30 minutes for 20 questions, so get comfortable with the pace. Aim to answer in under 60 seconds per question.'},
+    {icon:'📅',title:'Memorize Key Dates and Numbers',body:"1867 (Confederation), 1982 (Charter), 1965 (Maple Leaf Flag), 1918 (women's vote), 1949 (Newfoundland joins), 338 (MP seats), 9 (Supreme Court judges), 75% (passing score)."},
+    {icon:'🍁',title:'Learn the Provinces and Capitals',body:'Know all 10 provinces and 3 territories, their capitals, and key facts. Province questions frequently appear on the test and in the interview.'},
+    {icon:'🎯',title:'Target Your Weak Areas',body:'After each practice test, review your incorrect answers. If you score below 75% in a category, focus your study there. Use the category-filtered quizzes in the Practice section.'},
+    {icon:'🧠',title:'Test Day Strategy',body:"Read each question carefully before looking at the options. Eliminate obviously wrong answers first. If unsure, trust your gut — don't change answers unless you're confident."},
+    {icon:'💬',title:'Practice Out Loud',body:'Say answers out loud, explain concepts to someone else, or write brief notes. Teaching the material is one of the most effective study methods.'},
+  ];
+  const wrap=el('div',{style:{maxWidth:860,margin:'0 auto',padding:'32px 16px'}});
+  const hdr=el('div',{style:{textAlign:'center',marginBottom:24}});
+  hdr.appendChild(el('div',{style:{fontSize:48,marginBottom:8}},'🎯'));
+  hdr.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:36,color:C.navy,marginBottom:8}},'How to Pass the Test'));
+  hdr.appendChild(el('p',{style:{color:C.grey,fontSize:16}},'Proven strategies to help you score 75%+ and pass with confidence.'));
+  wrap.appendChild(hdr);
+  // Stats
+  const statsBar=el('div',{style:{background:'linear-gradient(135deg,'+C.navy+','+C.navyMid+')',borderRadius:14,padding:'20px',display:'flex',justifyContent:'space-around',flexWrap:'wrap',gap:16,marginBottom:28}});
+  [['20','Questions on real test'],['75%','Minimum passing score'],['30','Minutes allowed'],['226','Questions to practice']].forEach(([n,l])=>{
+    const s=el('div',{style:{textAlign:'center'}});
+    s.appendChild(el('div',{style:{fontFamily:"'Playfair Display',serif",color:C.red,fontSize:38,fontWeight:700}},n));
+    s.appendChild(el('div',{style:{color:C.white,fontSize:13,fontWeight:600}},l));
+    statsBar.appendChild(s);
+  });
+  wrap.appendChild(statsBar);
+  const grid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(360px,1fr))',gap:16,marginBottom:24}});
+  tips.forEach(t=>{
+    const card=el('div',{style:{background:C.white,borderRadius:12,padding:'20px',border:'1px solid '+C.greyLight}});
+    card.appendChild(el('div',{style:{fontSize:28,marginBottom:8}},t.icon));
+    card.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",color:C.navy,fontSize:17,marginBottom:8}},t.title));
+    card.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.65}},t.body));
+    grid.appendChild(card);
+  });
+  wrap.appendChild(grid);
+  const checklist=el('div',{style:{background:C.greenLight,borderRadius:12,padding:'20px',border:'1px solid '+C.green,marginBottom:20}});
+  checklist.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",color:C.green,fontSize:18,marginBottom:12}},'✓ Test Day Checklist'));
+  ['Bring your test invitation letter (from IRCC)','Bring 2 pieces of valid ID (at least one with photo)','Arrive 15 minutes early','No phones or notes allowed during the test','Bring reading glasses if needed'].forEach(item=>{
+    const row=el('div',{style:{display:'flex',gap:10,marginBottom:6,alignItems:'flex-start'}});
+    row.appendChild(el('span',{style:{color:C.green,fontWeight:700}},'✓'));
+    row.appendChild(el('span',{style:{color:C.navyMid,fontSize:14}},item));
+    checklist.appendChild(row);
+  });
+  wrap.appendChild(checklist);
+  const btn=el('div',{style:{textAlign:'center'}});
+  btn.appendChild(el('button',{style:{background:C.red,color:C.white,border:'none',padding:'14px 32px',borderRadius:10,fontSize:16,fontWeight:700,cursor:'pointer'},onClick:()=>setPage('practice')},'Start Practicing Now →'));
+  wrap.appendChild(btn);
+  return wrap;
+}
+
+// ─── RIGHTS PAGE ──────────────────────────────────────────────────────────────
+function renderRights() {
+  const sections=[
+    {title:'Fundamental Freedoms',icon:'✊',color:C.red,content:[
+      {h:'Freedom of Conscience and Religion',b:"Every person in Canada may freely choose any faith or no faith at all. The state cannot force a religion on anyone."},
+      {h:'Freedom of Expression',b:"Canadians can speak, write, and express themselves freely. This includes the press and other media, with limits only on hate speech and incitement to violence."},
+      {h:'Freedom of Peaceful Assembly',b:"Canadians may gather and demonstrate peacefully. This right supports protests, rallies, and public meetings."},
+      {h:'Freedom of Association',b:"Canadians may form or join organizations, political parties, unions, and cultural groups freely."},
+    ]},
+    {title:'Democratic Rights',icon:'🗳️',color:C.navy,content:[
+      {h:'Right to Vote',b:"Every Canadian citizen aged 18 or older has the right to vote in federal, provincial, and territorial elections."},
+      {h:'Right to Run for Office',b:"Every Canadian citizen aged 18 or older may seek election to Parliament or a provincial/territorial legislature."},
+      {h:"Regular Elections",b:"Governments must call an election at least every 5 years — citizens have the right to be consulted regularly."},
+    ]},
+    {title:'Mobility Rights',icon:'🚗',color:C.green,content:[
+      {h:'Right to Live Anywhere in Canada',b:"Every Canadian citizen has the right to move to and live in any province or territory."},
+      {h:'Right to Enter and Leave Canada',b:"Citizens may enter and leave Canada freely. This right cannot be taken away."},
+      {h:'Right to Earn a Livelihood',b:"Citizens and permanent residents have the right to work and pursue a livelihood in any province or territory."},
+    ]},
+    {title:'Legal Rights',icon:'⚖️',color:C.gold,content:[
+      {h:'Right to Life, Liberty and Security',b:"Every person has the right not to be deprived of life, liberty, or security of person without due process."},
+      {h:'Protection from Unreasonable Search',b:"Canadians are protected from unreasonable searches and seizures by authorities without justification."},
+      {h:'Right to Remain Silent',b:"Anyone who is arrested has the right to remain silent and not incriminate themselves."},
+      {h:'Right to Counsel',b:"Anyone arrested has the right to contact and retain a lawyer immediately, and to be informed of that right."},
+      {h:'Right to a Fair Trial',b:"Everyone charged with an offence has the right to be presumed innocent until proven guilty."},
+    ]},
+    {title:'Equality Rights',icon:'🤝',color:C.navyLight,content:[
+      {h:'Equality Before the Law',b:"Every individual is equal before and under the law and has the right to equal protection and benefit of the law, without discrimination."},
+      {h:'Affirmative Action Programs',b:"The Charter allows laws and programs designed to improve conditions of disadvantaged groups (e.g., women, Indigenous peoples, visible minorities, disabled persons)."},
+    ]},
+    {title:'Responsibilities of Citizenship',icon:'🍁',color:C.maple,content:[
+      {h:'Obey the Law',b:"All Canadians must follow Canada's laws — ignorance of the law is not an excuse."},
+      {h:'Vote in Elections',b:"Citizens are encouraged to vote in all elections — federal, provincial, and municipal."},
+      {h:'Pay Taxes',b:"Everyone who earns income in Canada must pay taxes. Taxes fund public services like healthcare and education."},
+      {h:'Serve on Jury Duty',b:"When called, citizens must serve as jurors in criminal and civil trials."},
+      {h:'Respect Rights of Others',b:"Canadians must respect the rights and freedoms of other Canadians, including those they disagree with."},
+      {h:'Help Others in the Community',b:"Volunteering and contributing to your community is a valued Canadian responsibility."},
+    ]},
+  ];
+  return renderAccordionPage('Rights & Responsibilities','📜','Understanding the Canadian Charter of Rights and Freedoms and your civic duties.',sections);
+}
+
+function renderAccordionPage(title, icon, subtitle, sections, introText) {
+  let openIndex=null;
+  const wrap=el('div',{style:{maxWidth:860,margin:'0 auto',padding:'32px 16px'}});
+  const hdr=el('div',{style:{textAlign:'center',marginBottom:32}});
+  hdr.appendChild(el('div',{style:{fontSize:44,marginBottom:8}},icon));
+  hdr.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:36,color:C.navy,marginBottom:8}},title));
+  if(subtitle)hdr.appendChild(el('p',{style:{color:C.grey,fontSize:16}},subtitle));
+  wrap.appendChild(hdr);
+  if(introText){
+    const intro=el('div',{style:{background:'linear-gradient(90deg,'+C.navy+','+C.navyMid+')',borderRadius:12,padding:'16px 20px',marginBottom:20}});
+    intro.appendChild(el('p',{style:{color:C.white,fontSize:14,lineHeight:1.7},html:introText}));
+    wrap.appendChild(intro);
+  }
+  sections.forEach((sec,i)=>{
+    const card=el('div',{style:{background:C.white,borderRadius:14,marginBottom:12,border:'1px solid '+C.greyLight,overflow:'hidden'}});
+    const header=el('div',{style:{padding:'16px 20px',display:'flex',alignItems:'center',gap:12,cursor:'pointer',background:openIndex===i?(sec.color||C.navy):C.white}});
+    header.appendChild(el('span',{style:{fontSize:22}},sec.icon||''));
+    header.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",fontSize:18,fontWeight:700,flex:1,color:openIndex===i?C.white:C.navy}},sec.title));
+    header.appendChild(el('span',{style:{color:openIndex===i?C.white:C.grey,fontSize:20}},openIndex===i?'−':'+'));
+    let body=null;
+    header.addEventListener('click',()=>{
+      openIndex=openIndex===i?null:i;
+      render();
+    });
+    card.appendChild(header);
+    if(openIndex===i){
+      body=el('div',{class:'fade-up',style:{padding:'16px 20px'}});
+      (sec.content||sec.items||[]).forEach((item,j)=>{
+        const itemDiv=el('div',{style:{marginBottom:14,paddingBottom:14,borderBottom:j<(sec.content||sec.items).length-1?'1px solid '+C.greyLight:'none'}});
+        if(item.h)itemDiv.appendChild(el('h4',{style:{color:sec.color||C.red,fontSize:14,fontWeight:700,marginBottom:4}},item.h));
+        if(item.b)itemDiv.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.65}},item.b));
+        if(typeof item==='string')itemDiv.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.65}},item));
+        body.appendChild(itemDiv);
+      });
+      if(sec.content_text)body.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.7}},sec.content_text));
+      card.appendChild(body);
+    }
+    wrap.appendChild(card);
+  });
+  return wrap;
+}
+
+// ─── GOVERNMENT PAGE ─────────────────────────────────────────────────────────
+function renderGovernment() {
+  const sections=[
+    {title:"Canada's System of Government",icon:'🏛️',content_text:"Canada is a constitutional monarchy, a federal state, and a parliamentary democracy. The King (Charles III) is the Head of State, represented by the Governor General federally and lieutenant-governors provincially. The Prime Minister is Head of Government. Parliament is supreme in making laws, but all laws must conform to the Constitution and Charter."},
+    {title:'The Three Branches',icon:'⚡',items:[
+      {h:'Legislative Branch — Parliament',b:"Makes the laws. Parliament consists of: the Crown (Governor General), the Senate (105 appointed senators), and the House of Commons (338 elected MPs)."},
+      {h:'Executive Branch — The Government',b:"Carries out the laws. Consists of the Prime Minister, Cabinet ministers, and the public service."},
+      {h:'Judicial Branch — The Courts',b:"Interprets and applies the law. Courts are independent from government. The Supreme Court of Canada is the final court of appeal (9 judges)."},
+    ]},
+    {title:'How a Bill Becomes a Law',icon:'📄',items:[
+      {h:'1. Introduction',b:"A bill is introduced in the House of Commons (or Senate) by a minister or MP."},
+      {h:'2. First Reading',b:"The bill is introduced — no debate, just notice."},
+      {h:'3. Second Reading',b:"Debate on the principle of the bill. A vote is held."},
+      {h:'4. Committee Study',b:"A parliamentary committee studies the bill in detail and can propose amendments."},
+      {h:'5. Third Reading',b:"Final debate and vote in the House of Commons."},
+      {h:'6. Senate Review',b:"The Senate reviews, may amend, and votes on the bill."},
+      {h:'7. Royal Assent',b:"The Governor General formally approves the bill, making it law."},
+    ]},
+    {title:'Federal vs Provincial Powers',icon:'🗺️',items:[
+      {h:'Federal Government Responsibilities',b:"National defence, criminal law, banking and currency, immigration, trade between provinces, foreign policy, and Indigenous peoples' affairs."},
+      {h:'Provincial Government Responsibilities',b:"Education, healthcare, property and civil rights, natural resources, and municipal institutions."},
+      {h:'Shared Responsibilities',b:"Agriculture, immigration (shared), and environment are areas where federal and provincial governments both have jurisdiction."},
+      {h:'Territories',b:"Territories (Yukon, NWT, Nunavut) don't have the same constitutional powers as provinces — their powers are delegated by the federal government."},
+    ]},
+    {title:'Key Government Roles',icon:'👤',items:[
+      {h:'Governor General',b:"Represents the King, grants Royal Assent to bills, swears in the PM and Cabinet, dissolves Parliament on PM's advice."},
+      {h:'Prime Minister',b:"Head of government, leader of the party with most seats/confidence. Appoints Cabinet, Senators, and key officials."},
+      {h:'Cabinet',b:"Senior ministers who each lead a government department (Finance, Health, Justice, etc.). Must maintain Cabinet solidarity."},
+      {h:'Speaker of the House',b:"Elected by MPs to preside over House of Commons debates, maintain order, and protect parliamentary rules."},
+      {h:'Official Opposition Leader',b:"Leader of the second-largest party in Parliament. Holds the government accountable and proposes alternatives."},
+    ]},
+  ];
+  return renderAccordionPage('Canadian Government Explained','🏛️','A clear guide to how Canada\'s government works.',sections);
+}
+
+// ─── PROVINCES PAGE ──────────────────────────────────────────────────────────
+function renderProvinces() {
+  let selected=null;
+  const provinces=[
+    {name:'Ontario',abbr:'ON',flag:'🏛️',capital:'Toronto',pop:'~14.8M',economy:'Finance, manufacturing, services',joined:'1867',fact:'Canada\'s most populous province and economic centre; home to the national capital Ottawa and largest city Toronto.'},
+    {name:'Quebec',abbr:'QC',flag:'⚜️',capital:'Quebec City',pop:'~8.9M',economy:'Aerospace, hydro, tech, culture',joined:'1867',fact:'The only majority French-speaking province; has its own Civil Code. The Quiet Revolution transformed Quebec society in the 1960s.'},
+    {name:'British Columbia',abbr:'BC',flag:'🌲',capital:'Victoria',pop:'~5.5M',economy:'Tech, forestry, film, trade',joined:'1871',fact:"Canada's westernmost province, known for mountains, Pacific coast, and Vancouver — Canada's third-largest city."},
+    {name:'Alberta',abbr:'AB',flag:'🏔️',capital:'Edmonton',pop:'~4.7M',economy:'Oil sands, energy, agriculture',joined:'1905',fact:"Canada's energy powerhouse, home to the oil sands. Calgary hosts the world-famous Stampede rodeo."},
+    {name:'Manitoba',abbr:'MB',flag:'🦬',capital:'Winnipeg',pop:'~1.4M',economy:'Agriculture, manufacturing, hydro',joined:'1870',fact:'Created in 1870 largely due to the efforts of Louis Riel and the Red River Resistance of the Métis people.'},
+    {name:'Saskatchewan',abbr:'SK',flag:'🌾',capital:'Regina',pop:'~1.2M',economy:'Wheat, potash, oil, uranium',joined:'1905',fact:"The 'breadbasket of Canada' — produces a significant share of Canada's wheat and canola. First province to introduce Medicare (1962)."},
+    {name:'Nova Scotia',abbr:'NS',flag:'⚓',capital:'Halifax',pop:'~1.1M',economy:'Ocean tech, fishing, tourism',joined:'1867',fact:'One of the original four provinces of Confederation. Halifax Harbour was key in both World Wars.'},
+    {name:'New Brunswick',abbr:'NB',flag:'🌿',capital:'Fredericton',pop:'~830K',economy:'Forestry, seafood, bilingual services',joined:'1867',fact:"Canada's only officially bilingual province, with a significant Acadian French-speaking population."},
+    {name:'Newfoundland & Labrador',abbr:'NL',flag:'🐟',capital:"St. John's",pop:'~530K',economy:'Oil, fishing, mining, tourism',joined:'1949',fact:"The last province to join Confederation (1949). St. John's is the oldest city in North America and the most easterly point in Canada."},
+    {name:'Prince Edward Island',abbr:'PEI',flag:'🌿',capital:'Charlottetown',pop:'~175K',economy:'Agriculture, tourism, seafood',joined:'1873',fact:"Canada's smallest province and 'Birthplace of Confederation' — the 1864 Charlottetown Conference launched the road to Confederation."},
+    {name:'Yukon',abbr:'YT',flag:'⛰️',capital:'Whitehorse',pop:'~45K',economy:'Mining, tourism, government',joined:'N/A (Territory)',fact:"Site of the famous Klondike Gold Rush (1896–1899). Home to Mount Logan, Canada's highest peak."},
+    {name:'Northwest Territories',abbr:'NT',flag:'❄️',capital:'Yellowknife',pop:'~45K',economy:'Mining (diamonds, gold), government',joined:'N/A (Territory)',fact:"Canada's largest territory. Rich in diamonds — the NWT produces a significant portion of the world's gem diamonds."},
+    {name:'Nunavut',abbr:'NU',flag:'🧊',capital:'Iqaluit',pop:'~39K',economy:'Mining, hunting, fishing',joined:'1999 (created)',fact:"Canada's newest and largest territory, created in 1999 as a homeland for the Inuit people. Covers about 20% of Canada's landmass."},
+  ];
+  const wrap=el('div',{style:{maxWidth:1000,margin:'0 auto',padding:'32px 16px'}});
+  const hdr=el('div',{style:{textAlign:'center',marginBottom:32}});
+  hdr.appendChild(el('div',{style:{fontSize:44,marginBottom:8}},'🗺️'));
+  hdr.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:36,color:C.navy,marginBottom:8}},'Provinces & Territories'));
+  hdr.appendChild(el('p',{style:{color:C.grey,fontSize:16}},'Click any province or territory to learn more.'));
+  wrap.appendChild(hdr);
+  const grid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))',gap:10,marginBottom:20}});
+  const detailDiv=el('div');
+  function renderCards(){
+    grid.innerHTML='';
+    provinces.forEach((p,i)=>{
+      const card=el('div',{class:'card-hover',style:{background:selected===i?C.navy:C.white,borderRadius:10,padding:'14px 10px',textAlign:'center',border:'1px solid '+C.greyLight,cursor:'pointer'},onClick:()=>{selected=selected===i?null:i;renderCards();renderDetail();}});
+      card.appendChild(el('div',{style:{fontSize:24,marginBottom:4}},p.flag));
+      card.appendChild(el('div',{style:{fontFamily:"'Playfair Display',serif",fontSize:12,fontWeight:700,color:selected===i?C.white:C.navy}},p.name));
+      card.appendChild(el('div',{style:{fontSize:11,color:selected===i?'rgba(255,255,255,0.6)':C.grey}},p.abbr));
+      grid.appendChild(card);
+    });
+  }
+  function renderDetail(){
+    detailDiv.innerHTML='';
+    if(selected===null)return;
+    const p=provinces[selected];
+    const card=el('div',{class:'fade-up',style:{background:C.white,borderRadius:14,padding:'24px',border:'1px solid '+C.greyLight,marginBottom:16}});
+    const top=el('div',{style:{display:'flex',alignItems:'center',gap:14,marginBottom:16}});
+    top.appendChild(el('span',{style:{fontSize:40}},p.flag));
+    const info=el('div');
+    info.appendChild(el('h2',{style:{fontFamily:"'Playfair Display',serif",fontSize:26,color:C.navy}},p.name));
+    info.appendChild(el('div',{style:{color:C.grey,fontSize:13}},`Joined Confederation: ${p.joined}`));
+    top.appendChild(info);
+    card.appendChild(top);
+    const statsGrid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:10,marginBottom:16}});
+    [['🏙️ Capital',p.capital],['👥 Population',p.pop],['🏭 Economy',p.economy]].forEach(([k,v])=>{
+      const s=el('div',{style:{background:C.offWhite,borderRadius:8,padding:'10px 14px'}});
+      s.appendChild(el('div',{style:{fontSize:11,color:C.grey,fontWeight:700,marginBottom:3}},k));
+      s.appendChild(el('div',{style:{color:C.navyMid,fontSize:13,fontWeight:600}},v));
+      statsGrid.appendChild(s);
+    });
+    card.appendChild(statsGrid);
+    const fact=el('div',{style:{background:C.redLight,borderRadius:8,padding:'12px 16px',border:'1px solid rgba(213,43,30,0.15)'}});
+    fact.appendChild(el('div',{style:{fontSize:11,color:C.red,fontWeight:700,marginBottom:3}},'🍁 KEY FACT'));
+    fact.appendChild(el('p',{style:{color:C.navyMid,fontSize:14}},p.fact));
+    card.appendChild(fact);
+    detailDiv.appendChild(card);
+  }
+  renderCards();
+  wrap.appendChild(grid);
+  wrap.appendChild(detailDiv);
+  // Summary box
+  const summary=el('div',{style:{background:C.offWhite,borderRadius:12,padding:'16px 20px',border:'1px solid '+C.greyLight}});
+  summary.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",color:C.navy,fontSize:16,marginBottom:12}},'Quick Reference'));
+  const sumGrid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:10}});
+  [['10 Provinces','ON, QC, BC, AB, MB, SK, NS, NB, NL, PEI'],['3 Territories','Yukon, NWT, Nunavut'],['Capital of Canada','Ottawa, Ontario'],['Atlantic Provinces','NB, NS, PEI, NL'],['Prairie Provinces','AB, SK, MB']].forEach(([k,v])=>{
+    const s=el('div',{style:{background:C.white,borderRadius:8,padding:'8px 12px',border:'1px solid '+C.greyLight}});
+    s.appendChild(el('div',{style:{fontSize:11,color:C.grey,fontWeight:700}},k));
+    s.appendChild(el('div',{style:{color:C.navyMid,fontSize:13,marginTop:2}},v));
+    sumGrid.appendChild(s);
+  });
+  summary.appendChild(sumGrid);
+  wrap.appendChild(summary);
+  return wrap;
+}
+
+// ─── INTERVIEW PAGE ──────────────────────────────────────────────────────────
+function renderInterview() {
+  const qas=[
+    {q:"Why do you want to become a Canadian citizen?",a:"I want to fully commit to Canada — to participate in democracy, vote in elections, and contribute to the country I call home. Citizenship means belonging and responsibility."},
+    {q:"Can you tell me about Canada's system of government?",a:"Canada is a constitutional monarchy, federal state, and parliamentary democracy. The King is Head of State, represented by the Governor General. The Prime Minister is Head of Government. Parliament includes the Senate and House of Commons."},
+    {q:"What are your responsibilities as a Canadian citizen?",a:"To obey the laws of Canada, pay taxes, vote in elections, serve on jury duty if called, respect the rights of others, and contribute to the community."},
+    {q:"When did Canada become a country?",a:"Canada became a country on July 1, 1867, through the British North America Act. This is celebrated as Canada Day."},
+    {q:"What is the Charter of Rights and Freedoms?",a:"The Canadian Charter of Rights and Freedoms is part of the Constitution Act, 1982. It guarantees fundamental freedoms, democratic rights, mobility rights, legal rights, equality rights, and language rights to all people in Canada."},
+    {q:"Who are Aboriginal peoples of Canada?",a:"The three main groups are First Nations, Métis, and Inuit. They are the original inhabitants of Canada and have unique cultures, histories, and rights recognized in the Constitution."},
+    {q:"What does the maple leaf on Canada's flag represent?",a:"The maple leaf is a symbol of Canada as a nation and has been associated with Canadian identity since the 1700s."},
+    {q:"What is the significance of November 11 in Canada?",a:"November 11 is Remembrance Day. Canadians wear poppies and observe a moment of silence at 11 a.m. to honour those who died in service to Canada, beginning with WWI."},
+    {q:"Name the three levels of government in Canada.",a:"Federal (national) government in Ottawa, provincial/territorial governments, and municipal (local) governments. Each has different responsibilities."},
+    {q:"What are the two official languages of Canada?",a:"English and French are Canada's two official languages, protected by the Official Languages Act and the Charter of Rights and Freedoms."},
+    {q:"How long did you need to live in Canada to apply for citizenship?",a:"You must have been physically present in Canada for at least 1,095 days (3 years) within the 5 years before applying."},
+    {q:"Have you been outside Canada? Tell me about your travels.",a:"Answer honestly and specifically. List the countries you visited, approximate dates, and the reason for each trip. Have your travel history prepared and consistent with your application."},
+  ];
+  let openIndex=null;
+  const wrap=el('div',{style:{maxWidth:860,margin:'0 auto',padding:'32px 16px'}});
+  const hdr=el('div',{style:{textAlign:'center',marginBottom:32}});
+  hdr.appendChild(el('div',{style:{fontSize:44,marginBottom:8}},'🗣️'));
+  hdr.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:36,color:C.navy,marginBottom:8}},'Citizenship Interview Prep'));
+  hdr.appendChild(el('p',{style:{color:C.grey,fontSize:16}},'Practice your answers to common questions asked at the citizenship interview.'));
+  wrap.appendChild(hdr);
+  const info=el('div',{style:{background:'linear-gradient(90deg,'+C.navy+','+C.navyMid+')',borderRadius:12,padding:'16px 20px',marginBottom:20}});
+  info.appendChild(el('p',{style:{color:C.white,fontSize:14,lineHeight:1.7},html:"<strong style='color:"+C.red+"'>Who gets an interview?</strong> Not everyone is called. IRCC may request an interview if they need to verify information, if you failed the test, or for applicants in certain age groups. Always bring your original documents."}));
+  wrap.appendChild(info);
+  const list=el('div');
+  function renderList(){
+    list.innerHTML='';
+    qas.forEach((item,i)=>{
+      const card=el('div',{style:{background:C.white,borderRadius:12,marginBottom:10,border:'1px solid '+C.greyLight,overflow:'hidden'}});
+      const hd=el('div',{style:{padding:'14px 20px',display:'flex',alignItems:'center',gap:12,cursor:'pointer'},onClick:()=>{openIndex=openIndex===i?null:i;renderList();}});
+      const num=el('div',{style:{background:C.red,color:C.white,borderRadius:'50%',width:26,height:26,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:13,flexShrink:0}},(i+1)+'');
+      hd.appendChild(num);
+      hd.appendChild(el('p',{style:{color:C.navy,fontSize:15,fontWeight:600,flex:1,lineHeight:1.4}},item.q));
+      hd.appendChild(el('span',{style:{color:C.grey,fontSize:18,flexShrink:0}},openIndex===i?'−':'+'));
+      card.appendChild(hd);
+      if(openIndex===i){
+        const body=el('div',{class:'fade-up',style:{padding:'4px 20px 16px 58px',borderTop:'1px solid '+C.greyLight}});
+        const row=el('div',{style:{display:'flex',gap:10,alignItems:'flex-start'}});
+        const icon=el('div',{style:{background:C.green,color:C.white,borderRadius:'50%',width:26,height:26,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:13,flexShrink:0,marginTop:2}},'A');
+        row.appendChild(icon);
+        row.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.7}},item.a));
+        body.appendChild(row);
+        card.appendChild(body);
+      }
+      list.appendChild(card);
+    });
+  }
+  renderList();
+  wrap.appendChild(list);
+  const tips=el('div',{style:{background:C.redLight,borderRadius:12,padding:'16px 20px',marginTop:16,border:'1px solid rgba(213,43,30,0.15)'}});
+  tips.appendChild(el('strong',{style:{color:C.red}},'💡 Interview Tips:'));
+  const ul=el('ul',{style:{marginTop:8,paddingLeft:18}});
+  ["Answer questions honestly and directly — don't over-explain","Bring originals of all documents listed in your interview letter","It's okay to say 'I don't understand the question' and ask for clarification","If asked about your physical presence, refer to your documented travel history"].forEach(item=>{
+    ul.appendChild(el('li',{style:{color:C.navyMid,fontSize:14,lineHeight:1.7,marginBottom:4}},item));
+  });
+  tips.appendChild(ul);
+  wrap.appendChild(tips);
+  return wrap;
+}
+
+// ─── FAQ PAGE ────────────────────────────────────────────────────────────────
+function renderFAQ() {
+  const faqs=[
+    {q:"How long does the citizenship application take?",a:"Processing times vary. As of 2026, IRCC aims for 12 months but times can be longer. Check ircc.canada.ca for current estimates. Apply as soon as you are eligible."},
+    {q:"Do I have to give up my other citizenship to become Canadian?",a:"Not necessarily. Canada generally allows dual citizenship. However, some countries don't allow their citizens to hold dual nationality — check with your home country's laws."},
+    {q:"What happens if I fail the citizenship test?",a:"If you fail, you'll be scheduled to take the test again. If you fail a second time, you'll have an interview with a citizenship officer who will assess your knowledge and language skills."},
+    {q:"Can my children become citizens at the same time?",a:"Yes. Minor children (under 18) can be included in a parent's citizenship application. They don't need to take the test or oath, but will receive citizenship if the parent is approved."},
+    {q:"Do I need to speak English or French for citizenship?",a:"Yes. If you are between 18 and 54 years old at the time of signing your application, you must demonstrate adequate knowledge of English or French. This may be assessed during the test or interview."},
+    {q:"What is the physical presence requirement?",a:"You must have been physically present in Canada for at least 1,095 days (3 years) within the 5 years before the date you sign your application. Days spent as a PR count fully; days as a temporary resident count at half the rate (up to a maximum of 365 days)."},
+    {q:"Can I apply for citizenship if I owe taxes?",a:"No. You must have filed taxes if required for at least 3 tax years within the 5 years before applying. Outstanding tax obligations can affect your application."},
+    {q:"What is the Oath of Citizenship?",a:"The Oath of Citizenship is: 'I swear (or affirm) that I will be faithful and bear true allegiance to His Majesty King Charles the Third, King of Canada, His Heirs and Successors, and that I will faithfully observe the laws of Canada and fulfil my duties as a Canadian citizen.' It is taken at a citizenship ceremony."},
+    {q:"What is 'Discover Canada' and why does it matter?",a:"Discover Canada: The Rights and Responsibilities of Citizenship is the official IRCC study guide for the citizenship test. The entire test is based on its contents. Read it at ircc.canada.ca."},
+    {q:"How much does the citizenship application cost?",a:"As of 2026: $630 for adults (18+) — includes a $530 processing fee and a $100 right-of-citizenship fee. The fee for minors under 18 is $100. Fees can change; verify at ircc.canada.ca."},
+    {q:"Can I keep my PR card after becoming a citizen?",a:"You won't need your PR card anymore once you're a citizen. You'll receive a Certificate of Canadian Citizenship, and can apply for a Canadian passport."},
+    {q:"What if I live outside Canada now — can I still apply?",a:"You must physically be in Canada to take the citizenship test, attend any required interview, and take the Oath of Citizenship. If you are living abroad, you'll need to return to Canada for these steps."},
+  ];
+  let openIndex=null;
+  const wrap=el('div',{style:{maxWidth:860,margin:'0 auto',padding:'32px 16px'}});
+  const hdr=el('div',{style:{textAlign:'center',marginBottom:32}});
+  hdr.appendChild(el('div',{style:{fontSize:44,marginBottom:8}},'❓'));
+  hdr.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:36,color:C.navy,marginBottom:8}},'Frequently Asked Questions'));
+  hdr.appendChild(el('p',{style:{color:C.grey,fontSize:16}},'Answers to the most common questions about the citizenship process.'));
+  wrap.appendChild(hdr);
+  const list=el('div');
+  function renderList(){
+    list.innerHTML='';
+    faqs.forEach((item,i)=>{
+      const card=el('div',{style:{background:C.white,borderRadius:12,marginBottom:8,border:'1px solid '+C.greyLight,overflow:'hidden'}});
+      const hd=el('div',{style:{padding:'14px 20px',display:'flex',alignItems:'center',gap:10,cursor:'pointer'},onClick:()=>{openIndex=openIndex===i?null:i;renderList();}});
+      hd.appendChild(el('span',{style:{color:C.red,fontWeight:700,fontSize:16,flexShrink:0}},'Q'));
+      hd.appendChild(el('p',{style:{color:C.navy,fontSize:15,fontWeight:600,flex:1,lineHeight:1.4}},item.q));
+      hd.appendChild(el('span',{style:{color:C.grey,fontSize:18}},openIndex===i?'−':'+'));
+      card.appendChild(hd);
+      if(openIndex===i){
+        const body=el('div',{style:{padding:'4px 20px 14px 48px',borderTop:'1px solid '+C.greyLight}});
+        body.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.7}},item.a));
+        card.appendChild(body);
+      }
+      list.appendChild(card);
+    });
+  }
+  renderList();
+  wrap.appendChild(list);
+  const cta=el('div',{style:{background:C.navy,borderRadius:12,padding:'20px',textAlign:'center',marginTop:16}});
+  cta.appendChild(el('p',{style:{color:C.white,fontSize:14,lineHeight:1.7,marginBottom:14},html:"<strong>Still have questions?</strong> Always verify current requirements and fees at <strong>ircc.canada.ca</strong>."}));
+  cta.appendChild(el('button',{style:{background:C.red,color:C.white,border:'none',padding:'12px 24px',borderRadius:10,fontSize:15,fontWeight:700,cursor:'pointer'},onClick:()=>setPage('practice')},'Practice Questions →'));
+  wrap.appendChild(cta);
+  return wrap;
+}
+
+// ─── STUDY GUIDE ─────────────────────────────────────────────────────────────
+function renderStudy() {
+  let openIndex=null;
+  const wrap=el('div',{style:{maxWidth:860,margin:'0 auto',padding:'32px 16px'}});
+  const hdr=el('div',{style:{textAlign:'center',marginBottom:32}});
+  hdr.appendChild(mapleLeaf(32,C.red));
+  hdr.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:36,color:C.navy,margin:'12px 0 8px'}},'Study Guide'));
+  hdr.appendChild(el('p',{style:{color:C.grey,fontSize:16}},'Master all five categories tested on the citizenship exam.'));
+  wrap.appendChild(hdr);
+  const list=el('div');
+  function renderList(){
+    list.innerHTML='';
+    STUDY_GUIDE.forEach((sec,i)=>{
+      const card=el('div',{style:{background:C.white,borderRadius:14,marginBottom:12,border:'1px solid '+C.greyLight,overflow:'hidden'}});
+      const hd=el('div',{style:{padding:'18px 22px',display:'flex',alignItems:'center',gap:14,cursor:'pointer',background:openIndex===i?sec.color:C.white},onClick:()=>{openIndex=openIndex===i?null:i;renderList();}});
+      hd.appendChild(el('span',{style:{fontSize:24}},sec.icon));
+      hd.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",fontSize:19,fontWeight:700,flex:1,color:openIndex===i?C.white:C.navy}},sec.title));
+      hd.appendChild(el('span',{style:{color:openIndex===i?C.white:C.grey,fontSize:20,background:openIndex===i?'rgba(255,255,255,0.15)':'transparent',borderRadius:6,width:28,height:28,display:'flex',alignItems:'center',justifyContent:'center'}},openIndex===i?'−':'+'));
+      card.appendChild(hd);
+      if(openIndex===i){
+        const body=el('div',{class:'fade-up',style:{padding:'4px 22px 20px'}});
+        sec.topics.forEach((t,j)=>{
+          const row=el('div',{style:{display:'flex',gap:12,marginBottom:12,alignItems:'flex-start'}});
+          row.appendChild(el('div',{style:{width:7,height:7,borderRadius:'50%',background:sec.color,flexShrink:0,marginTop:6}}));
+          row.appendChild(el('p',{style:{color:C.navyMid,lineHeight:1.7,fontSize:14}},t));
+          body.appendChild(row);
+        });
+        card.appendChild(body);
+      }
+      list.appendChild(card);
+    });
+  }
+  renderList();
+  wrap.appendChild(list);
+  const reminder=el('div',{style:{background:C.redLight,borderRadius:12,padding:20,marginTop:20,border:'1px solid rgba(213,43,30,0.15)'}});
+  reminder.appendChild(el('strong',{style:{color:C.red}},'🍁 Remember:'));
+  reminder.appendChild(el('p',{style:{color:C.navyMid,marginTop:6,lineHeight:1.7,fontSize:14}},"The official study guide is Discover Canada by IRCC. All test questions come from it. Read it at least once, then use practice tests to reinforce your knowledge."));
+  wrap.appendChild(reminder);
+  return wrap;
+}
+
+// ─── QUIZ ─────────────────────────────────────────────────────────────────────
+function renderQuiz(questions, onFinish, title) {
+  if(!quizState || quizState.questions!==questions){
+    quizState={questions,idx:0,selected:null,answers:{},done:false,title};
+  }
+  const s=quizState;
+  if(s.done){
+    const total=s.questions.length;
+    const correct=s.questions.filter((q,i)=>s.answers[i]===q.answer).length;
+    const pct=Math.round((correct/total)*100);
+    const pass=pct>=75;
+    const byCat={};
+    s.questions.forEach((q,i)=>{
+      if(!byCat[q.category])byCat[q.category]={correct:0,total:0};
+      byCat[q.category].total++;
+      if(s.answers[i]===q.answer)byCat[q.category].correct++;
+    });
+    const wrap=el('div',{style:{maxWidth:800,margin:'0 auto',padding:'24px 16px'}});
+    const scoreCard=el('div',{class:'fade-up',style:{background:C.white,borderRadius:16,padding:'32px',textAlign:'center',marginBottom:20}});
+    scoreCard.appendChild(el('div',{style:{fontSize:52,marginBottom:12}},pass?'🎉':'📚'));
+    scoreCard.appendChild(el('h2',{style:{fontFamily:"'Playfair Display',serif",fontSize:32,color:C.navy,marginBottom:8}},pass?'Great Work!':'Keep Studying!'));
+    scoreCard.appendChild(el('div',{style:{fontSize:60,fontFamily:"'Playfair Display',serif",color:pass?C.green:C.red,fontWeight:700,marginBottom:4}},pct+'%'));
+    scoreCard.appendChild(el('div',{style:{fontSize:15,color:C.grey,marginBottom:12}},`${correct} of ${total} correct`));
+    const verdict=el('div',{style:{background:pass?C.greenLight:C.redLight,borderRadius:10,padding:'12px 16px',display:'inline-block',marginBottom:20}});
+    verdict.appendChild(el('span',{style:{color:pass?C.green:C.red,fontWeight:700,fontSize:15}},pass?"✓ You'd likely pass the citizenship test!":"✗ Aim for 75%+ — keep reviewing!"));
+    scoreCard.appendChild(verdict);
+    scoreCard.appendChild(el('button',{style:{background:C.navy,color:C.white,border:'none',padding:'12px 28px',borderRadius:10,fontSize:15,fontWeight:600,cursor:'pointer',display:'block',margin:'0 auto'},onClick:onFinish},'← Try Again'));
+    wrap.appendChild(scoreCard);
+    // Category breakdown
+    if(Object.keys(byCat).length>1){
+      const catDiv=el('div',{style:{marginBottom:20}});
+      catDiv.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",fontSize:20,color:C.navy,marginBottom:12}},'Performance by Category'));
+      const catGrid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:12}});
+      Object.entries(byCat).forEach(([cat,d])=>{
+        const cp=Math.round((d.correct/d.total)*100);
+        const c=el('div',{style:{background:C.white,borderRadius:12,padding:'14px',border:'1px solid '+C.greyLight}});
+        c.appendChild(el('div',{style:{fontSize:11,color:C.grey,fontWeight:700,marginBottom:4}},cat.toUpperCase()));
+        c.appendChild(el('div',{style:{fontFamily:"'Playfair Display',serif",fontSize:22,color:cp>=75?C.green:C.red,fontWeight:700}},cp+'%'));
+        c.appendChild(el('div',{style:{fontSize:12,color:C.grey}},`${d.correct}/${d.total}`));
+        const bar=el('div',{style:{background:C.greyLight,borderRadius:4,height:5,marginTop:8}});
+        const fill=el('div',{style:{background:cp>=75?C.green:C.red,height:'100%',borderRadius:4,width:cp+'%'}});
+        bar.appendChild(fill);c.appendChild(bar);
+        catGrid.appendChild(c);
+      });
+      catDiv.appendChild(catGrid);wrap.appendChild(catDiv);
+    }
+    // Review answers
+    const reviewDiv=el('div');
+    reviewDiv.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",fontSize:20,color:C.navy,marginBottom:12}},'Answer Review'));
+    s.questions.forEach((q,i)=>{
+      const chosen=s.answers[i];
+      const isCorrect=chosen===q.answer;
+      const card=el('div',{class:'fade-up',style:{background:C.white,borderRadius:12,padding:'16px',marginBottom:10,border:'2px solid '+(isCorrect?C.green:C.red)}});
+      const top=el('div',{style:{display:'flex',justifyContent:'space-between',marginBottom:6}});
+      top.appendChild(el('div',{style:{fontSize:11,color:C.grey,fontWeight:700}},q.category.toUpperCase()));
+      top.appendChild(el('span',{style:{fontSize:13,fontWeight:700,color:isCorrect?C.green:C.red}},isCorrect?'✓ Correct':'✗ Wrong'));
+      card.appendChild(top);
+      card.appendChild(el('p',{style:{fontWeight:700,color:C.navy,fontSize:13,marginBottom:6,lineHeight:1.4}},q.q));
+      if(!isCorrect&&chosen!==undefined)card.appendChild(el('p',{style:{color:C.red,fontSize:13,marginBottom:4}},`Your answer: ${q.options[chosen]}`));
+      if(!isCorrect&&chosen===undefined)card.appendChild(el('p',{style:{color:C.grey,fontSize:13,marginBottom:4}},'Not answered'));
+      card.appendChild(el('p',{style:{color:C.green,fontSize:13,fontWeight:600}},`✓ Correct: ${q.options[q.answer]}`));
+      reviewDiv.appendChild(card);
+    });
+    wrap.appendChild(reviewDiv);
+    return wrap;
+  }
+  // Active question
+  const q=s.questions[s.idx];
+  const prog=(s.idx/s.questions.length)*100;
+  const wrap=el('div',{style:{maxWidth:720,margin:'0 auto',padding:'20px 16px'}});
+  const topRow=el('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}});
+  topRow.appendChild(el('span',{style:{fontSize:12,color:C.grey,fontWeight:700}},s.title));
+  topRow.appendChild(el('span',{style:{background:C.redLight,color:C.red,borderRadius:8,padding:'4px 12px',fontSize:14,fontWeight:700}},`${s.idx+1} / ${s.questions.length}`));
+  wrap.appendChild(topRow);
+  const progBar=el('div',{style:{background:C.greyLight,borderRadius:4,height:6,marginBottom:20}});
+  progBar.appendChild(el('div',{style:{background:C.red,height:'100%',borderRadius:4,width:prog+'%',transition:'width 0.3s'}}));
+  wrap.appendChild(progBar);
+  const card=el('div',{class:'fade-up',style:{background:C.white,borderRadius:16,padding:'28px 22px',boxShadow:'0 4px 24px rgba(10,22,40,0.08)'}});
+  card.appendChild(el('div',{style:{fontSize:11,color:C.grey,fontWeight:700,textTransform:'uppercase',letterSpacing:1,marginBottom:12}},q.category));
+  card.appendChild(el('h2',{style:{fontFamily:"'Playfair Display',serif",fontSize:20,color:C.navy,marginBottom:20,lineHeight:1.4}},q.q));
+  const opts=el('div',{style:{display:'flex',flexDirection:'column',gap:10}});
+  q.options.forEach((opt,i)=>{
+    let bg=C.white,border='2px solid '+C.greyLight,color=C.navy;
+    if(s.selected!==null){
+      if(i===q.answer){bg=C.greenLight;border='2px solid '+C.green;color=C.green;}
+      else if(i===s.selected&&i!==q.answer){bg=C.redLight;border='2px solid '+C.red;color=C.red;}
+    }
+    const btn=el('button',{class:'opt-btn',style:{background:bg,border,color,fontFamily:'inherit',fontSize:15},onClick:()=>{
+      if(s.selected!==null)return;
+      s.selected=i;s.answers[s.idx]=i;
+      render();
+    }});
+    const circle=el('span',{style:{width:24,height:24,borderRadius:'50%',background:s.selected===null?C.greyLight:(i===q.answer?C.green:i===s.selected?C.red:C.greyLight),color:s.selected===null?C.grey:'white',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:700,flexShrink:0}},['A','B','C','D'][i]);
+    btn.appendChild(circle);
+    btn.appendChild(document.createTextNode(opt));
+    opts.appendChild(btn);
+  });
+  card.appendChild(opts);
+  if(s.selected!==null){
+    const feedback=el('div',{style:{marginTop:20,display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:12}});
+    feedback.appendChild(el('span',{style:{fontSize:14,fontWeight:700,color:s.selected===q.answer?C.green:C.red}},s.selected===q.answer?'✓ Correct!':'✗ Correct: '+q.options[q.answer]));
+    const next=el('button',{style:{background:C.navy,color:C.white,border:'none',padding:'10px 24px',borderRadius:10,fontSize:15,fontWeight:600,cursor:'pointer'},onClick:()=>{
+      if(s.idx+1>=s.questions.length){s.done=true;}
+      else{s.idx++;s.selected=null;}
+      render();
+    }},s.idx+1>=s.questions.length?'See Results →':'Next →');
+    feedback.appendChild(next);
+    card.appendChild(feedback);
+  }
+  wrap.appendChild(card);
+  return wrap;
+}
+
+// ─── PRACTICE PAGE ───────────────────────────────────────────────────────────
+let practiceState={step:'category',selectedCat:null,selectedProvince:'all',selectedSize:null,questions:null};
+
+function renderPractice() {
+  const ps=practiceState;
+  function getPool(){
+    let pool=ps.selectedCat==='All'?ALL_QUESTIONS:ALL_QUESTIONS.filter(q=>q.category===ps.selectedCat);
+    if(ps.selectedProvince!=='all'){
+      const ids=PROVINCE_QUESTIONS[ps.selectedProvince]||[];
+      const idSet=new Set(ids);
+      const base=pool.filter(q=>idSet.has(q.id));
+      const rest=pool.filter(q=>!idSet.has(q.id));
+      pool=[...base,...rest];
+    }
+    return pool;
+  }
+  if(ps.step==='quiz'&&ps.questions){
+    const provLabel=ps.selectedProvince!=='all'?` · ${PROVINCES.find(p=>p.id===ps.selectedProvince)?.name}`:'';
+    const sizeLabel=ps.selectedSize===226?'All 226':`${ps.selectedSize} Qs`;
+    return renderQuiz(ps.questions,()=>{quizState=null;practiceState={step:'category',selectedCat:null,selectedProvince:'all',selectedSize:null,questions:null};render();},`${ps.selectedCat}${provLabel} · ${sizeLabel}`);
+  }
+  const wrap=el('div',{style:{maxWidth:900,margin:'0 auto',padding:'32px 16px'}});
+  // Breadcrumb
+  const bc=el('div',{style:{display:'flex',alignItems:'center',gap:8,marginBottom:24,fontSize:13,flexWrap:'wrap'}});
+  const steps2=['Category','Province','Length','Quiz'];
+  const stepIdx=['category','province','size','quiz'].indexOf(ps.step);
+  steps2.forEach((label,i)=>{
+    if(i>0)bc.appendChild(el('span',{style:{color:C.greyLight}},'›'));
+    bc.appendChild(el('span',{style:{color:i===stepIdx?C.red:i<stepIdx?C.navy:C.grey,fontWeight:i<=stepIdx?700:400,cursor:i<stepIdx?'pointer':'default'},onClick:()=>{if(i===0&&stepIdx>0){practiceState.step='category';render();}else if(i===1&&stepIdx>1){practiceState.step='province';render();}else if(i===2&&stepIdx>2){practiceState.step='size';render();}}},label));
+  });
+  wrap.appendChild(bc);
+  if(ps.step==='category'){
+    wrap.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:30,color:C.navy,marginBottom:8}},'Practice Tests'));
+    wrap.appendChild(el('p',{style:{color:C.grey,fontSize:15,marginBottom:20}},'Step 1: Select the category you want to practice.'));
+    const grid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(250px,1fr))',gap:16}});
+    CATEGORIES.forEach(cat=>{
+      const guide=STUDY_GUIDE.find(g=>g.title===cat);
+      const count=cat==='All'?ALL_QUESTIONS.length:ALL_QUESTIONS.filter(q=>q.category===cat).length;
+      const card=el('div',{class:'card-hover',style:{background:C.white,borderRadius:14,padding:'20px',border:'1px solid '+C.greyLight,cursor:'pointer'},onClick:()=>{practiceState.selectedCat=cat;practiceState.step='province';render();}});
+      card.appendChild(el('div',{style:{fontSize:28,marginBottom:8}},guide?.icon||'📋'));
+      card.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",fontSize:16,color:C.navy,marginBottom:6}},cat));
+      card.appendChild(el('p',{style:{color:C.grey,fontSize:13,marginBottom:12}},`${count} questions`));
+      card.appendChild(el('div',{style:{background:C.red,color:C.white,borderRadius:8,padding:'7px 14px',fontSize:13,fontWeight:700,display:'inline-block'}},'Select →'));
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);
+  } else if(ps.step==='province'){
+    wrap.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:28,color:C.navy,marginBottom:8}},'Choose Province Focus'));
+    wrap.appendChild(el('p',{style:{color:C.grey,fontSize:14,marginBottom:16}},'Step 2: Choose a province to prioritize questions, or keep it as All of Canada.'));
+    const grid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(130px,1fr))',gap:10,marginBottom:16}});
+    PROVINCES.forEach(p=>{
+      const isSelected=ps.selectedProvince===p.id;
+      const card=el('div',{class:'card-hover',style:{background:isSelected?C.navy:C.white,borderRadius:10,padding:'12px 8px',textAlign:'center',border:'1px solid '+C.greyLight,cursor:'pointer'},onClick:()=>{practiceState.selectedProvince=p.id;render();}});
+      card.appendChild(el('div',{style:{fontSize:22,marginBottom:4}},p.flag));
+      card.appendChild(el('div',{style:{fontFamily:"'Playfair Display',serif",fontSize:12,fontWeight:700,color:isSelected?C.white:C.navy}},p.name));
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);
+    const btns=el('div',{style:{display:'flex',gap:12,flexWrap:'wrap'}});
+    btns.appendChild(el('button',{style:{background:'transparent',color:C.navy,border:'2px solid '+C.greyLight,padding:'10px 20px',borderRadius:10,fontSize:14,fontWeight:600,cursor:'pointer'},onClick:()=>{practiceState.step='category';render();}},'← Back'));
+    btns.appendChild(el('button',{style:{background:C.red,color:C.white,border:'none',padding:'10px 24px',borderRadius:10,fontSize:14,fontWeight:700,cursor:'pointer'},onClick:()=>{practiceState.step='size';render();}},'Continue →'));
+    wrap.appendChild(btns);
+  } else if(ps.step==='size'){
+    wrap.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:28,color:C.navy,marginBottom:8}},'Choose Quiz Length'));
+    wrap.appendChild(el('p',{style:{color:C.grey,fontSize:14,marginBottom:16}},'Step 3: How many questions do you want?'));
+    const grid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:12,marginBottom:20}});
+    QUIZ_SIZES.forEach(s=>{
+      const pool=getPool();
+      const avail=Math.min(s.value,pool.length);
+      const isSelected=ps.selectedSize===s.value;
+      const card=el('div',{class:'card-hover',style:{background:isSelected?C.navy:C.white,borderRadius:14,padding:'20px',textAlign:'center',border:'2px solid '+(isSelected?C.red:C.greyLight),cursor:'pointer'},onClick:()=>{practiceState.selectedSize=s.value;render();}});
+      card.appendChild(el('div',{style:{fontFamily:"'Playfair Display',serif",fontSize:28,color:isSelected?C.red:C.navy,fontWeight:700}},avail+''));
+      card.appendChild(el('div',{style:{fontFamily:"'Playfair Display',serif",fontSize:15,color:isSelected?C.white:C.navy,marginTop:4}},s.label));
+      card.appendChild(el('div',{style:{fontSize:12,color:isSelected?'rgba(255,255,255,0.6)':C.grey}},s.desc));
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);
+    const btns=el('div',{style:{display:'flex',gap:12,flexWrap:'wrap'}});
+    btns.appendChild(el('button',{style:{background:'transparent',color:C.navy,border:'2px solid '+C.greyLight,padding:'10px 20px',borderRadius:10,fontSize:14,fontWeight:600,cursor:'pointer'},onClick:()=>{practiceState.step='province';render();}},'← Back'));
+    const startBtn=el('button',{style:{background:ps.selectedSize?C.red:C.greyLight,color:ps.selectedSize?C.white:C.grey,border:'none',padding:'10px 24px',borderRadius:10,fontSize:14,fontWeight:700,cursor:ps.selectedSize?'pointer':'default'},onClick:()=>{
+      if(!ps.selectedSize)return;
+      const pool=getPool();
+      const count=Math.min(ps.selectedSize,pool.length);
+      practiceState.questions=shuffle(pool).slice(0,count);
+      quizState=null;
+      practiceState.step='quiz';
+      render();
+    }},ps.selectedSize?`Start Quiz (${ps.selectedSize} Questions) →`:'Select a length above');
+    btns.appendChild(startBtn);
+    wrap.appendChild(btns);
+  }
+  return wrap;
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function render() {
+  const app=document.getElementById('app');
+  app.innerHTML='';
+  app.appendChild(renderNav());
+  const main=el('main');
+  const pages={
+    home:renderHome,
+    guide2026:renderGuide2026,
+    'how-to-pass':renderHowToPass,
+    rights:renderRights,
+    'government-explained':renderGovernment,
+    'provinces-guide':renderProvinces,
+    interview:renderInterview,
+    practice:renderPractice,
+    study:renderStudy,
+    faq:renderFAQ,
+  };
+  const renderer=pages[currentPage]||pages.home;
+  main.appendChild(renderer());
+  app.appendChild(main);
+  app.appendChild(renderFooter());
+}
+
+render();
+</script>
+</body>
+</html>
