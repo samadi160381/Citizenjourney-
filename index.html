@@ -355,6 +355,7 @@ function mapleLeaf(size=24,color=C.red,spin=false){
 // ─── APP STATE ────────────────────────────────────────────────────────────────
 let currentPage = 'home';
 let quizState = null;
+let lang = 'en';
 
 function setPage(page) {
   currentPage = page;
@@ -362,26 +363,87 @@ function setPage(page) {
   render();
 }
 
+function setLang(l) {
+  lang = l;
+  render();
+}
+
+const T = {
+  en: {
+    nav: {
+      home:'Home', guide2026:'2026 Guide', 'how-to-pass':'How to Pass',
+      rights:'Rights & Duties', 'government-explained':'Government',
+      'provinces-guide':'Provinces', interview:'Interview',
+      practice:'Practice', study:'Study Guide', faq:'FAQ',
+    },
+    footer: {
+      tagline: 'Free Canadian citizenship test prep.',
+      legal: 'Legal',
+      links: [['About Us','about'],['Contact Us','contact'],['Privacy Policy','privacy'],['Disclaimer','disclaimer'],['Terms & Conditions','terms']],
+      copy: '© 2026 CitizenReady. For educational use only.',
+      based: 'Based on <em>Discover Canada</em> by IRCC.',
+    },
+    hero: {
+      badge: 'CANADA CITIZENSHIP 2026',
+      h1: "Pass Your <span style='color:#D52B1E'>Citizenship Test</span> With Confidence",
+      sub: 'Everything you need: 226 practice questions, complete study guides, province-specific quizzes, interview prep, and more. Free, always.',
+      cta1: 'Start Practice Test →',
+      cta2: '2026 Guide',
+    },
+    stats: [['226','Questions'],['10','Study Pages'],['13','Provinces'],['Free','Always']],
+  },
+  fr: {
+    nav: {
+      home:'Accueil', guide2026:'Guide 2026', 'how-to-pass':'Réussir',
+      rights:'Droits & Devoirs', 'government-explained':'Gouvernement',
+      'provinces-guide':'Provinces', interview:'Entretien',
+      practice:'Entraînement', study:'Guide d\'étude', faq:'FAQ',
+    },
+    footer: {
+      tagline: 'Préparation gratuite au test de citoyenneté canadienne.',
+      legal: 'Légal',
+      links: [['À propos','about'],['Contactez-nous','contact'],['Politique de confidentialité','privacy'],['Avis de non-responsabilité','disclaimer'],['Conditions d\'utilisation','terms']],
+      copy: '© 2026 CitizenReady. À des fins éducatives seulement.',
+      based: 'Basé sur <em>Découvrir le Canada</em> par IRCC.',
+    },
+    hero: {
+      badge: 'CITOYENNETÉ CANADIENNE 2026',
+      h1: "Réussissez Votre <span style='color:#D52B1E'>Test de Citoyenneté</span> en Toute Confiance",
+      sub: 'Tout ce qu\'il vous faut : 226 questions d\'entraînement, guides d\'étude complets, quiz par province, préparation à l\'entretien et plus encore. Gratuit, toujours.',
+      cta1: 'Commencer le test →',
+      cta2: 'Guide 2026',
+    },
+    stats: [['226','Questions'],['10','Guides'],['13','Provinces'],['Gratuit','Toujours']],
+  }
+};
+
 // ─── NAV ──────────────────────────────────────────────────────────────────────
 function renderNav() {
-  const links = [
-    {id:'home',label:'Home'},{id:'guide2026',label:'2026 Guide'},{id:'how-to-pass',label:'How to Pass'},
-    {id:'rights',label:'Rights & Duties'},{id:'government-explained',label:'Government'},
-    {id:'provinces-guide',label:'Provinces'},{id:'interview',label:'Interview'},
-    {id:'practice',label:'Practice'},{id:'study',label:'Study Guide'},{id:'faq',label:'FAQ'},
-  ];
+  const t = T[lang];
+  const linkIds = ['home','guide2026','how-to-pass','rights','government-explained','provinces-guide','interview','practice','study','faq'];
+  const links = linkIds.map(id=>({id, label: t.nav[id]}));
   let mobileOpen=false;
   const nav=el('nav',{style:{background:C.navy,position:'sticky',top:0,zIndex:1000,boxShadow:'0 2px 12px rgba(0,0,0,0.2)'}});
   const inner=el('div',{style:{maxWidth:1200,margin:'0 auto',padding:'0 16px',display:'flex',alignItems:'center',justifyContent:'space-between',height:52}});
   const logo=el('div',{style:{display:'flex',alignItems:'center',gap:8,cursor:'pointer'},onClick:()=>setPage('home')});
   logo.appendChild(mapleLeaf(22,C.red));
   logo.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:18,fontWeight:700},html:"Citizen<span style='color:"+C.red+"'>Ready</span>"}));
-  const desktop=el('div',{class:'hide-mobile',style:{display:'flex',gap:2,flexWrap:'wrap'}});
+  const desktop=el('div',{class:'hide-mobile',style:{display:'flex',gap:2,flexWrap:'wrap',alignItems:'center'}});
   links.forEach(l=>{
     const btn=el('button',{class:'nav-link'+(currentPage===l.id?' active':''),onClick:()=>setPage(l.id)},l.label);
     if(currentPage===l.id)btn.style.background=C.red;
     desktop.appendChild(btn);
   });
+  // Language toggle
+  const langToggle=el('div',{style:{display:'flex',alignItems:'center',gap:1,marginLeft:8,background:'rgba(255,255,255,0.08)',borderRadius:6,padding:'2px'}});
+  ['en','fr'].forEach(l=>{
+    const btn=el('button',{
+      style:{background:lang===l?C.red:'transparent',color:C.white,border:'none',padding:'4px 9px',borderRadius:5,cursor:'pointer',fontSize:12,fontWeight:700,transition:'background 0.15s'},
+      onClick:()=>setLang(l)
+    },l.toUpperCase());
+    langToggle.appendChild(btn);
+  });
+  desktop.appendChild(langToggle);
   const hamburger=el('button',{class:'show-mobile',style:{background:'transparent',border:'none',color:C.white,fontSize:22,cursor:'pointer',padding:'4px 8px'},onClick:()=>{mobileOpen=!mobileOpen;mobileMenu.style.display=mobileOpen?'block':'none';}},'☰');
   inner.appendChild(logo);inner.appendChild(desktop);inner.appendChild(hamburger);
   nav.appendChild(inner);
@@ -390,65 +452,78 @@ function renderNav() {
     const item=el('div',{style:{padding:'10px 20px',color:currentPage===l.id?C.red:C.white,cursor:'pointer',fontSize:14},onClick:()=>{setPage(l.id);mobileOpen=false;mobileMenu.style.display='none';}},l.label);
     mobileMenu.appendChild(item);
   });
+  // Mobile lang toggle
+  const mobileLang=el('div',{style:{padding:'10px 20px',display:'flex',gap:8}});
+  ['en','fr'].forEach(l=>{
+    const btn=el('button',{
+      style:{background:lang===l?C.red:'rgba(255,255,255,0.1)',color:C.white,border:'none',padding:'4px 12px',borderRadius:5,cursor:'pointer',fontSize:12,fontWeight:700},
+      onClick:()=>{setLang(l);mobileOpen=false;mobileMenu.style.display='none';}
+    },l.toUpperCase());
+    mobileLang.appendChild(btn);
+  });
+  mobileMenu.appendChild(mobileLang);
   nav.appendChild(mobileMenu);
   return nav;
 }
 
 // ─── FOOTER ──────────────────────────────────────────────────────────────────
 function renderFooter() {
-  const footer=el('footer',{style:{background:C.navy,marginTop:40,padding:'28px 20px'}});
-  const inner=el('div',{style:{maxWidth:1100,margin:'0 auto',display:'flex',justifyContent:'space-between',flexWrap:'wrap',gap:24,marginBottom:20}});
+  const t = T[lang].footer;
+  const footer=el('footer',{style:{background:C.navy,marginTop:40,padding:'20px 20px 16px'}});
+  const inner=el('div',{style:{maxWidth:1100,margin:'0 auto',display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:16,marginBottom:14}});
+  // Brand
   const brand=el('div');
-  const bLogo=el('div',{style:{display:'flex',alignItems:'center',gap:8,marginBottom:8}});
+  const bLogo=el('div',{style:{display:'flex',alignItems:'center',gap:8,marginBottom:4}});
   bLogo.appendChild(mapleLeaf(18,C.red));
   bLogo.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:17,fontWeight:700},html:"Citizen<span style='color:"+C.red+"'>Ready</span>"}));
   brand.appendChild(bLogo);
-  brand.appendChild(el('p',{style:{color:'rgba(250,250,248,0.45)',fontSize:12,maxWidth:200,lineHeight:1.5}},'Free Canadian citizenship test prep.'));
+  brand.appendChild(el('p',{style:{color:'rgba(250,250,248,0.45)',fontSize:12,lineHeight:1.5}},t.tagline));
   inner.appendChild(brand);
-  const cols=[
-    {title:'Legal',links:[['About Us','about'],['Contact Us','contact'],['Privacy Policy','privacy'],['Disclaimer','disclaimer'],['Terms & Conditions','terms']]},
-  ];
-  const colsDiv=el('div',{style:{display:'flex',gap:32,flexWrap:'wrap'}});
-  cols.forEach(col=>{
-    const c=el('div');
-    c.appendChild(el('div',{style:{color:C.greyLight,fontWeight:700,fontSize:11,textTransform:'uppercase',letterSpacing:1,marginBottom:8}},col.title));
-    col.links.forEach(([label,pg])=>{
-      const d=el('div',{style:{color:'rgba(250,250,248,0.55)',fontSize:13,marginBottom:6,cursor:'pointer'},onClick:()=>setPage(pg)},label);
-      d.addEventListener('mouseover',()=>d.style.color=C.white);
-      d.addEventListener('mouseout',()=>d.style.color='rgba(250,250,248,0.55)');
-      c.appendChild(d);
-    });
-    colsDiv.appendChild(c);
+  // Legal links — all in one row
+  const legalWrapDiv=el('div',{style:{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:6}});
+  legalWrapDiv.appendChild(el('div',{style:{color:C.greyLight,fontWeight:700,fontSize:10,textTransform:'uppercase',letterSpacing:1}},t.legal));
+  const linksRow=el('div',{style:{display:'flex',flexWrap:'wrap',gap:'4px 18px',alignItems:'center'}});
+  t.links.forEach(([label,pg],i)=>{
+    const d=el('span',{style:{color:'rgba(250,250,248,0.55)',fontSize:12,cursor:'pointer',whiteSpace:'nowrap'},onClick:()=>setPage(pg)},label);
+    d.addEventListener('mouseover',()=>d.style.color=C.white);
+    d.addEventListener('mouseout',()=>d.style.color='rgba(250,250,248,0.55)');
+    linksRow.appendChild(d);
+    if(i<t.links.length-1){
+      linksRow.appendChild(el('span',{style:{color:'rgba(250,250,248,0.2)',fontSize:10,userSelect:'none'}},'·'));
+    }
   });
-  inner.appendChild(colsDiv);
+  legalWrapDiv.appendChild(linksRow);
+  inner.appendChild(legalWrapDiv);
   footer.appendChild(inner);
-  const bottom=el('div',{style:{borderTop:'1px solid rgba(255,255,255,0.1)',paddingTop:14,display:'flex',justifyContent:'space-between',flexWrap:'wrap',gap:8}});
-  bottom.appendChild(el('p',{style:{color:'rgba(250,250,248,0.3)',fontSize:12}},'© 2026 CitizenReady. For educational use only.'));
-  bottom.appendChild(el('p',{style:{color:'rgba(250,250,248,0.3)',fontSize:12},html:"Based on <em>Discover Canada</em> by IRCC."}));
+  const bottom=el('div',{style:{borderTop:'1px solid rgba(255,255,255,0.1)',paddingTop:10,display:'flex',justifyContent:'space-between',flexWrap:'wrap',gap:8}});
+  bottom.appendChild(el('p',{style:{color:'rgba(250,250,248,0.3)',fontSize:11}},t.copy));
+  bottom.appendChild(el('p',{style:{color:'rgba(250,250,248,0.3)',fontSize:11},html:t.based}));
   footer.appendChild(bottom);
   return footer;
 }
 
 // ─── HOME PAGE ────────────────────────────────────────────────────────────────
 function renderHome() {
+  const th = T[lang].hero;
+  const ts = T[lang].stats;
   const wrap=el('div');
   // Hero
   const hero=el('div',{style:{background:'linear-gradient(135deg,'+C.navy+' 0%,'+C.navyMid+' 60%,'+C.navyLight+' 100%)',padding:'60px 20px',textAlign:'center',position:'relative',overflow:'hidden'}});
   const badge=el('div',{style:{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(213,43,30,0.15)',border:'1px solid rgba(213,43,30,0.3)',borderRadius:20,padding:'4px 14px',marginBottom:16}});
   badge.appendChild(mapleLeaf(12,C.red));
-  badge.appendChild(el('span',{style:{color:C.red,fontSize:12,fontWeight:700,letterSpacing:1}},'CANADA CITIZENSHIP 2026'));
+  badge.appendChild(el('span',{style:{color:C.red,fontSize:12,fontWeight:700,letterSpacing:1}},th.badge));
   hero.appendChild(badge);
-  hero.appendChild(el('h1',{class:'mobile-h1',style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:46,fontWeight:900,lineHeight:1.15,marginBottom:16,maxWidth:700,margin:'0 auto 16px'},html:"Pass Your <span style='color:"+C.red+"'>Citizenship Test</span> With Confidence"}));
-  hero.appendChild(el('p',{style:{color:'rgba(250,250,248,0.75)',fontSize:16,lineHeight:1.7,marginBottom:28,maxWidth:560,margin:'0 auto 28px'}},'Everything you need: 226 practice questions, complete study guides, province-specific quizzes, interview prep, and more. Free, always.'));
+  hero.appendChild(el('h1',{class:'mobile-h1',style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:46,fontWeight:900,lineHeight:1.15,marginBottom:16,maxWidth:700,margin:'0 auto 16px'},html:th.h1}));
+  hero.appendChild(el('p',{style:{color:'rgba(250,250,248,0.75)',fontSize:16,lineHeight:1.7,marginBottom:28,maxWidth:560,margin:'0 auto 28px'}},th.sub));
   const btns=el('div',{style:{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}});
-  const b1=el('button',{style:{background:C.red,color:C.white,border:'none',padding:'14px 28px',borderRadius:10,fontSize:16,fontWeight:700,cursor:'pointer'},onClick:()=>setPage('practice')},'Start Practice Test →');
-  const b2=el('button',{style:{background:'transparent',color:C.white,border:'2px solid rgba(255,255,255,0.3)',padding:'14px 28px',borderRadius:10,fontSize:16,fontWeight:600,cursor:'pointer'},onClick:()=>setPage('guide2026')},'2026 Guide');
+  const b1=el('button',{style:{background:C.red,color:C.white,border:'none',padding:'14px 28px',borderRadius:10,fontSize:16,fontWeight:700,cursor:'pointer'},onClick:()=>setPage('practice')},th.cta1);
+  const b2=el('button',{style:{background:'transparent',color:C.white,border:'2px solid rgba(255,255,255,0.3)',padding:'14px 28px',borderRadius:10,fontSize:16,fontWeight:600,cursor:'pointer'},onClick:()=>setPage('guide2026')},th.cta2);
   btns.appendChild(b1);btns.appendChild(b2);
   hero.appendChild(btns);
   wrap.appendChild(hero);
   // Stats bar
   const statsBar=el('div',{style:{background:C.red,padding:'14px 20px',display:'flex',justifyContent:'center',gap:40,flexWrap:'wrap'}});
-  [['226','Questions'],['10','Study Pages'],['13','Provinces'],['Free','Always']].forEach(([n,l])=>{
+  ts.forEach(([n,l])=>{
     const s=el('div',{style:{textAlign:'center'}});
     s.appendChild(el('div',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:24,fontWeight:700}},n));
     s.appendChild(el('div',{style:{color:'rgba(255,255,255,0.75)',fontSize:11,fontWeight:700,textTransform:'uppercase',letterSpacing:1}},l));
