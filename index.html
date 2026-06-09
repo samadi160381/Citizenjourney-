@@ -374,7 +374,7 @@ const T = {
       home:'Home', guide2026:'2026 Guide', 'how-to-pass':'How to Pass',
       rights:'Rights & Duties', 'government-explained':'Government',
       'provinces-guide':'Provinces', interview:'Interview',
-      practice:'Practice', study:'Study Guide', faq:'FAQ',
+      practice:'Practice', study:'Study Guide', faq:'FAQ', blog:'Blog',
     },
     footer: {
       tagline: 'Free Canadian citizenship test prep.',
@@ -397,7 +397,7 @@ const T = {
       home:'Accueil', guide2026:'Guide 2026', 'how-to-pass':'Réussir',
       rights:'Droits & Devoirs', 'government-explained':'Gouvernement',
       'provinces-guide':'Provinces', interview:'Entretien',
-      practice:'Entraînement', study:'Guide d\'étude', faq:'FAQ',
+      practice:'Entraînement', study:'Guide d\'étude', faq:'FAQ', blog:'Blogue',
     },
     footer: {
       tagline: 'Préparation gratuite au test de citoyenneté canadienne.',
@@ -420,7 +420,7 @@ const T = {
 // ─── NAV ──────────────────────────────────────────────────────────────────────
 function renderNav() {
   const t = T[lang];
-  const linkIds = ['home','guide2026','how-to-pass','rights','government-explained','provinces-guide','interview','practice','study','faq'];
+  const linkIds = ['home','guide2026','how-to-pass','rights','government-explained','provinces-guide','interview','practice','study','faq','blog'];
   const links = linkIds.map(id=>({id, label: t.nav[id]}));
   let mobileOpen=false;
   const nav=el('nav',{style:{background:C.navy,position:'sticky',top:0,zIndex:1000,boxShadow:'0 2px 12px rgba(0,0,0,0.2)'}});
@@ -1474,6 +1474,7 @@ function render() {
     privacy:renderPrivacy,
     disclaimer:renderDisclaimer,
     terms:renderTerms,
+    blog:()=>{ window.location.href='blog.html'; return el('div'); },
   };
   const renderer=pages[currentPage]||pages.home;
   main.appendChild(renderer());
