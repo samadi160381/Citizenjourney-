@@ -406,9 +406,7 @@ function renderFooter() {
   brand.appendChild(el('p',{style:{color:'rgba(250,250,248,0.45)',fontSize:12,maxWidth:200,lineHeight:1.5}},'Free Canadian citizenship test prep.'));
   inner.appendChild(brand);
   const cols=[
-    {title:'Guides',links:[['2026 Guide','guide2026'],['How to Pass','how-to-pass'],['Rights & Duties','rights'],['Government','government-explained']]},
-    {title:'Reference',links:[['Provinces','provinces-guide'],['Interview Prep','interview'],['FAQ','faq']]},
-    {title:'Practice',links:[['Study Guide','study'],['Practice Tests','practice']]},
+    {title:'Legal',links:[['About Us','about'],['Contact Us','contact'],['Privacy Policy','privacy'],['Disclaimer','disclaimer'],['Terms & Conditions','terms']]},
   ];
   const colsDiv=el('div',{style:{display:'flex',gap:32,flexWrap:'wrap'}});
   cols.forEach(col=>{
@@ -457,28 +455,83 @@ function renderHome() {
     statsBar.appendChild(s);
   });
   wrap.appendChild(statsBar);
-  // Cards
-  const pages=[
-    {icon:'📋',title:'2026 Citizenship Guide',desc:'Complete overview of eligibility, application steps, and what to expect.',page:'guide2026',color:C.red},
-    {icon:'🎯',title:'How to Pass the Test',desc:'Proven strategies, test-day tips, and scoring breakdown.',page:'how-to-pass',color:C.navy},
-    {icon:'📜',title:'Rights & Responsibilities',desc:'Deep dive into the Charter, your freedoms, and civic duties.',page:'rights',color:C.gold},
-    {icon:'🏛️',title:'Canadian Government Explained',desc:'Clear breakdown of Parliament, the PM, Cabinet, and more.',page:'government-explained',color:C.navyLight},
-    {icon:'🗺️',title:'Provinces & Territories Guide',desc:'Every province and territory: capitals, economy, key facts.',page:'provinces-guide',color:C.green},
-    {icon:'🗣️',title:'Citizenship Interview Questions',desc:'Prepare for the interview with model Q&A.',page:'interview',color:C.maple},
-    {icon:'✏️',title:'Practice Tests',desc:'Take quizzes by category, chapter, or province focus.',page:'practice',color:C.red},
-    {icon:'📚',title:'Study Guide',desc:'Structured topic-by-topic review of all five exam categories.',page:'study',color:C.gold},
-    {icon:'❓',title:'FAQ',desc:'Answers to the most common questions about the citizenship process.',page:'faq',color:C.navy},
+  // Photo Cards
+  // Photo Cards
+  const CARDS=[
+    {
+      img:'https://images.unsplash.com/photo-1575505586569-646b2ca898fc?w=600&q=80',
+      title:'2026 Citizenship Guide',
+      desc:'Complete overview of eligibility, application steps, and what to expect.',
+      page:'guide2026'
+    },
+    {
+      img:'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&q=80',
+      title:'How to Pass the Test',
+      desc:'Proven strategies, test-day tips, and scoring breakdown.',
+      page:'how-to-pass'
+    },
+    {
+      img:'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=600&q=80',
+      title:'Rights & Responsibilities',
+      desc:'Deep dive into the Charter, your freedoms, and civic duties.',
+      page:'rights'
+    },
+    {
+      img:'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&q=80',
+      title:'Canadian Government Explained',
+      desc:'Clear breakdown of Parliament, the PM, Cabinet, and more.',
+      page:'government-explained'
+    },
+    {
+      img:'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=600&q=80',
+      title:'Provinces & Territories Guide',
+      desc:'Every province and territory: capitals, economy, key facts.',
+      page:'provinces-guide'
+    },
+    {
+      img:'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&q=80',
+      title:'Citizenship Interview Questions',
+      desc:'Prepare for the interview with model Q&A and expert tips.',
+      page:'interview'
+    },
+    {
+      img:'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=600&q=80',
+      title:'Practice Tests',
+      desc:'Take quizzes by category, chapter, or province focus.',
+      page:'practice'
+    },
+    {
+      img:'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&q=80',
+      title:'Study Guide',
+      desc:'Structured topic-by-topic review of all five exam categories.',
+      page:'study'
+    },
+    {
+      img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80',
+      title:'FAQ',
+      desc:'Answers to the most common questions about the citizenship process.',
+      page:'faq'
+    },
   ];
   const cardArea=el('div',{style:{maxWidth:1100,margin:'40px auto',padding:'0 16px'}});
   cardArea.appendChild(el('h2',{style:{fontFamily:"'Playfair Display',serif",fontSize:28,color:C.navy,textAlign:'center',marginBottom:8}},'Everything You Need to Succeed'));
   cardArea.appendChild(el('p',{style:{color:C.grey,textAlign:'center',marginBottom:28,fontSize:15}},'Explore all resources — free, no signup required.'));
-  const grid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:16}});
-  pages.forEach(p=>{
-    const card=el('div',{class:'card-hover',style:{background:C.white,borderRadius:14,padding:'22px 20px',border:'1px solid '+C.greyLight,cursor:'pointer'},onClick:()=>setPage(p.page)});
-    card.appendChild(el('div',{style:{fontSize:32,marginBottom:10}},p.icon));
-    card.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",fontSize:17,marginBottom:8,color:C.navy}},p.title));
-    card.appendChild(el('p',{style:{color:C.grey,lineHeight:1.6,marginBottom:14,fontSize:13}},p.desc));
-    card.appendChild(el('span',{style:{color:p.color,fontWeight:700,fontSize:13}},'Explore →'));
+  const grid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',gap:0,border:'1px solid '+C.greyLight,borderRadius:0,overflow:'hidden'}});
+  CARDS.forEach(p=>{
+    const card=el('div',{class:'card-hover',style:{background:C.white,cursor:'pointer',position:'relative',overflow:'hidden',borderRight:'1px solid '+C.greyLight,borderBottom:'1px solid '+C.greyLight},onClick:()=>setPage(p.page)});
+    const imgWrap=el('div',{style:{position:'relative',height:'180px',overflow:'hidden'}});
+    const img=el('img',{src:p.img,alt:p.title,style:{width:'100%',height:'100%',objectFit:'cover',transition:'transform 0.4s ease',display:'block'}});
+    imgWrap.appendChild(img);
+    const overlay=el('div',{style:{position:'absolute',bottom:0,left:0,right:0,background:'linear-gradient(transparent,rgba(10,22,40,0.65))',padding:'28px 16px 12px'}});
+    overlay.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",fontSize:17,color:C.white,margin:0,lineHeight:1.3}},p.title));
+    imgWrap.appendChild(overlay);
+    card.appendChild(imgWrap);
+    const body=el('div',{style:{padding:'14px 16px 16px'}});
+    body.appendChild(el('p',{style:{color:C.grey,lineHeight:1.6,marginBottom:12,fontSize:13,margin:'0 0 12px'}},p.desc));
+    body.appendChild(el('span',{style:{color:C.red,fontWeight:700,fontSize:13}},'Learn More →'));
+    card.appendChild(body);
+    card.addEventListener('mouseover',()=>{img.style.transform='scale(1.06)';});
+    card.addEventListener('mouseout',()=>{img.style.transform='scale(1)';});
     grid.appendChild(card);
   });
   cardArea.appendChild(grid);
@@ -1148,6 +1201,182 @@ function renderPractice() {
   return wrap;
 }
 
+// ─── LEGAL PAGES ──────────────────────────────────────────────────────────────
+function legalWrap(title, subtitle) {
+  const wrap = el('div', {style:{maxWidth:800,margin:'0 auto',padding:'40px 20px'}});
+  const hdr = el('div', {style:{marginBottom:32,paddingBottom:20,borderBottom:'2px solid '+C.greyLight}});
+  hdr.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:32,color:C.navy,marginBottom:8}},title));
+  hdr.appendChild(el('p',{style:{color:C.grey,fontSize:14}},subtitle));
+  wrap.appendChild(hdr);
+  return wrap;
+}
+function legalSection(wrap, heading, ...paragraphs) {
+  const sec = el('div', {style:{marginBottom:28}});
+  if(heading) sec.appendChild(el('h2',{style:{fontFamily:"'Playfair Display',serif",fontSize:18,color:C.navy,marginBottom:10,marginTop:0}},heading));
+  paragraphs.forEach(p=>{
+    if(typeof p==='string'){
+      sec.appendChild(el('p',{style:{color:'#2D3748',lineHeight:1.8,marginBottom:10,fontSize:15}},p));
+    } else {
+      sec.appendChild(p);
+    }
+  });
+  wrap.appendChild(sec);
+}
+
+function renderAbout() {
+  const wrap = legalWrap('About Us','Learn about CitizenReady and our mission.');
+  legalSection(wrap, 'Our Mission',
+    'CitizenReady is a free, independent educational resource designed to help permanent residents of Canada prepare for the Canadian Citizenship Test. Our goal is to make high-quality study materials accessible to everyone — at no cost, with no account required.',
+    'We believe that every person on the path to Canadian citizenship deserves clear, accurate, and up-to-date preparation resources. The citizenship test is an important milestone, and we want to make sure you feel confident walking in on test day.'
+  );
+  legalSection(wrap, 'What We Offer',
+    'CitizenReady provides over 226 practice questions drawn from the official Discover Canada study guide published by Immigration, Refugees and Citizenship Canada (IRCC). Our platform includes topic-specific study guides, province-focused practice quizzes, interview preparation resources, and answers to frequently asked questions about the citizenship process.',
+    'All content is organized around the five official test categories: Rights and Responsibilities, Canadian History, Government, Geography, and Economy and Symbols.'
+  );
+  legalSection(wrap, 'Who We Are',
+    'CitizenReady is an independent educational website. We are not affiliated with, endorsed by, or connected to the Government of Canada, Immigration, Refugees and Citizenship Canada (IRCC), or any government agency. We are a team of developers and educators passionate about civic education and making Canada\'s citizenship process more approachable.',
+    'If you have questions or feedback, please visit our Contact page.'
+  );
+  legalSection(wrap, 'Our Commitment',
+    'We are committed to keeping CitizenReady free and up-to-date. We regularly review our content to reflect the latest version of the Discover Canada study guide and any changes to the citizenship test format announced by IRCC.',
+    'We do not sell your data, require registration, or place your study progress behind a paywall.'
+  );
+  return wrap;
+}
+
+function renderContact() {
+  const wrap = legalWrap('Contact Us','We\'d love to hear from you.');
+  legalSection(wrap, 'Get in Touch',
+    'CitizenReady is an independent educational platform. While we do not offer individual immigration advice or legal counsel, we welcome your feedback, content suggestions, and error reports.'
+  );
+  const infoBox = el('div',{style:{background:C.offWhite,border:'1px solid '+C.greyLight,borderRadius:12,padding:'20px 24px',marginBottom:16}});
+  [
+    ['📧','Email','support@citizenready.ca'],
+    ['🌐','Website','www.citizenready.ca'],
+    ['📍','Location','Canada'],
+  ].forEach(([icon,label,value])=>{
+    const row = el('div',{style:{display:'flex',gap:12,alignItems:'center',marginBottom:10}});
+    row.appendChild(el('span',{style:{fontSize:20}},icon));
+    const txt = el('div');
+    txt.appendChild(el('div',{style:{fontWeight:700,fontSize:13,color:C.navy}},label));
+    txt.appendChild(el('div',{style:{fontSize:14,color:C.grey}},value));
+    row.appendChild(txt);
+    infoBox.appendChild(row);
+  });
+  wrap.appendChild(infoBox);
+  legalSection(wrap, 'What to Include in Your Message',
+    'To help us respond effectively, please include a clear subject line describing your inquiry, the specific page or question you are referencing (if applicable), and any relevant details such as the question ID number or topic category.',
+    'We aim to review all messages within 5–7 business days. Please note that we are unable to provide personalized immigration advice, legal guidance, or assessments of individual citizenship applications.'
+  );
+  legalSection(wrap, 'Reporting Errors',
+    'Accuracy matters. If you believe any question, answer, or study content on CitizenReady contains an error or is outdated, please contact us with the question ID and the correction you suggest. We take accuracy reports seriously and will investigate promptly.'
+  );
+  legalSection(wrap, 'Advertising Enquiries',
+    'If you are interested in advertising on CitizenReady, please contact us by email with the subject line "Advertising Enquiry" and include details about your product or service. We only consider advertising partnerships that are relevant and appropriate for our audience.'
+  );
+  return wrap;
+}
+
+function renderPrivacy() {
+  const wrap = legalWrap('Privacy Policy','Last updated: January 1, 2026');
+  legalSection(wrap, 'Introduction',
+    'This Privacy Policy explains how CitizenReady ("we", "our", or "us") collects, uses, and protects information when you visit our website. We are committed to protecting your privacy and handling your data transparently.',
+    'By using CitizenReady, you agree to the practices described in this policy. If you do not agree, please discontinue use of the site.'
+  );
+  legalSection(wrap, 'Information We Collect',
+    'CitizenReady does not require you to create an account or provide personal information to use the site. However, certain data may be collected automatically when you visit, including:',
+    '• IP address and general geographic region\n• Browser type and version\n• Device type and operating system\n• Pages visited and time spent on the site\n• Referring URLs',
+    'This information is collected through analytics tools (such as Google Analytics) and advertising partners (such as Google AdSense) for the purposes described below.'
+  );
+  legalSection(wrap, 'How We Use Information',
+    'We use collected data to: understand how visitors use our site so we can improve content and navigation; monitor site performance and diagnose technical issues; display relevant advertisements through our advertising partners; and comply with legal obligations.',
+    'We do not sell, rent, or share your personal information with third parties for their own marketing purposes.'
+  );
+  legalSection(wrap, 'Cookies and Advertising',
+    'CitizenReady uses cookies — small text files stored on your device — to support analytics and advertising. Our advertising partner, Google AdSense, may use cookies to show you personalized ads based on your browsing history. You can opt out of personalized advertising through the Google Ads Settings page or by visiting aboutads.info.',
+    'You can disable cookies in your browser settings, though doing so may affect how the site functions.'
+  );
+  legalSection(wrap, 'Third-Party Services',
+    'We use the following third-party services that may collect data independently: Google Analytics (website analytics), Google AdSense (advertising), and Google Fonts (typography). Each of these services operates under their own privacy policies. We encourage you to review those policies on the respective providers\' websites.'
+  );
+  legalSection(wrap, 'Data Retention',
+    'We retain analytics and usage data for up to 26 months, after which it is automatically deleted. We do not store personally identifiable information beyond what is described above.'
+  );
+  legalSection(wrap, 'Your Rights',
+    'Depending on your location, you may have rights regarding your personal data, including the right to access, correct, or delete data we hold about you. Canadian residents may also have rights under the Personal Information Protection and Electronic Documents Act (PIPEDA). To make a request, contact us at the email listed on our Contact page.'
+  );
+  legalSection(wrap, 'Children\'s Privacy',
+    'CitizenReady is not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe a child has provided us with personal information, please contact us immediately.'
+  );
+  legalSection(wrap, 'Changes to This Policy',
+    'We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated revision date. We encourage you to review this page periodically.'
+  );
+  return wrap;
+}
+
+function renderDisclaimer() {
+  const wrap = legalWrap('Disclaimer','Please read this disclaimer carefully before using CitizenReady.');
+  legalSection(wrap, 'Educational Purpose Only',
+    'CitizenReady is an independent educational resource created to help individuals prepare for the Canadian Citizenship Test. All content on this website is provided for informational and educational purposes only. It is not intended as legal advice, immigration advice, or a substitute for professional consultation.'
+  );
+  legalSection(wrap, 'No Affiliation with the Government of Canada',
+    'CitizenReady is not affiliated with, endorsed by, sponsored by, or connected to the Government of Canada, Immigration, Refugees and Citizenship Canada (IRCC), or any federal, provincial, or municipal government agency. Use of government-related terminology, content from Discover Canada, and references to official processes is purely for educational illustration.',
+    'For official and authoritative information about the Canadian citizenship process, please visit the IRCC website at canada.ca/citizenship.'
+  );
+  legalSection(wrap, 'Accuracy of Content',
+    'While we make every effort to ensure that the content on CitizenReady is accurate and up-to-date, we cannot guarantee that all information is complete, current, or free of error. Immigration rules, test formats, and fee structures can change. Always verify critical details with official IRCC sources before making decisions.',
+    'CitizenReady is not responsible for any errors or omissions, or for any outcomes that arise from reliance on information provided on this website.'
+  );
+  legalSection(wrap, 'No Guarantee of Test Success',
+    'Practice questions and study guides on CitizenReady are designed to supplement your preparation but do not guarantee a passing score on the Canadian Citizenship Test. Test results depend on individual preparation, circumstances, and the discretion of IRCC.'
+  );
+  legalSection(wrap, 'External Links',
+    'CitizenReady may contain links to external websites for reference or additional information. We are not responsible for the content, accuracy, or privacy practices of those external sites. The inclusion of any link does not imply our endorsement of that site.'
+  );
+  legalSection(wrap, 'Limitation of Liability',
+    'To the fullest extent permitted by applicable law, CitizenReady and its operators shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising out of your use of, or inability to use, this website or its content.'
+  );
+  return wrap;
+}
+
+function renderTerms() {
+  const wrap = legalWrap('Terms and Conditions','Last updated: January 1, 2026. Please read these terms carefully.');
+  legalSection(wrap, 'Acceptance of Terms',
+    'By accessing and using CitizenReady ("the Site"), you accept and agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree to these terms, please do not use the Site.'
+  );
+  legalSection(wrap, 'Use of the Site',
+    'CitizenReady grants you a limited, non-exclusive, non-transferable, revocable licence to access and use the Site for personal, non-commercial educational purposes only.',
+    'You agree not to: reproduce, distribute, or republish content from CitizenReady without prior written permission; use the Site for any unlawful purpose; attempt to gain unauthorized access to any part of the Site or its systems; use automated tools (bots, scrapers, crawlers) to extract content from the Site; or interfere with the operation or security of the Site.'
+  );
+  legalSection(wrap, 'Intellectual Property',
+    'All original content on CitizenReady — including but not limited to text, design, layout, and code — is the intellectual property of CitizenReady and is protected by applicable copyright laws.',
+    'Content derived from the official Discover Canada guide published by IRCC is used for educational purposes. CitizenReady does not claim ownership over government-produced materials.'
+  );
+  legalSection(wrap, 'User Conduct',
+    'You are responsible for your own use of the Site. You agree to use CitizenReady only in a manner consistent with all applicable local, provincial, and federal laws and regulations.'
+  );
+  legalSection(wrap, 'Advertising',
+    'CitizenReady displays advertisements served by third-party advertising networks, including Google AdSense. These advertisers may use cookies and similar technologies to serve relevant ads. CitizenReady is not responsible for the content of third-party advertisements and does not endorse advertised products or services.',
+    'By using the Site, you acknowledge and consent to the use of advertising as described in our Privacy Policy.'
+  );
+  legalSection(wrap, 'Disclaimer of Warranties',
+    'CitizenReady is provided "as is" and "as available" without warranties of any kind, either express or implied. We do not warrant that the Site will be uninterrupted, error-free, or free of viruses or harmful components. We make no warranty regarding the accuracy, completeness, or suitability of any content for any particular purpose.'
+  );
+  legalSection(wrap, 'Limitation of Liability',
+    'To the maximum extent permitted by law, CitizenReady and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of data, revenue, or goodwill, arising out of or related to your use of the Site, even if advised of the possibility of such damages.'
+  );
+  legalSection(wrap, 'Modifications to the Site and Terms',
+    'We reserve the right to modify or discontinue the Site at any time without notice. We may also update these Terms and Conditions periodically. Continued use of the Site after changes are posted constitutes your acceptance of the revised terms.'
+  );
+  legalSection(wrap, 'Governing Law',
+    'These Terms and Conditions are governed by and construed in accordance with the laws of Canada and the province of Ontario, without regard to conflict of law principles. Any disputes arising from these terms shall be subject to the exclusive jurisdiction of the courts located in Ontario, Canada.'
+  );
+  legalSection(wrap, 'Contact',
+    'If you have questions about these Terms and Conditions, please contact us via the Contact page.'
+  );
+  return wrap;
+}
+
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 function render() {
   const app=document.getElementById('app');
@@ -1165,6 +1394,11 @@ function render() {
     practice:renderPractice,
     study:renderStudy,
     faq:renderFAQ,
+    about:renderAbout,
+    contact:renderContact,
+    privacy:renderPrivacy,
+    disclaimer:renderDisclaimer,
+    terms:renderTerms,
   };
   const renderer=pages[currentPage]||pages.home;
   main.appendChild(renderer());
