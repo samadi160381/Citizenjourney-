@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog — CitizenReady | Canadian Citizenship Tips & Stories</title>
+  <meta name="description" content="Read our latest articles, study tips, immigration stories, and guides to help you prepare for the Canadian Citizenship Test."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #0d1b2a; font-family: 'Inter', sans-serif; color: #f0ede6; overflow-x: hidden; }
+
+    /* ── NAV ── */
+    nav { background: #0a1628; border-bottom: 1px solid rgba(255,255,255,0.08); position: sticky; top: 0; z-index: 999; }
+    .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo svg { flex-shrink: 0; }
+    .nav-logo span { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #f0ede6; }
+    .nav-logo span em { font-style: normal; color: #D52B1E; }
+    .nav-links { display: flex; gap: 2px; align-items: center; flex-wrap: nowrap; overflow-x: auto; }
+    .nav-links a { color: rgba(240,237,230,0.6); text-decoration: none; font-size: 13px; font-weight: 600; padding: 5px 10px; border-radius: 6px; transition: all 0.15s; white-space: nowrap; }
+    .nav-links a:hover, .nav-links a.active { background: #D52B1E; color: #fff; }
+
+    /* ── HERO ── */
+    .hero { background: linear-gradient(160deg, #0a1628 0%, #152340 55%, #1E3A5F 100%); padding: 48px 16px 56px; text-align: center; position: relative; overflow: hidden; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(213,43,30,0.18); border: 1px solid #D52B1E; border-radius: 20px; padding: 5px 14px; margin-bottom: 18px; }
+    .hero-badge span { color: #D52B1E; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 7vw, 52px); color: #f0ede6; line-height: 1.15; margin-bottom: 14px; font-weight: 900; }
+    .hero h1 em { font-style: normal; color: #D52B1E; }
+    .hero p { color: rgba(240,237,230,0.65); font-size: clamp(14px, 3vw, 17px); line-height: 1.7; max-width: 500px; margin: 0 auto; }
+
+    /* ── LANG TOGGLE ── */
+    .lang-bar { background: #D52B1E; padding: 12px 16px; display: flex; justify-content: center; gap: 10px; }
+    .lang-btn { background: transparent; border: 2px solid rgba(255,255,255,0.4); border-radius: 20px; padding: 6px 18px; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .lang-btn.active { background: #fff; color: #D52B1E; border-color: #fff; }
+
+    /* ── MAIN LAYOUT ── */
+    .container { max-width: 1000px; margin: 0 auto; padding: 36px 16px 60px; }
+
+    /* ── FILTERS ── */
+    .filters { margin-bottom: 28px; }
+    .search-wrap { position: relative; margin-bottom: 14px; }
+    .search-wrap .icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #8a8a8a; font-size: 16px; pointer-events: none; }
+    .search-input { width: 100%; padding: 12px 14px 12px 42px; border-radius: 10px; border: 1.5px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); color: #f0ede6; font-size: 15px; font-family: 'Inter', sans-serif; outline: none; transition: border 0.2s; }
+    .search-input::placeholder { color: #8a8a8a; }
+    .search-input:focus { border-color: #D52B1E; }
+    .cat-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cat-btn { background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 6px 14px; color: rgba(240,237,230,0.7); font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; white-space: nowrap; }
+    .cat-btn.active, .cat-btn:hover { background: #D52B1E; border-color: #D52B1E; color: #fff; }
+
+    /* ── BLOG GRID ── */
+    .blog-grid { display: flex; flex-direction: column; gap: 16px; }
+    .blog-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; display: flex; flex-direction: column; }
+    .blog-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.4); border-color: rgba(213,43,30,0.4); }
+    .card-img { width: 100%; height: 180px; object-fit: cover; background: #152340; display: flex; align-items: center; justify-content: center; font-size: 48px; flex-shrink: 0; }
+    .card-body { padding: 18px 16px 20px; flex: 1; display: flex; flex-direction: column; }
+    .card-meta { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .card-cat { background: rgba(213,43,30,0.2); color: #ff6b5b; border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .card-date { color: #8a8a8a; font-size: 12px; }
+    .card-title { font-family: 'Playfair Display', serif; font-size: clamp(17px, 4vw, 21px); color: #f0ede6; margin-bottom: 8px; line-height: 1.35; }
+    .card-excerpt { color: rgba(240,237,230,0.6); font-size: 14px; line-height: 1.65; margin-bottom: 14px; flex: 1; }
+    .card-link { color: #D52B1E; font-weight: 700; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+    .card-link:hover { color: #ff6b5b; }
+
+    /* ── SINGLE POST ── */
+    .post-wrap { display: none; max-width: 760px; margin: 0 auto; padding: 24px 16px 60px; }
+    .back-btn { background: none; border: none; color: rgba(240,237,230,0.6); font-size: 14px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 4px; margin-bottom: 20px; padding: 0; font-family: 'Inter', sans-serif; }
+    .back-btn:hover { color: #f0ede6; }
+    .post-article { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 28px 20px; }
+    .post-cat { background: rgba(213,43,30,0.2); color: #ff6b5b; border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; margin-bottom: 14px; }
+    .post-title { font-family: 'Playfair Display', serif; font-size: clamp(22px, 5vw, 34px); color: #f0ede6; margin-bottom: 12px; line-height: 1.3; }
+    .post-meta { color: #8a8a8a; font-size: 13px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .post-excerpt { color: rgba(240,237,230,0.7); font-size: 15px; line-height: 1.75; font-style: italic; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .post-content p { color: rgba(240,237,230,0.8); line-height: 1.85; font-size: 15px; margin-bottom: 10px; }
+    .post-content p strong { color: #f0ede6; font-size: 16px; display: block; margin-top: 20px; margin-bottom: 6px; }
+    .post-content p:first-child strong { margin-top: 0; }
+    .post-nav { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+    .post-nav-btn { flex: 1; min-width: 120px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 11px 16px; cursor: pointer; font-size: 13px; font-weight: 600; color: #f0ede6; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .post-nav-btn:hover { background: rgba(213,43,30,0.15); border-color: rgba(213,43,30,0.4); }
+    .post-cta { background: linear-gradient(135deg, #0a1628, #1E3A5F); border: 1px solid rgba(213,43,30,0.3); border-radius: 16px; padding: 22px 20px; margin-top: 20px; text-align: center; }
+    .post-cta p { color: rgba(240,237,230,0.75); font-size: 14px; margin: 10px 0 16px; line-height: 1.6; }
+    .cta-btn { background: #D52B1E; color: #fff; border: none; border-radius: 8px; padding: 11px 24px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; text-decoration: none; display: inline-block; transition: background 0.2s; }
+    .cta-btn:hover { background: #A8221A; }
+
+    /* ── EMPTY STATE ── */
+    .empty { text-align: center; padding: 50px 0; color: #8a8a8a; }
+    .empty .icon { font-size: 44px; margin-bottom: 12px; }
+
+    /* ── ADD POST HINT ── */
+    .add-hint { background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12); border-radius: 14px; padding: 16px 20px; margin-top: 28px; text-align: center; }
+    .add-hint p { color: #8a8a8a; font-size: 13px; line-height: 1.6; }
+    .add-hint code { background: rgba(255,255,255,0.08); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: #f0ede6; }
+
+    /* ── FOOTER ── */
+    footer { background: #0a1628; border-top: 1px solid rgba(255,255,255,0.06); padding: 32px 16px; margin-top: 0; }
+    .footer-inner { max-width: 1000px; margin: 0 auto; }
+    .footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px; margin-bottom: 24px; }
+    .footer-brand span { font-family: 'Playfair Display', serif; color: #f0ede6; font-size: 16px; font-weight: 700; }
+    .footer-brand span em { font-style: normal; color: #D52B1E; }
+    .footer-brand p { color: rgba(240,237,230,0.4); font-size: 13px; max-width: 220px; line-height: 1.6; margin-top: 8px; }
+    .footer-cols { display: flex; gap: 40px; flex-wrap: wrap; }
+    .footer-col h4 { color: rgba(240,237,230,0.5); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 10px; }
+    .footer-col a { display: block; color: rgba(240,237,230,0.45); font-size: 13px; text-decoration: none; margin-bottom: 6px; transition: color 0.15s; }
+    .footer-col a:hover { color: #f0ede6; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 16px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .footer-bottom p { color: rgba(240,237,230,0.25); font-size: 12px; }
+
+    /* ── RESPONSIVE ── */
+    @media(min-width: 640px) {
+      .blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .card-img { height: 160px; }
+    }
+    @media(min-width: 900px) {
+      .blog-grid { grid-template-columns: 1fr 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="http://mycitizenjourney.com/" class="nav-logo">
+      <svg width="20" height="20" viewBox="0 0 100 100" fill="#D52B1E"><path d="M50 5 L56 35 L85 20 L68 45 L95 50 L68 55 L85 80 L56 65 L50 95 L44 65 L15 80 L32 55 L5 50 L32 45 L15 20 L44 35 Z"/></svg>
+      <span>Citizen<em>Ready</em></span>
+    </a>
+    <div class="nav-links">
+      <a href="http://mycitizenjourney.com/">Home</a>
+      <a href="http://mycitizenjourney.com/#study">Study</a>
+      <a href="http://mycitizenjourney.com/#practice">Practice</a>
+      <a href="http://mycitizenjourney.com/#mock">Mock Exam</a>
+      <a href="http://mycitizenjourney.com/blog.html" class="active">Blog</a>
+      <a href="http://mycitizenjourney.com/about.html">About</a>
+      <a href="http://mycitizenjourney.com/contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-badge">
+    <svg width="12" height="12" viewBox="0 0 100 100" fill="#D52B1E"><path d="M50 5 L56 35 L85 20 L68 45 L95 50 L68 55 L85 80 L56 65 L50 95 L44 65 L15 80 L32 55 L5 50 L32 45 L15 20 L44 35 Z"/></svg>
+    <span>CitizenReady Blog</span>
+  </div>
+  <h1>Tips, Stories &<br/><em>Guides</em> for Your<br/>Citizenship Journey</h1>
+  <p>Study tips, Canadian history deep-dives, government guides, and real immigration stories — in English and French.</p>
+</div>
+
+<!-- ── LANGUAGE TOGGLE ── -->
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('en')">🇨🇦 English</button>
+  <button class="lang-btn" onclick="setLang('fr')">🇨🇦 Français</button>
+</div>
+
+<!-- ── BLOG LIST ── -->
+<div class="container" id="blog-list-view">
+  <div class="filters">
+    <div class="search-wrap">
+      <span class="icon">🔍</span>
+      <input class="search-input" id="search-input" type="text" placeholder="Search posts..." oninput="filterPosts()"/>
+    </div>
+    <div class="cat-filters" id="cat-filters"></div>
+  </div>
+  <div class="blog-grid" id="blog-grid"></div>
+  <div class="empty" id="empty-state" style="display:none">
+    <div class="icon">📭</div>
+    <p>No posts found.</p>
+  </div>
+  <div class="add-hint">
+    <p>✏️ <strong style="color:#f0ede6">Want to add a new post?</strong> Open <code>blog.html</code> and add your post to the <code>POSTS</code> array at the bottom of the script. Both English and French supported!</p>
+  </div>
+</div>
+
+<!-- ── SINGLE POST ── -->
+<div class="post-wrap" id="post-view">
+  <button class="back-btn" onclick="showList()">← Back to Blog</button>
+  <div class="lang-bar" style="margin-bottom:20px;border-radius:10px;overflow:hidden">
+    <button class="lang-btn active" id="post-lang-en" onclick="setPostLang('en')">🇨🇦 English</button>
+    <button class="lang-btn" id="post-lang-fr" onclick="setPostLang('fr')">🇨🇦 Français</button>
+  </div>
+  <article class="post-article" id="post-article"></article>
+  <div class="post-nav" id="post-nav"></div>
+  <div class="post-cta">
+    <svg width="22" height="22" viewBox="0 0 100 100" fill="#D52B1E"><path d="M50 5 L56 35 L85 20 L68 45 L95 50 L68 55 L85 80 L56 65 L50 95 L44 65 L15 80 L32 55 L5 50 L32 45 L15 20 L44 35 Z"/></svg>
+    <p id="cta-text">Ready to test your knowledge?</p>
+    <a href="http://mycitizenjourney.com/#mock" class="cta-btn" id="cta-btn">Take the Mock Exam →</a>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span>Citizen<em>Ready</em></span>
+        <p>Free Canadian citizenship test prep for everyone.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Learn</h4>
+          <a href="http://mycitizenjourney.com/#study">Study Guide</a>
+          <a href="http://mycitizenjourney.com/#practice">Practice Tests</a>
+          <a href="http://mycitizenjourney.com/#mock">Mock Exam</a>
+          <a href="http://mycitizenjourney.com/blog.html">Blog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Info</h4>
+          <a href="http://mycitizenjourney.com/about.html">About</a>
+          <a href="http://mycitizenjourney.com/contact.html">Contact</a>
+          <a href="http://mycitizenjourney.com/privacy.html">Privacy</a>
+          <a href="http://mycitizenjourney.com/disclaimer.html">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 CitizenReady · Independent educational resource, not affiliated with the Government of Canada.</p>
+      <p>Based on <em>Discover Canada</em> (IRCC)</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────
+// ✏️  ADD NEW POSTS HERE — copy a block below,
+//     paste it at the top, fill in your content.
+// ─────────────────────────────────────────────
+const POSTS = [
+  {
+    id: 1,
+    slug: "how-to-pass-citizenship-test",
+    category: "Study Tips",
+    date: "June 9, 2026",
+    readTime: "5 min read",
+    emoji: "📝",
+    en: {
+      title: "How to Pass the Canadian Citizenship Test on Your First Try",
+      excerpt: "The citizenship test is a milestone moment. Here are the most effective strategies to prepare and pass with confidence.",
+      content: [
+        ["The Canadian Citizenship Test covers five main areas: Rights & Responsibilities, Canadian History, Government, Geography, and Economy & Symbols. Here is how to prepare effectively."],
+        ["1. Read Discover Canada thoroughly", "The official study guide published by IRCC is the single most important resource. Every test question comes from this book. Read it at least twice — once for understanding and once to memorize key facts."],
+        ["2. Focus on your hardest areas", "Most people find Canadian History and Government the most challenging. Use practice tests to identify your weak areas and focus your study time there."],
+        ["3. Practice under timed conditions", "The real test gives you 45 minutes for 20 questions. Practising under realistic conditions builds confidence. Try a 20-question mock exam to simulate the experience."],
+        ["4. Know the key dates", "Some dates come up repeatedly: 1867 (Confederation), 1982 (Charter of Rights), 1965 (current flag), 1949 (Newfoundland joined), 1918 (women got the federal vote)."],
+        ["5. Understand, don't just memorize", "When you understand why something happened — like why the CPR was built or why the Charter matters — the answers become logical rather than just facts to remember."],
+        ["6. Take the full 226-question exam at least once", "Even though the real test is only 20 questions, practising all 226 ensures you are ready for any question. Aim for 85%+ before your test date."],
+        ["Good luck — you've got this! 🍁"]
+      ]
+    },
+    fr: {
+      title: "Comment réussir le test de citoyenneté canadienne du premier coup",
+      excerpt: "Le test de citoyenneté est un moment important. Voici les stratégies les plus efficaces pour vous préparer et réussir avec confiance.",
+      content: [
+        ["Le test de citoyenneté canadienne couvre cinq domaines principaux : les droits et responsabilités, l'histoire canadienne, le gouvernement, la géographie et l'économie et les symboles."],
+        ["1. Lisez Découvrir le Canada attentivement", "Le guide d'étude officiel publié par IRCC est la ressource la plus importante. Toutes les questions du test proviennent de ce livre. Lisez-le au moins deux fois."],
+        ["2. Concentrez-vous sur les domaines les plus difficiles", "La plupart des gens trouvent l'histoire canadienne et le gouvernement les plus difficiles. Utilisez des tests pratiques pour identifier vos points faibles."],
+        ["3. Pratiquez dans des conditions chronométrées", "Le vrai test vous donne 45 minutes pour 20 questions. Pratiquer dans des conditions réalistes renforce la confiance."],
+        ["4. Connaissez les dates clés", "Certaines dates reviennent souvent : 1867 (Confédération), 1982 (Charte des droits), 1965 (drapeau actuel), 1949 (Terre-Neuve a rejoint), 1918 (les femmes ont obtenu le vote fédéral)."],
+        ["5. Comprenez, ne mémorisez pas seulement", "Quand vous comprenez pourquoi quelque chose s'est passé, les réponses deviennent logiques plutôt que de simples faits à retenir."],
+        ["Bonne chance — vous pouvez le faire ! 🍁"]
+      ]
+    }
+  },
+  {
+    id: 2,
+    slug: "top-10-facts-canadian-history",
+    category: "Canadian History",
+    date: "June 9, 2026",
+    readTime: "4 min read",
+    emoji: "📜",
+    en: {
+      title: "Top 10 Canadian History Facts You Must Know for the Citizenship Test",
+      excerpt: "Canadian history questions are among the most common on the citizenship test. Master these 10 essential facts.",
+      content: [
+        ["History questions make up a significant portion of the Canadian Citizenship Test. Here are the 10 most important facts to know."],
+        ["1. Confederation — July 1, 1867", "Canada became a country on July 1, 1867, through the British North America Act. Sir John A. Macdonald became the first Prime Minister."],
+        ["2. The Battle of Vimy Ridge — 1917", "Canadian troops captured Vimy Ridge during World War I in April 1917. This battle is considered a defining moment in Canadian national identity."],
+        ["3. D-Day — June 6, 1944", "Canadian forces landed at Juno Beach during the Normandy invasion in World War II. About 14,000 Canadians participated."],
+        ["4. The Canadian Pacific Railway — 1885", "The CPR connected Canada coast to coast. It was built largely by Chinese labourers who faced discrimination including the Chinese Head Tax."],
+        ["5. The Charter of Rights and Freedoms — 1982", "Prime Minister Pierre Elliott Trudeau patriated the Constitution and added the Charter of Rights and Freedoms in 1982."],
+        ["6. Women's Right to Vote — 1918", "Women gained the right to vote in federal elections in 1918. The Persons Case in 1929 established women as persons under Canadian law."],
+        ["7. Residential Schools", "Government-funded, church-run schools forcibly separated Indigenous children from their families. The Truth and Reconciliation Commission documented these harms."],
+        ["8. Newfoundland joins Confederation — 1949", "Newfoundland and Labrador was the last province to join Canada."],
+        ["9. Louis Riel and Manitoba — 1870", "Louis Riel led the Métis in the Red River Resistance and helped create the province of Manitoba."],
+        ["10. The Underground Railroad", "Canada was a destination for freedom seekers escaping slavery in the United States via the Underground Railroad network."]
+      ]
+    },
+    fr: {
+      title: "10 faits d'histoire canadienne essentiels pour le test de citoyenneté",
+      excerpt: "Les questions d'histoire canadienne sont parmi les plus courantes au test de citoyenneté. Maîtrisez ces 10 faits essentiels.",
+      content: [
+        ["Les questions d'histoire constituent une partie importante du test de citoyenneté canadienne. Voici les 10 faits les plus importants à connaître."],
+        ["1. La Confédération — 1er juillet 1867", "Le Canada est devenu un pays le 1er juillet 1867. Sir John A. Macdonald est devenu le premier Premier ministre."],
+        ["2. La bataille de la crête de Vimy — 1917", "Les troupes canadiennes ont capturé la crête de Vimy en avril 1917. Cette bataille est considérée comme un moment déterminant de l'identité nationale canadienne."],
+        ["3. Le Jour J — 6 juin 1944", "Les forces canadiennes ont débarqué à la plage Juno lors de l'invasion de la Normandie en Seconde Guerre mondiale."],
+        ["4. Le Chemin de fer Canadien Pacifique — 1885", "Le CPR a relié le Canada d'un océan à l'autre. Il a été construit en grande partie par des travailleurs chinois."],
+        ["5. La Charte des droits et libertés — 1982", "Le Premier ministre Pierre Elliott Trudeau a rapatrié la Constitution et ajouté la Charte des droits et libertés en 1982."],
+        ["6. Le droit de vote des femmes — 1918", "Les femmes ont obtenu le droit de vote aux élections fédérales en 1918."],
+        ["7. Les pensionnats autochtones", "Des écoles financées par le gouvernement ont séparé de force les enfants autochtones de leurs familles."],
+        ["8. Terre-Neuve rejoint la Confédération — 1949", "Terre-Neuve-et-Labrador était la dernière province à rejoindre le Canada."],
+        ["9. Louis Riel et le Manitoba — 1870", "Louis Riel a dirigé les Métis dans la résistance de la rivière Rouge et a aidé à créer la province du Manitoba."],
+        ["10. Le chemin de fer clandestin", "Le Canada était une destination pour ceux qui fuyaient l'esclavage aux États-Unis."]
+      ]
+    }
+  },
+  {
+    id: 3,
+    slug: "understanding-canadian-government",
+    category: "Government",
+    date: "June 9, 2026",
+    readTime: "6 min read",
+    emoji: "🏛️",
+    en: {
+      title: "Understanding Canada's Government System — Simplified",
+      excerpt: "Canada's government can feel complex at first. This simple guide breaks it down so you can answer any government question on your test.",
+      content: [
+        ["Canada is three things at once: a constitutional monarchy (the King is head of state), a federal state (powers split between federal and provincial governments), and a parliamentary democracy (citizens elect representatives)."],
+        ["The Three Branches of Government"],
+        ["Legislative Branch — Makes the laws", "Parliament is made up of the House of Commons (338 elected MPs) and the Senate (105 appointed senators). Bills must pass both chambers before becoming law."],
+        ["Executive Branch — Carries out the laws", "The Prime Minister leads the government and heads the Cabinet. The PM is the leader of the party with the most seats in the House of Commons."],
+        ["Judicial Branch — Interprets the laws", "Courts ensure laws follow the Constitution. The Supreme Court of Canada has 9 judges and is the final court of appeal."],
+        ["The Governor General", "The Governor General represents the King in Canada — granting Royal Assent to bills, swearing in the PM, and dissolving Parliament for elections."],
+        ["Federal vs Provincial", "Federal: defence, immigration, criminal law, banking. Provincial: education, healthcare, natural resources. Municipal: local services, water, transit."],
+        ["Key fact: The Prime Minister is NOT directly elected by all Canadians. Canadians vote for their local MP, and the leader of the party winning the most seats becomes PM."]
+      ]
+    },
+    fr: {
+      title: "Comprendre le système gouvernemental canadien — Simplifié",
+      excerpt: "Le gouvernement canadien peut sembler complexe au premier abord. Ce guide simple le décompose pour vous aider à répondre à toute question.",
+      content: [
+        ["Le Canada est trois choses à la fois : une monarchie constitutionnelle, un État fédéral et une démocratie parlementaire."],
+        ["Les trois branches du gouvernement"],
+        ["Branche législative — Fait les lois", "Le Parlement est composé de la Chambre des communes (338 députés élus) et du Sénat (105 sénateurs nommés)."],
+        ["Branche exécutive — Applique les lois", "Le Premier ministre dirige le gouvernement et préside le Cabinet."],
+        ["Branche judiciaire — Interprète les lois", "La Cour suprême du Canada a 9 juges et est le tribunal d'appel final."],
+        ["Le Gouverneur général", "Le Gouverneur général représente le Roi au Canada — accordant la sanction royale aux projets de loi et dissolvant le Parlement pour les élections."],
+        ["Fédéral vs Provincial", "Fédéral : défense, immigration, droit pénal. Provincial : éducation, santé, ressources naturelles. Municipal : services locaux, eau, transport."],
+        ["Fait clé : Le Premier ministre n'est PAS directement élu par tous les Canadiens. Les Canadiens votent pour leur député local."]
+      ]
+    }
+  },
+  {
+    id: 4,
+    slug: "citizenship-journey-story",
+    category: "Immigration Stories",
+    date: "June 9, 2026",
+    readTime: "3 min read",
+    emoji: "🍁",
+    en: {
+      title: "From Permanent Resident to Canadian Citizen: A Journey",
+      excerpt: "A personal story about the path to Canadian citizenship — the challenges, the preparation, and the pride of that final moment.",
+      content: [
+        ["Becoming a Canadian citizen is one of the most meaningful milestones in a newcomer's life."],
+        ["The Wait", "After arriving as a permanent resident, the countdown begins. You need to live in Canada for at least 3 of the last 5 years. Those years go by quickly when you are building a new life."],
+        ["The Preparation", "The study guide Discover Canada covers everything from the history of Indigenous peoples to how Parliament works. As you study, something changes — you begin to truly understand the country you have chosen to call home."],
+        ["The Test Day", "Walking into the test centre, you feel a mix of nerves and pride. The 20 questions come and go. Most people who prepare well find the test manageable."],
+        ["The Ceremony", "Nothing compares to the citizenship ceremony. Standing with others from around the world, taking the Oath of Citizenship, receiving your certificate — it is emotional in the best possible way."],
+        ["Canada is a country built by people who came from elsewhere. When you become a citizen, you join that story. Welcome home. 🍁"]
+      ]
+    },
+    fr: {
+      title: "De résident permanent à citoyen canadien : Un parcours",
+      excerpt: "Une histoire personnelle sur le chemin vers la citoyenneté canadienne — les défis, la préparation et la fierté de ce moment final.",
+      content: [
+        ["Devenir citoyen canadien est l'un des jalons les plus significatifs dans la vie d'un nouvel arrivant."],
+        ["L'attente", "Après être arrivé en tant que résident permanent, le compte à rebours commence. Vous devez vivre au Canada pendant au moins 3 des 5 dernières années."],
+        ["La préparation", "Le guide d'étude Découvrir le Canada couvre tout. En étudiant, quelque chose change — vous commencez à vraiment comprendre le pays que vous avez choisi d'appeler votre foyer."],
+        ["Le jour du test", "En entrant dans le centre de test, vous ressentez un mélange de nervosité et de fierté. La plupart des gens qui se préparent bien trouvent le test gérable."],
+        ["La cérémonie", "Rien n'est comparable à la cérémonie de citoyenneté. Se tenir avec d'autres personnes du monde entier, prêter le serment de citoyenneté — c'est émouvant dans le meilleur sens du terme."],
+        ["Le Canada est un pays construit par des gens venus d'ailleurs. Bienvenue chez vous. 🍁"]
+      ]
+    }
+  }
+];
+
+// ── STATE ──
+let currentLang = 'en';
+let currentPost = null;
+let currentCat = 'All';
+
+const CATEGORIES = ['All', 'Study Tips', 'Canadian History', 'Government', 'Immigration Stories'];
+
+// ── INIT ──
+function init() {
+  renderCatFilters();
+  renderGrid();
+}
+
+function renderCatFilters() {
+  const el = document.getElementById('cat-filters');
+  el.innerHTML = CATEGORIES.map(c =>
+    `<button class="cat-btn${c === currentCat ? ' active' : ''}" onclick="setCat('${c}')">${c}</button>`
+  ).join('');
+}
+
+function setCat(cat) {
+  currentCat = cat;
+  renderCatFilters();
+  renderGrid();
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    if (b.getAttribute('onclick') === `setLang('${lang}')`) b.classList.add('active');
+  });
+  // update search placeholder
+  document.getElementById('search-input').placeholder = lang === 'en' ? 'Search posts...' : 'Rechercher des articles...';
+  renderGrid();
+}
+
+function filterPosts() { renderGrid(); }
+
+function renderGrid() {
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const filtered = POSTS.filter(p => {
+    const matchCat = currentCat === 'All' || p.category === currentCat;
+    const matchSearch = p[currentLang].title.toLowerCase().includes(search) ||
+      p[currentLang].excerpt.toLowerCase().includes(search);
+    return matchCat && matchSearch;
+  });
+  const grid = document.getElementById('blog-grid');
+  const empty = document.getElementById('empty-state');
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    empty.querySelector('p').textContent = currentLang === 'en' ? 'No posts found.' : 'Aucun article trouvé.';
+  } else {
+    empty.style.display = 'none';
+    grid.innerHTML = filtered.map(p => `
+      <div class="blog-card" onclick="showPost(${p.id})">
+        <div class="card-img">${p.emoji}</div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="card-cat">${p.category}</span>
+            <span class="card-date">${p.date} · ${p.readTime}</span>
+          </div>
+          <h2 class="card-title">${p[currentLang].title}</h2>
+          <p class="card-excerpt">${p[currentLang].excerpt}</p>
+          <span class="card-link">${currentLang === 'en' ? 'Read more →' : 'Lire la suite →'}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+function showPost(id) {
+  currentPost = POSTS.find(p => p.id === id);
+  renderPost();
+  document.getElementById('blog-list-view').style.display = 'none';
+  document.getElementById('post-view').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setPostLang(lang) {
+  currentLang = lang;
+  document.getElementById('post-lang-en').classList.toggle('active', lang === 'en');
+  document.getElementById('post-lang-fr').classList.toggle('active', lang === 'fr');
+  renderPost();
+}
+
+function renderPost() {
+  if (!currentPost) return;
+  const p = currentPost;
+  const d = p[currentLang];
+  const article = document.getElementById('post-article');
+  const contentHtml = d.content.map(block => {
+    if (block.length === 1) return `<p>${block[0]}</p>`;
+    return `<p><strong>${block[0]}</strong>${block[1] || ''}</p>`;
+  }).join('');
+  article.innerHTML = `
+    <span class="post-cat">${p.category}</span>
+    <h1 class="post-title">${d.title}</h1>
+    <div class="post-meta">${p.date} · ${p.readTime}</div>
+    <p class="post-excerpt">${d.excerpt}</p>
+    <div class="post-content">${contentHtml}</div>
+  `;
+  // nav
+  const prev = POSTS.find(x => x.id === p.id - 1);
+  const next = POSTS.find(x => x.id === p.id + 1);
+  document.getElementById('post-nav').innerHTML = `
+    ${prev ? `<button class="post-nav-btn" onclick="showPost(${prev.id})">← ${currentLang === 'en' ? 'Previous' : 'Précédent'}</button>` : ''}
+    ${next ? `<button class="post-nav-btn" onclick="showPost(${next.id})" style="text-align:right">${currentLang === 'en' ? 'Next' : 'Suivant'} →</button>` : ''}
+  `;
+  // cta
+  document.getElementById('cta-text').textContent = currentLang === 'en' ? 'Ready to test your knowledge?' : 'Prêt à tester vos connaissances ?';
+  document.getElementById('cta-btn').textContent = currentLang === 'en' ? 'Take the Mock Exam →' : 'Passer l\'examen simulé →';
+}
+
+function showList() {
+  document.getElementById('blog-list-view').style.display = 'block';
+  document.getElementById('post-view').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+init();
+</script>
+</body>
+</html>
