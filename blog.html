@@ -199,13 +199,6 @@
       </div>
       <div class="footer-cols">
         <div class="footer-col">
-          <h4>Learn</h4>
-          <a href="http://mycitizenjourney.com/#study">Study Guide</a>
-          <a href="http://mycitizenjourney.com/#practice">Practice Tests</a>
-          <a href="http://mycitizenjourney.com/#mock">Mock Exam</a>
-          <a href="http://mycitizenjourney.com/blog.html">Blog</a>
-        </div>
-        <div class="footer-col">
           <h4>Info</h4>
           <a href="http://mycitizenjourney.com/about.html">About</a>
           <a href="http://mycitizenjourney.com/contact.html">Contact</a>
@@ -233,7 +226,7 @@ const POSTS = [
     category: "Study Tips",
     date: "June 9, 2026",
     readTime: "5 min read",
-    emoji: "📝",
+    photo: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&q=80",
     en: {
       title: "How to Pass the Canadian Citizenship Test on Your First Try",
       excerpt: "The citizenship test is a milestone moment. Here are the most effective strategies to prepare and pass with confidence.",
@@ -268,7 +261,7 @@ const POSTS = [
     category: "Canadian History",
     date: "June 9, 2026",
     readTime: "4 min read",
-    emoji: "📜",
+    photo: "https://images.unsplash.com/photo-1569163139599-0f4517e36f51?w=600&q=80",
     en: {
       title: "Top 10 Canadian History Facts You Must Know for the Citizenship Test",
       excerpt: "Canadian history questions are among the most common on the citizenship test. Master these 10 essential facts.",
@@ -310,7 +303,7 @@ const POSTS = [
     category: "Government",
     date: "June 9, 2026",
     readTime: "6 min read",
-    emoji: "🏛️",
+    photo: "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&q=80",
     en: {
       title: "Understanding Canada's Government System — Simplified",
       excerpt: "Canada's government can feel complex at first. This simple guide breaks it down so you can answer any government question on your test.",
@@ -346,7 +339,7 @@ const POSTS = [
     category: "Immigration Stories",
     date: "June 9, 2026",
     readTime: "3 min read",
-    emoji: "🍁",
+    photo: "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?w=600&q=80",
     en: {
       title: "From Permanent Resident to Canadian Citizen: A Journey",
       excerpt: "A personal story about the path to Canadian citizenship — the challenges, the preparation, and the pride of that final moment.",
@@ -431,7 +424,7 @@ function renderGrid() {
     empty.style.display = 'none';
     grid.innerHTML = filtered.map(p => `
       <div class="blog-card" onclick="showPost(${p.id})">
-        <div class="card-img">${p.emoji}</div>
+        <div class="card-img"><img src="${p.photo}" alt="${p[currentLang].title}" style="width:100%;height:100%;object-fit:cover;display:block;"/></div>
         <div class="card-body">
           <div class="card-meta">
             <span class="card-cat">${p.category}</span>
