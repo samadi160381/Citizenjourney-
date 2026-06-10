@@ -1,17 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Contact Us - My Citizen Journey</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us - CitizenReady</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f7fa;
+}
+
+.container{
+    display:flex;
+    min-height:100vh;
+}
+
+.left{
+    flex:1;
+    background:url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a0?w=1200') center center/cover;
+}
+
+.right{
+    flex:1;
+    padding:60px;
+    background:white;
+}
+
+h1{
+    color:#0b1f3a;
+    margin-bottom:30px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:5px;
+    font-weight:bold;
+}
+
+input, textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    box-sizing:border-box;
+}
+
+textarea{
+    height:150px;
+}
+
+button{
+    margin-top:20px;
+    background:#d62828;
+    color:white;
+    border:none;
+    padding:14px 30px;
+    border-radius:6px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#b71c1c;
+}
+
+@media(max-width:768px){
+    .container{
+        flex-direction:column;
+    }
+
+    .left{
+        height:250px;
+    }
+
+    .right{
+        padding:30px;
+    }
+}
+</style>
 </head>
+
 <body>
-    <h1>Contact Us</h1>
 
-    <p>If you have questions, suggestions, or feedback, please contact us.</p>
+<div class="container">
 
-    <p>Email:   contact.mycitizenjourney@gmail.com</p>
+<div class="left"></div>
 
-    <p>We aim to respond as quickly as possible.</p>
+<div class="right">
 
-    <a href="index.html">Back to Home</a>
+<h1>Contact CitizenReady</h1>
+
+<p>
+Questions, feedback, content suggestions, or error reports?
+Send us a message and we'll get back to you as soon as possible.
+</p>
+
+<form action="https://formspree.io/f/xkoazoqv" method="POST">
+
+<label>Name</label>
+<input type="text" name="name" required>
+
+<label>Email</label>
+<input type="email" name="email" required>
+
+<label>Message</label>
+<textarea name="message" required></textarea>
+
+<button type="submit">Send Message</button>
+
+</form>
+
+</div>
+
+</div>
+
 </body>
 </html>
