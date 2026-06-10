@@ -1329,36 +1329,78 @@ function renderAbout() {
 }
 
 function renderContact() {
-  const wrap = legalWrap('Contact Us','We\'d love to hear from you.');
-  legalSection(wrap, 'Get in Touch',
-    'CitizenReady is an independent educational platform. While we do not offer individual immigration advice or legal counsel, we welcome your feedback, content suggestions, and error reports.'
-  );
-  const infoBox = el('div',{style:{background:C.offWhite,border:'1px solid '+C.greyLight,borderRadius:12,padding:'20px 24px',marginBottom:16}});
-  [
-    ['📧','Email','contact.mycitizenjourney@gmail.com'],
-    ['🌐','Website','www.mycitizenjourney.ca'],
-    ['📍','Location','Canada'],
-  ].forEach(([icon,label,value])=>{
-    const row = el('div',{style:{display:'flex',gap:12,alignItems:'center',marginBottom:10}});
-    row.appendChild(el('span',{style:{fontSize:20}},icon));
-    const txt = el('div');
-    txt.appendChild(el('div',{style:{fontWeight:700,fontSize:13,color:C.navy}},label));
-    txt.appendChild(el('div',{style:{fontSize:14,color:C.grey}},value));
-    row.appendChild(txt);
-    infoBox.appendChild(row);
+  const outer = el('div',{style:{minHeight:'80vh',display:'flex',alignItems:'stretch',flexWrap:'wrap'}});
+
+  // ── LEFT PANEL ──
+  const left = el('div',{style:{
+    flex:'1',minWidth:280,background:'linear-gradient(160deg,'+C.navy+' 0%,#152340 60%,#1E3A5F 100%)',
+    display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
+    padding:'48px 32px',gap:24
+  }});
+  const logoRow = el('div',{style:{display:'flex',alignItems:'center',gap:12,marginBottom:8}});
+  logoRow.appendChild(mapleLeaf(44,C.red));
+  logoRow.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",fontSize:32,fontWeight:900,color:'#f0ede6'},
+    html:"My<em style='font-style:normal;color:#D52B1E'>Citizen</em><br>Journey"}));
+  left.appendChild(logoRow);
+  left.appendChild(el('p',{style:{color:'rgba(240,237,230,0.6)',fontSize:15,textAlign:'center',lineHeight:1.7,maxWidth:260}},
+    'Free Canadian citizenship test prep. Study guides, practice tests, and mock exams — all in one place.'));
+  const badges = [['226','Questions'],['Free','Always'],['🍁','Canada']];
+  const badgeRow = el('div',{style:{display:'flex',gap:12,flexWrap:'wrap',justifyContent:'center',marginTop:8}});
+  badges.forEach(([n,l])=>{
+    const b = el('div',{style:{background:'rgba(213,43,30,0.15)',border:'1px solid rgba(213,43,30,0.3)',borderRadius:20,padding:'6px 14px',textAlign:'center'}});
+    b.appendChild(el('div',{style:{color:'#D52B1E',fontWeight:700,fontSize:15}},n));
+    b.appendChild(el('div',{style:{color:'rgba(240,237,230,0.5)',fontSize:11}},l));
+    badgeRow.appendChild(b);
   });
-  wrap.appendChild(infoBox);
-  legalSection(wrap, 'What to Include in Your Message',
-    'To help us respond effectively, please include a clear subject line describing your inquiry, the specific page or question you are referencing (if applicable), and any relevant details such as the question ID number or topic category.',
-    'We aim to review all messages within 5–7 business days. Please note that we are unable to provide personalized immigration advice, legal guidance, or assessments of individual citizenship applications.'
-  );
-  legalSection(wrap, 'Reporting Errors',
-    'Accuracy matters. If you believe any question, answer, or study content on CitizenReady contains an error or is outdated, please contact us with the question ID and the correction you suggest. We take accuracy reports seriously and will investigate promptly.'
-  );
-  legalSection(wrap, 'Advertising Enquiries',
-    'If you are interested in advertising on CitizenReady, please contact us by email with the subject line "Advertising Enquiry" and include details about your product or service. We only consider advertising partnerships that are relevant and appropriate for our audience.'
-  );
-  return wrap;
+  left.appendChild(badgeRow);
+
+  // ── RIGHT PANEL ──
+  const right = el('div',{style:{
+    flex:'1',minWidth:300,background:'#F2EFE9',
+    display:'flex',flexDirection:'column',justifyContent:'center',
+    padding:'48px 40px'
+  }});
+  right.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:'clamp(24px,4vw,34px)',color:C.navy,marginBottom:8,fontWeight:900}},'Contact MyCitizenJourney'));
+  right.appendChild(el('p',{style:{color:C.grey,fontSize:14,marginBottom:28,lineHeight:1.7}},
+    'Questions, feedback, content suggestions, or error reports? Send us a message and we\'ll get back to you as soon as possible.'));
+
+  function iStyle(extra={}){ return {width:'100%',padding:'11px 14px',borderRadius:8,border:'1.5px solid #ddd',fontSize:14,fontFamily:"'Source Sans 3',sans-serif",color:C.navy,background:'#fff',outline:'none',boxSizing:'border-box',...extra}; }
+  function label(txt){ return el('div',{style:{fontWeight:700,fontSize:13,color:C.navy,marginBottom:6}},txt); }
+
+  const nameInput    = el('input',{type:'text',name:'name',placeholder:'Your name',style:iStyle()});
+  const emailInput   = el('input',{type:'email',name:'email',placeholder:'your@email.com',style:iStyle()});
+  const msgInput     = el('textarea',{name:'message',placeholder:'Your message...',rows:5,style:iStyle({resize:'vertical'})});
+  const submitBtn    = el('button',{type:'button',style:{marginTop:20,background:C.red,color:'#fff',border:'none',borderRadius:8,padding:'13px 28px',fontSize:15,fontWeight:700,cursor:'pointer',fontFamily:"'Source Sans 3',sans-serif",width:'100%',transition:'background 0.2s'}},'Send Message');
+  const successMsg   = el('div',{style:{display:'none',background:'#d4edda',border:'1px solid #c3e6cb',borderRadius:8,padding:'12px 16px',color:'#155724',fontSize:14,marginTop:12}},'✅ Message sent! We\'ll get back to you soon.');
+
+  submitBtn.addEventListener('mouseover',()=>submitBtn.style.background=C.redDark);
+  submitBtn.addEventListener('mouseout',()=>submitBtn.style.background=C.red);
+  submitBtn.addEventListener('click', async ()=>{
+    const name=nameInput.value.trim(), email=emailInput.value.trim(), message=msgInput.value.trim();
+    if(!name||!email||!message){alert('Please fill in all fields.');return;}
+    submitBtn.textContent='Sending...'; submitBtn.disabled=true;
+    try {
+      const res = await fetch('https://formspree.io/f/xkoazoqv',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({name,email,message})});
+      if(res.ok){
+        successMsg.style.display='block';
+        nameInput.value=''; emailInput.value=''; msgInput.value='';
+        submitBtn.textContent='Sent ✓';
+      } else { submitBtn.textContent='Send Message'; submitBtn.disabled=false; alert('Something went wrong. Please try again.'); }
+    } catch(e){ submitBtn.textContent='Send Message'; submitBtn.disabled=false; alert('Something went wrong. Please try again.'); }
+  });
+
+  [
+    label('Name'), nameInput,
+    el('div',{style:{marginTop:14}}),
+    label('Email'), emailInput,
+    el('div',{style:{marginTop:14}}),
+    label('Message'), msgInput,
+    submitBtn, successMsg
+  ].forEach(e=>right.appendChild(e));
+
+  outer.appendChild(left);
+  outer.appendChild(right);
+  return outer;
 }
 
 function renderPrivacy() {
