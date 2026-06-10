@@ -13,6 +13,7 @@
 <link rel="icon" type="image/x-icon" href="https://mycitizenjourney.com/favicon.ico"/>
 <link rel="icon" type="image/png" sizes="256x256" href="https://mycitizenjourney.com/favicon.png"/>
 <link rel="apple-touch-icon" sizes="256x256" href="https://mycitizenjourney.com/favicon.png"/>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1947161842433441" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -504,6 +505,19 @@ function renderFooter() {
   legalWrapDiv.appendChild(linksRow);
   inner.appendChild(legalWrapDiv);
   footer.appendChild(inner);
+  // Buy Me a Coffee button
+  const bmcWrap = el('div',{style:{textAlign:'center',padding:'12px 0',borderTop:'1px solid rgba(255,255,255,0.06)'}});
+  const bmcBtn = el('a',{
+    href:'https://www.buymeacoffee.com/Mycitizenjourney',
+    target:'_blank',
+    style:{display:'inline-flex',alignItems:'center',gap:8,background:'#FFDD00',color:'#000',borderRadius:10,padding:'10px 22px',fontWeight:700,fontSize:14,textDecoration:'none',fontFamily:"'Inter',sans-serif",transition:'opacity 0.2s'}
+  });
+  bmcBtn.innerHTML = '☕ Buy Me a Coffee';
+  bmcBtn.addEventListener('mouseover',()=>bmcBtn.style.opacity='0.85');
+  bmcBtn.addEventListener('mouseout',()=>bmcBtn.style.opacity='1');
+  bmcWrap.appendChild(el('p',{style:{color:'rgba(250,250,248,0.4)',fontSize:12,marginBottom:8}},'Enjoying MyCitizenJourney? Support us!'));
+  bmcWrap.appendChild(bmcBtn);
+  footer.appendChild(bmcWrap);
   const bottom=el('div',{style:{borderTop:'1px solid rgba(255,255,255,0.1)',paddingTop:10,display:'flex',justifyContent:'space-between',flexWrap:'wrap',gap:8}});
   bottom.appendChild(el('p',{style:{color:'rgba(250,250,248,0.3)',fontSize:11}},t.copy));
   bottom.appendChild(el('p',{style:{color:'rgba(250,250,248,0.3)',fontSize:11},html:t.based}));
