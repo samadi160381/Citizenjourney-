@@ -2,6 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-11R0CM7XBR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-11R0CM7XBR');
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MyCitizenJourney — Free Canadian Citizenship Test Prep 2026</title>
 <meta name="description" content="Prepare for your Canadian Citizenship Test with 226 practice questions, study guides, mock exams and more. Free, no signup required. Updated for 2026."/>
@@ -434,8 +441,8 @@ function renderNav() {
   let mobileOpen=false;
   const nav=el('nav',{style:{background:C.navy,position:'sticky',top:0,zIndex:1000,boxShadow:'0 2px 12px rgba(0,0,0,0.2)'}});
   const inner=el('div',{style:{maxWidth:1200,margin:'0 auto',padding:'0 16px',display:'flex',alignItems:'center',justifyContent:'space-between',height:52}});
-  const logo=el('div',{style:{display:'flex',alignItems:'center',gap:12,cursor:'pointer'},onClick:()=>setPage('home')});
-  logo.appendChild(el('img',{src:'favicon.png',alt:'icon',style:{height:'24px',width:'24px',borderRadius:'50%',mixBlendMode:'screen'}}));
+  const logo=el('div',{style:{display:'flex',alignItems:'center',gap:16,cursor:'pointer'},onClick:()=>setPage('home')});
+  logo.appendChild(el('img',{src:'favicon.png',alt:'icon',style:{height:'20px',width:'20px',borderRadius:'50%',mixBlendMode:'screen'}}));
   logo.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",fontSize:18,fontWeight:700},html:"<span style='color:"+C.white+"'>My</span><span style='color:"+C.red+"'>Citizen</span><span style='color:"+C.white+"'>Journey</span>"}));
   const desktop=el('div',{class:'hide-mobile',style:{display:'flex',gap:2,flexWrap:'wrap',alignItems:'center'}});
   links.forEach(l=>{
@@ -482,8 +489,8 @@ function renderFooter() {
   const inner=el('div',{style:{maxWidth:1100,margin:'0 auto',display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:8,marginBottom:6}});
   // Brand
   const brand=el('div');
-  const bLogo=el('div',{style:{display:'flex',alignItems:'center',gap:8,marginBottom:4}});
-  bLogo.appendChild(el('img',{src:'favicon.png',alt:'icon',style:{height:'22px',width:'22px',borderRadius:'50%',mixBlendMode:'screen'}}));
+  const bLogo=el('div',{style:{display:'flex',alignItems:'center',gap:14,marginBottom:4}});
+  bLogo.appendChild(el('img',{src:'favicon.png',alt:'icon',style:{height:'18px',width:'18px',borderRadius:'50%',mixBlendMode:'screen'}}));
   bLogo.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",fontSize:16,fontWeight:700},html:"<span style='color:"+C.white+"'>My</span><span style='color:"+C.red+"'>Citizen</span><span style='color:"+C.white+"'>Journey</span>"}));
   brand.appendChild(bLogo);
   brand.appendChild(el('p',{style:{color:'rgba(250,250,248,0.45)',fontSize:12,lineHeight:1.5}},t.tagline));
