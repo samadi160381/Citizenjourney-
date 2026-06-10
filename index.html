@@ -1095,10 +1095,12 @@ function renderStudy() {
 // ─── QUIZ ─────────────────────────────────────────────────────────────────────
 function renderQuiz(questions, onFinish, title) {
   if(!quizState || quizState.questions!==questions){
-    quizState={questions,idx:0,selected:null,answers:{},done:false,title};
+    if(quizState && quizState.timerInterval) clearInterval(quizState.timerInterval);
+    quizState={questions,idx:0,selected:null,answers:{},done:false,title,timerStart:null,timerInterval:null};
   }
   const s=quizState;
   if(s.done){
+    if(s.timerInterval){ clearInterval(s.timerInterval); s.timerInterval=null; }
     const total=s.questions.length;
     const correct=s.questions.filter((q,i)=>s.answers[i]===q.answer).length;
     const pct=Math.round((correct/total)*100);
@@ -1112,6 +1114,7 @@ function renderQuiz(questions, onFinish, title) {
     const wrap=el('div',{style:{maxWidth:800,margin:'0 auto',padding:'24px 16px'}});
     const scoreCard=el('div',{class:'fade-up',style:{background:C.white,borderRadius:16,padding:'32px',textAlign:'center',marginBottom:20}});
     scoreCard.appendChild(el('div',{style:{fontSize:52,marginBottom:12}},pass?'🎉':'📚'));
+    if(s.timerExpired) scoreCard.appendChild(el('div',{style:{background:C.redLight,color:C.red,borderRadius:8,padding:'8px 16px',fontWeight:700,fontSize:14,marginBottom:12}},'⏱ Time is up! The 45-minute exam time has ended.'));
     scoreCard.appendChild(el('h2',{style:{fontFamily:"'Playfair Display',serif",fontSize:32,color:C.navy,marginBottom:8}},pass?'Great Work!':'Keep Studying!'));
     scoreCard.appendChild(el('div',{style:{fontSize:60,fontFamily:"'Playfair Display',serif",color:pass?C.green:C.red,fontWeight:700,marginBottom:4}},pct+'%'));
     scoreCard.appendChild(el('div',{style:{fontSize:15,color:C.grey,marginBottom:12}},`${correct} of ${total} correct`));
@@ -1161,10 +1164,51 @@ function renderQuiz(questions, onFinish, title) {
   // Active question
   const q=s.questions[s.idx];
   const prog=(s.idx/s.questions.length)*100;
+
+  // ── TIMER SETUP ──
+  const totalSeconds = 45 * 60; // 45 minutes like real exam
+  if(!s.timerStart) s.timerStart = Date.now();
+  if(!s.timerInterval){
+    s.timerInterval = setInterval(()=>{
+      const elapsed = Math.floor((Date.now() - s.timerStart) / 1000);
+      const remaining = totalSeconds - elapsed;
+      if(remaining <= 0){
+        clearInterval(s.timerInterval);
+        s.done = true;
+        s.timerExpired = true;
+        render();
+        return;
+      }
+      const mins = Math.floor(remaining / 60);
+      const secs = remaining % 60;
+      const timerEl = document.getElementById('quiz-timer');
+      if(timerEl){
+        timerEl.textContent = `⏱ ${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        if(remaining <= 300) timerEl.style.color = C.red; // red when 5 mins left
+        if(remaining <= 60) timerEl.style.animation = 'fadeUp 0.5s infinite alternate'; // flash when 1 min left
+      }
+    }, 1000);
+  }
+  const elapsed = Math.floor((Date.now() - s.timerStart) / 1000);
+  const remaining = Math.max(0, totalSeconds - elapsed);
+  const mins = Math.floor(remaining / 60);
+  const secs = remaining % 60;
+  const timerColor = remaining <= 300 ? C.red : C.green;
+
   const wrap=el('div',{style:{maxWidth:720,margin:'0 auto',padding:'20px 16px'}});
   const topRow=el('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}});
   topRow.appendChild(el('span',{style:{fontSize:12,color:C.grey,fontWeight:700}},s.title));
-  topRow.appendChild(el('span',{style:{background:C.redLight,color:C.red,borderRadius:8,padding:'4px 12px',fontSize:14,fontWeight:700}},`${s.idx+1} / ${s.questions.length}`));
+
+  // Timer + question counter row
+  const rightRow = el('div',{style:{display:'flex',alignItems:'center',gap:12}});
+  const timerBadge = el('span',{
+    id:'quiz-timer',
+    style:{background:remaining<=300?C.redLight:C.greenLight,color:timerColor,borderRadius:8,padding:'4px 12px',fontSize:14,fontWeight:700,fontFamily:'monospace'}
+  }, `⏱ ${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`);
+  const counterBadge = el('span',{style:{background:C.redLight,color:C.red,borderRadius:8,padding:'4px 12px',fontSize:14,fontWeight:700}},`${s.idx+1} / ${s.questions.length}`);
+  rightRow.appendChild(timerBadge);
+  rightRow.appendChild(counterBadge);
+  topRow.appendChild(rightRow);
   wrap.appendChild(topRow);
   const progBar=el('div',{style:{background:C.greyLight,borderRadius:4,height:6,marginBottom:20}});
   progBar.appendChild(el('div',{style:{background:C.red,height:'100%',borderRadius:4,width:prog+'%',transition:'width 0.3s'}}));
