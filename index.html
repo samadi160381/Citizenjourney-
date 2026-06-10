@@ -435,7 +435,7 @@ function renderNav() {
   const nav=el('nav',{style:{background:C.navy,position:'sticky',top:0,zIndex:1000,boxShadow:'0 2px 12px rgba(0,0,0,0.2)'}});
   const inner=el('div',{style:{maxWidth:1200,margin:'0 auto',padding:'0 16px',display:'flex',alignItems:'center',justifyContent:'space-between',height:52}});
   const logo=el('div',{style:{display:'flex',alignItems:'center',gap:12,cursor:'pointer'},onClick:()=>setPage('home')});
-  logo.appendChild(el('img',{src:'favicon.png',alt:'icon',style:{height:'22px',width:'22px'}}));
+  logo.appendChild(el('img',{src:'favicon.png',alt:'icon',style:{height:'22px',width:'22px',borderRadius:'50%'}}));
   logo.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",fontSize:18,fontWeight:700},html:"<span style='color:"+C.white+"'>My</span><span style='color:"+C.red+"'>Citizen</span><span style='color:"+C.white+"'>Journey</span>"}));
   const desktop=el('div',{class:'hide-mobile',style:{display:'flex',gap:2,flexWrap:'wrap',alignItems:'center'}});
   links.forEach(l=>{
@@ -483,7 +483,7 @@ function renderFooter() {
   // Brand
   const brand=el('div');
   const bLogo=el('div',{style:{display:'flex',alignItems:'center',gap:8,marginBottom:4}});
-  bLogo.appendChild(el('img',{src:'favicon.png',alt:'icon',style:{height:'18px',width:'18px'}}));
+  bLogo.appendChild(el('img',{src:'favicon.png',alt:'icon',style:{height:'18px',width:'18px',borderRadius:'50%'}}));
   bLogo.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",fontSize:16,fontWeight:700},html:"<span style='color:"+C.white+"'>My</span><span style='color:"+C.red+"'>Citizen</span><span style='color:"+C.white+"'>Journey</span>"}));
   brand.appendChild(bLogo);
   brand.appendChild(el('p',{style:{color:'rgba(250,250,248,0.45)',fontSize:12,lineHeight:1.5}},t.tagline));
@@ -517,63 +517,14 @@ function renderHome() {
   const ts = T[lang].stats;
   const wrap=el('div');
   // Hero
-  const hero=el('div',{style:{padding:'60px 20px',textAlign:'center',position:'relative',overflow:'hidden',minHeight:'320px'}});
-
-  // ── Sliding Canada nature image carousel (background) ──
-  const SLIDES=[
-    'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1400&q=80', // Banff mountains
-    'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1400&q=80', // Canada lake forest
-    'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1400&q=80', // Waterfall nature
-    'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1400&q=80', // Aurora borealis
-    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1400&q=80', // Rocky mountains
-  ];
-  const track=document.createElement('div');
-  track.id='hero-slide-track';
-  track.style.cssText='position:absolute;top:0;left:0;width:'+( SLIDES.length*100)+'%;height:100%;display:flex;transition:transform 0.9s cubic-bezier(0.77,0,0.175,1);will-change:transform;';
-  SLIDES.forEach(url=>{
-    const slide=document.createElement('div');
-    slide.style.cssText='width:'+(100/SLIDES.length)+'%;height:100%;background:url('+url+') center/cover no-repeat;flex-shrink:0;';
-    track.appendChild(slide);
-  });
-  hero.appendChild(track);
-
-  // Dark overlay so text stays readable
-  const overlay=document.createElement('div');
-  overlay.style.cssText='position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,22,40,0.72) 0%,rgba(10,22,40,0.55) 60%,rgba(10,22,40,0.65) 100%);z-index:1;';
-  hero.appendChild(overlay);
-
-  // Dot indicators
-  const dots=document.createElement('div');
-  dots.style.cssText='position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:3;';
-  let heroSlide=0;
-  function goToSlide(i){
-    heroSlide=i;
-    track.style.transform='translateX(-'+(i*(100/SLIDES.length))+'%)';
-    dots.querySelectorAll('span').forEach((d,idx)=>{
-      d.style.background=idx===i?'#D52B1E':'rgba(255,255,255,0.45)';
-      d.style.width=idx===i?'22px':'8px';
-    });
-  }
-  SLIDES.forEach((_,i)=>{
-    const dot=document.createElement('span');
-    dot.style.cssText='display:inline-block;height:8px;width:'+(i===0?'22px':'8px')+';border-radius:4px;background:'+(i===0?'#D52B1E':'rgba(255,255,255,0.45)')+';cursor:pointer;transition:all 0.3s;';
-    dot.addEventListener('click',()=>goToSlide(i));
-    dots.appendChild(dot);
-  });
-  hero.appendChild(dots);
-
-  // Auto-advance every 4 seconds
-  let slideTimer=setInterval(()=>goToSlide((heroSlide+1)%SLIDES.length),4000);
-  hero.addEventListener('mouseenter',()=>clearInterval(slideTimer));
-  hero.addEventListener('mouseleave',()=>{slideTimer=setInterval(()=>goToSlide((heroSlide+1)%SLIDES.length),4000);});
-
-  const badge=el('div',{style:{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(213,43,30,0.2)',border:'1px solid rgba(213,43,30,0.45)',borderRadius:20,padding:'4px 14px',marginBottom:16,position:'relative',zIndex:2}});
+  const hero=el('div',{style:{background:'linear-gradient(135deg,'+C.navy+' 0%,'+C.navyMid+' 60%,'+C.navyLight+' 100%)',padding:'60px 20px',textAlign:'center',position:'relative',overflow:'hidden'}});
+  const badge=el('div',{style:{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(213,43,30,0.15)',border:'1px solid rgba(213,43,30,0.3)',borderRadius:20,padding:'4px 14px',marginBottom:16}});
   badge.appendChild(mapleLeaf(12,C.red));
   badge.appendChild(el('span',{style:{color:C.red,fontSize:12,fontWeight:700,letterSpacing:1}},th.badge));
   hero.appendChild(badge);
-  hero.appendChild(el('h1',{class:'mobile-h1',style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:46,fontWeight:900,lineHeight:1.15,marginBottom:16,maxWidth:700,margin:'0 auto 16px',position:'relative',zIndex:2},html:th.h1}));
-  hero.appendChild(el('p',{style:{color:'rgba(250,250,248,0.85)',fontSize:16,lineHeight:1.7,marginBottom:28,maxWidth:560,margin:'0 auto 28px',position:'relative',zIndex:2}},th.sub));
-  const btns=el('div',{style:{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap',position:'relative',zIndex:2}});
+  hero.appendChild(el('h1',{class:'mobile-h1',style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:46,fontWeight:900,lineHeight:1.15,marginBottom:16,maxWidth:700,margin:'0 auto 16px'},html:th.h1}));
+  hero.appendChild(el('p',{style:{color:'rgba(250,250,248,0.75)',fontSize:16,lineHeight:1.7,marginBottom:28,maxWidth:560,margin:'0 auto 28px'}},th.sub));
+  const btns=el('div',{style:{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}});
   const b1=el('button',{style:{background:C.red,color:C.white,border:'none',padding:'14px 28px',borderRadius:10,fontSize:16,fontWeight:700,cursor:'pointer'},onClick:()=>setPage('practice')},th.cta1);
   const b2=el('button',{style:{background:'transparent',color:C.white,border:'2px solid rgba(255,255,255,0.3)',padding:'14px 28px',borderRadius:10,fontSize:16,fontWeight:600,cursor:'pointer'},onClick:()=>setPage('guide2026')},th.cta2);
   btns.appendChild(b1);btns.appendChild(b2);
