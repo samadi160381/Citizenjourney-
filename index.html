@@ -1533,6 +1533,9 @@ function render() {
   app.appendChild(renderFooter());
 }
 
+// Read page from URL parameter e.g. ?page=contact
+const urlPage = new URLSearchParams(window.location.search).get('page');
+if(urlPage) currentPage = urlPage;
 render();
 </script>
 </body>
