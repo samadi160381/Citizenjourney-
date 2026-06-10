@@ -1562,12 +1562,13 @@ function renderQuiz(questions, onFinish, title) {
 }
 
 // ─── PRACTICE PAGE ───────────────────────────────────────────────────────────
-let practiceState={step:'category',selectedCat:null,selectedProvince:'all',selectedSize:null,questions:null};
+let practiceState={step:'setup',selectedProvince:'all',selectedSize:null,questions:null};
 
 function renderPractice() {
   const ps=practiceState;
+  const dropdownStyle='width:100%;padding:11px 14px;border-radius:10px;border:2px solid '+C.greyLight+';font-size:15px;font-family:inherit;color:'+C.navy+';background:'+C.white+';cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'8\' viewBox=\'0 0 12 8\'%3E%3Cpath d=\'M1 1l5 5 5-5\' stroke=\'%238A8A8A\' stroke-width=\'2\' fill=\'none\' stroke-linecap=\'round\'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;';
   function getPool(){
-    let pool=ps.selectedCat==='All'?ALL_QUESTIONS:ALL_QUESTIONS.filter(q=>q.category===ps.selectedCat);
+    let pool=[...ALL_QUESTIONS];
     if(ps.selectedProvince!=='all'){
       const ids=PROVINCE_QUESTIONS[ps.selectedProvince]||[];
       const idSet=new Set(ids);
@@ -1580,78 +1581,96 @@ function renderPractice() {
   if(ps.step==='quiz'&&ps.questions){
     const provLabel=ps.selectedProvince!=='all'?` · ${PROVINCES.find(p=>p.id===ps.selectedProvince)?.name}`:'';
     const sizeLabel=ps.selectedSize===226?'All 226':`${ps.selectedSize} Qs`;
-    return renderQuiz(ps.questions,()=>{quizState=null;practiceState={step:'category',selectedCat:null,selectedProvince:'all',selectedSize:null,questions:null};render();},`${ps.selectedCat}${provLabel} · ${sizeLabel}`);
+    return renderQuiz(ps.questions,()=>{quizState=null;practiceState={step:'setup',selectedProvince:'all',selectedSize:null,questions:null};render();},`Practice Test${provLabel} · ${sizeLabel}`);
   }
-  const wrap=el('div',{style:{maxWidth:900,margin:'0 auto',padding:'32px 16px'}});
-  // Breadcrumb
-  const bc=el('div',{style:{display:'flex',alignItems:'center',gap:8,marginBottom:24,fontSize:13,flexWrap:'wrap'}});
-  const steps2=['Category','Province','Length','Quiz'];
-  const stepIdx=['category','province','size','quiz'].indexOf(ps.step);
-  steps2.forEach((label,i)=>{
-    if(i>0)bc.appendChild(el('span',{style:{color:C.greyLight}},'›'));
-    bc.appendChild(el('span',{style:{color:i===stepIdx?C.red:i<stepIdx?C.navy:C.grey,fontWeight:i<=stepIdx?700:400,cursor:i<stepIdx?'pointer':'default'},onClick:()=>{if(i===0&&stepIdx>0){practiceState.step='category';render();}else if(i===1&&stepIdx>1){practiceState.step='province';render();}else if(i===2&&stepIdx>2){practiceState.step='size';render();}}},label));
+  const wrap=el('div',{style:{maxWidth:600,margin:'0 auto',padding:'40px 16px'}});
+
+  // Header
+  const hdr=el('div',{style:{textAlign:'center',marginBottom:36}});
+  hdr.appendChild(mapleLeaf(32,C.red));
+  hdr.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:32,color:C.navy,margin:'12px 0 8px'}},'Practice Test'));
+  hdr.appendChild(el('p',{style:{color:C.grey,fontSize:15}},'Customize your quiz, then start.'));
+  wrap.appendChild(hdr);
+
+  const card=el('div',{style:{background:C.white,borderRadius:16,padding:'28px 24px',border:'1px solid '+C.greyLight,boxShadow:'0 4px 20px rgba(10,22,40,0.07)'}});
+
+  // ── Province dropdown ──
+  const provGroup=el('div',{style:{marginBottom:24}});
+  const provLabel=el('label',{style:{display:'block',fontWeight:700,fontSize:13,color:C.navy,textTransform:'uppercase',letterSpacing:0.8,marginBottom:8}});
+  provLabel.innerHTML='🗺️ Province Focus';
+  provGroup.appendChild(provLabel);
+  const provWrap=el('div',{style:{position:'relative'}});
+  const provSel=el('select',{style:dropdownStyle});
+  PROVINCES.forEach(p=>{
+    const opt=el('option',{value:p.id},`${p.flag} ${p.name}`);
+    if(p.id===ps.selectedProvince)opt.selected=true;
+    provSel.appendChild(opt);
   });
-  wrap.appendChild(bc);
-  if(ps.step==='category'){
-    wrap.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:30,color:C.navy,marginBottom:8}},'Practice Tests'));
-    wrap.appendChild(el('p',{style:{color:C.grey,fontSize:15,marginBottom:20}},'Step 1: Select the category you want to practice.'));
-    const grid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(250px,1fr))',gap:16}});
-    CATEGORIES.forEach(cat=>{
-      const guide=STUDY_GUIDE.find(g=>g.title===cat);
-      const count=cat==='All'?ALL_QUESTIONS.length:ALL_QUESTIONS.filter(q=>q.category===cat).length;
-      const card=el('div',{class:'card-hover',style:{background:C.white,borderRadius:14,padding:'20px',border:'1px solid '+C.greyLight,cursor:'pointer'},onClick:()=>{practiceState.selectedCat=cat;practiceState.step='province';render();}});
-      card.appendChild(el('div',{style:{fontSize:28,marginBottom:8}},guide?.icon||'📋'));
-      card.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",fontSize:16,color:C.navy,marginBottom:6}},cat));
-      card.appendChild(el('p',{style:{color:C.grey,fontSize:13,marginBottom:12}},`${count} questions`));
-      card.appendChild(el('div',{style:{background:C.red,color:C.white,borderRadius:8,padding:'7px 14px',fontSize:13,fontWeight:700,display:'inline-block'}},'Select →'));
-      grid.appendChild(card);
-    });
-    wrap.appendChild(grid);
-  } else if(ps.step==='province'){
-    wrap.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:28,color:C.navy,marginBottom:8}},'Choose Province Focus'));
-    wrap.appendChild(el('p',{style:{color:C.grey,fontSize:14,marginBottom:16}},'Step 2: Choose a province to prioritize questions, or keep it as All of Canada.'));
-    const grid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(130px,1fr))',gap:10,marginBottom:16}});
-    PROVINCES.forEach(p=>{
-      const isSelected=ps.selectedProvince===p.id;
-      const card=el('div',{class:'card-hover',style:{background:isSelected?C.navy:C.white,borderRadius:10,padding:'12px 8px',textAlign:'center',border:'1px solid '+C.greyLight,cursor:'pointer'},onClick:()=>{practiceState.selectedProvince=p.id;render();}});
-      card.appendChild(el('div',{style:{fontSize:22,marginBottom:4}},p.flag));
-      card.appendChild(el('div',{style:{fontFamily:"'Playfair Display',serif",fontSize:12,fontWeight:700,color:isSelected?C.white:C.navy}},p.name));
-      grid.appendChild(card);
-    });
-    wrap.appendChild(grid);
-    const btns=el('div',{style:{display:'flex',gap:12,flexWrap:'wrap'}});
-    btns.appendChild(el('button',{style:{background:'transparent',color:C.navy,border:'2px solid '+C.greyLight,padding:'10px 20px',borderRadius:10,fontSize:14,fontWeight:600,cursor:'pointer'},onClick:()=>{practiceState.step='category';render();}},'← Back'));
-    btns.appendChild(el('button',{style:{background:C.red,color:C.white,border:'none',padding:'10px 24px',borderRadius:10,fontSize:14,fontWeight:700,cursor:'pointer'},onClick:()=>{practiceState.step='size';render();}},'Continue →'));
-    wrap.appendChild(btns);
-  } else if(ps.step==='size'){
-    wrap.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:28,color:C.navy,marginBottom:8}},'Choose Quiz Length'));
-    wrap.appendChild(el('p',{style:{color:C.grey,fontSize:14,marginBottom:16}},'Step 3: How many questions do you want?'));
-    const grid=el('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:12,marginBottom:20}});
-    QUIZ_SIZES.forEach(s=>{
-      const pool=getPool();
-      const avail=Math.min(s.value,pool.length);
-      const isSelected=ps.selectedSize===s.value;
-      const card=el('div',{class:'card-hover',style:{background:isSelected?C.navy:C.white,borderRadius:14,padding:'20px',textAlign:'center',border:'2px solid '+(isSelected?C.red:C.greyLight),cursor:'pointer'},onClick:()=>{practiceState.selectedSize=s.value;render();}});
-      card.appendChild(el('div',{style:{fontFamily:"'Playfair Display',serif",fontSize:28,color:isSelected?C.red:C.navy,fontWeight:700}},avail+''));
-      card.appendChild(el('div',{style:{fontFamily:"'Playfair Display',serif",fontSize:15,color:isSelected?C.white:C.navy,marginTop:4}},s.label));
-      card.appendChild(el('div',{style:{fontSize:12,color:isSelected?'rgba(255,255,255,0.6)':C.grey}},s.desc));
-      grid.appendChild(card);
-    });
-    wrap.appendChild(grid);
-    const btns=el('div',{style:{display:'flex',gap:12,flexWrap:'wrap'}});
-    btns.appendChild(el('button',{style:{background:'transparent',color:C.navy,border:'2px solid '+C.greyLight,padding:'10px 20px',borderRadius:10,fontSize:14,fontWeight:600,cursor:'pointer'},onClick:()=>{practiceState.step='province';render();}},'← Back'));
-    const startBtn=el('button',{style:{background:ps.selectedSize?C.red:C.greyLight,color:ps.selectedSize?C.white:C.grey,border:'none',padding:'10px 24px',borderRadius:10,fontSize:14,fontWeight:700,cursor:ps.selectedSize?'pointer':'default'},onClick:()=>{
-      if(!ps.selectedSize)return;
-      const pool=getPool();
-      const count=Math.min(ps.selectedSize,pool.length);
-      practiceState.questions=shuffle(pool).slice(0,count);
+  provSel.addEventListener('change',e=>{
+    practiceState.selectedProvince=e.target.value;
+    // reset size if pool changed
+    practiceState.selectedSize=null;
+    render();
+  });
+  provWrap.appendChild(provSel);
+  provGroup.appendChild(provWrap);
+  // Province hint
+  if(ps.selectedProvince!=='all'){
+    const ids=PROVINCE_QUESTIONS[ps.selectedProvince]||[];
+    const hint=el('div',{style:{marginTop:6,fontSize:12,color:C.grey}});
+    hint.textContent=`${ids.length} province-specific questions will appear first.`;
+    provGroup.appendChild(hint);
+  }
+  card.appendChild(provGroup);
+
+  // ── Quiz length dropdown ──
+  const lenGroup=el('div',{style:{marginBottom:28}});
+  const lenLabel=el('label',{style:{display:'block',fontWeight:700,fontSize:13,color:C.navy,textTransform:'uppercase',letterSpacing:0.8,marginBottom:8}});
+  lenLabel.innerHTML='📋 Quiz Length';
+  lenGroup.appendChild(lenLabel);
+  const lenWrap=el('div',{style:{position:'relative'}});
+  const lenSel=el('select',{style:dropdownStyle});
+  // Placeholder option
+  const placeholder=el('option',{value:''},'Select quiz length…');
+  placeholder.disabled=true;
+  if(!ps.selectedSize)placeholder.selected=true;
+  lenSel.appendChild(placeholder);
+  const pool=getPool();
+  QUIZ_SIZES.forEach(s=>{
+    const avail=Math.min(s.value,pool.length);
+    const opt=el('option',{value:s.value},`${s.label} — ${s.desc} (${avail} available)`);
+    if(ps.selectedSize===s.value)opt.selected=true;
+    lenSel.appendChild(opt);
+  });
+  lenSel.addEventListener('change',e=>{
+    practiceState.selectedSize=Number(e.target.value)||null;
+    render();
+  });
+  lenWrap.appendChild(lenSel);
+  lenGroup.appendChild(lenWrap);
+  card.appendChild(lenGroup);
+
+  // ── Start button ──
+  const canStart=!!ps.selectedSize;
+  const startBtn=el('button',{
+    style:{width:'100%',background:canStart?C.red:C.greyLight,color:canStart?C.white:C.grey,border:'none',padding:'14px',borderRadius:12,fontSize:16,fontWeight:700,cursor:canStart?'pointer':'default',transition:'background 0.2s'},
+    onClick:()=>{
+      if(!canStart)return;
+      const p=getPool();
+      const count=Math.min(ps.selectedSize,p.length);
+      practiceState.questions=shuffle(p).slice(0,count);
       quizState=null;
       practiceState.step='quiz';
       render();
-    }},ps.selectedSize?`Start Quiz (${ps.selectedSize} Questions) →`:'Select a length above');
-    btns.appendChild(startBtn);
-    wrap.appendChild(btns);
-  }
+    }
+  },canStart?`Start Quiz (${ps.selectedSize} Questions) →`:'Choose a quiz length to begin');
+  card.appendChild(startBtn);
+  wrap.appendChild(card);
+
+  // Info strip
+  const info=el('div',{style:{marginTop:20,background:C.offWhite,borderRadius:12,padding:'14px 18px',border:'1px solid '+C.greyLight,fontSize:13,color:C.navyMid,lineHeight:1.6,textAlign:'center'}});
+  info.innerHTML='<strong>💡 Tip:</strong> The real citizenship test is 20 questions. Practice until you score 90%+ consistently.';
+  wrap.appendChild(info);
   return wrap;
 }
 
