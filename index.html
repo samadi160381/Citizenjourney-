@@ -88,6 +88,240 @@ const PROVINCE_QUESTIONS = {
   yt:[56,166],nt:[119,120,121,167],nu:[119,120,121,168,225],
 };
 
+// ─── DISCOVER CANADA HANDBOOK EXCERPTS ───────────────────────────────────────
+const DC_EXCERPTS = {
+  1:{page:9,text:"English and French are Canada's two official languages and are important symbols of identity."},
+  2:{page:8,text:"The Constitution of Canada was amended in 1982 to entrench the Canadian Charter of Rights and Freedoms."},
+  3:{page:9,text:"You are eligible to vote in a federal election if you are a Canadian citizen and at least 18 years old on voting day."},
+  4:{page:9,text:"Citizenship Responsibilities include obeying the law, voting in elections, and paying taxes. Speaking both official languages is not required."},
+  5:{page:40,text:"O Canada was proclaimed as the national anthem in 1980. It was first sung in Québec City in 1880."},
+  6:{page:8,text:"The Charter attempts to summarize fundamental freedoms while also setting out additional rights for all people in Canada."},
+  7:{page:10,text:"Today, the term Aboriginal peoples refers to three distinct groups: First Nations, Inuit, and Métis."},
+  8:{page:9,text:"Serving on a jury — When called to do so, you are legally required to serve. Serving on a jury is a privilege that makes the justice system work."},
+  9:{page:8,text:"Together, these secure for Canadians an 800-year old tradition of ordered liberty, including Freedom of conscience and religion."},
+  10:{page:9,text:"Citizenship Responsibilities include obeying the law, taking responsibility for oneself and one's family, serving on a jury, and voting in elections."},
+  11:{page:9,text:"Canadian citizens cannot be deported. Once you are a citizen, you have all the rights and responsibilities of citizenship permanently."},
+  12:{page:8,text:"The Constitution of Canada was amended in 1982 to entrench the Canadian Charter of Rights and Freedoms, which is part of the highest law of Canada."},
+  13:{page:8,text:"Mobility Rights — Canadians can live and work anywhere they choose in Canada, enter and leave the country freely, and apply for a passport."},
+  14:{page:9,text:"There is no compulsory military service in Canada. However, serving in the regular Canadian Forces is a noble way to contribute to Canada and an excellent career choice."},
+  15:{page:9,text:"In Canada, rights come with responsibilities. Voting in elections and participating in civic life are key responsibilities of citizenship."},
+  16:{page:8,text:"Freedom of peaceful assembly is one of the fundamental freedoms secured for Canadians, meaning Canadians can gather and demonstrate peacefully."},
+  17:{page:8,text:"Official Language Rights — French and English have equal status in Parliament and throughout the government."},
+  18:{page:8,text:"Canadian law has several sources. One of Canada's founding principles is the rule of law — individuals and governments are regulated by laws, not arbitrary actions. No person or group is above the law."},
+  19:{page:8,text:"Mobility Rights — Canadians can live and work anywhere they choose in Canada, enter and leave the country freely, and apply for a passport."},
+  20:{page:9,text:"Serving on a jury is a privilege that makes the justice system work as it depends on impartial juries made up of citizens."},
+  21:{page:8,text:"The Charter attempts to summarize fundamental freedoms including legal rights: protection from unreasonable search and seizure, and protection of life, liberty and security."},
+  22:{page:10,text:"Aboriginal and treaty rights are in the Canadian Constitution. Territorial rights were first guaranteed through the Royal Proclamation of 1763."},
+  23:{page:9,text:"Canadian citizens who are 18 years old or older may run in a federal election."},
+  24:{page:8,text:"The Charter attempts to summarize fundamental freedoms while also setting out additional rights including legal rights related to life, liberty, security, and justice."},
+  25:{page:8,text:"Multiculturalism — A fundamental characteristic of the Canadian heritage and identity. All individuals are treated equally by the law regardless of background."},
+  26:{page:11,text:"English and French define the reality of day-to-day life for most people and are the country's official languages. The federal government is required by law to provide services throughout Canada in English and French."},
+  27:{page:8,text:"Multiculturalism — A fundamental characteristic of the Canadian heritage and identity. Canadians celebrate the gift of one another's presence and work hard to respect pluralism and live in harmony."},
+  28:{page:2,text:"The Oath of Citizenship commits you to be faithful and bear true allegiance to Canada, faithfully observe the laws of Canada, and fulfil your duties as a Canadian citizen."},
+  29:{page:39,text:"Parliament passed the Official Languages Act in 1969. It promotes equality between French and English in Canadian society and protects the rights of Canadians to use either language with the federal government."},
+  30:{page:9,text:"Voting in elections — The right to vote comes with a responsibility to vote in federal, provincial or territorial and local elections. Democratic rights ensure the right to vote and stand for election."},
+  // History
+  31:{page:14,text:"When Europeans explored Canada they found all regions occupied by native peoples. Aboriginal peoples were well established here long before explorers from Europe first came to North America."},
+  32:{page:18,text:"The Dominion of Canada was officially born on July 1, 1867. The Fathers of Confederation established the Dominion of Canada on July 1, 1867."},
+  33:{page:19,text:"In 1867, Sir John Alexander Macdonald, a Father of Confederation, became Canada's first Prime Minister."},
+  34:{page:18,text:"From 1864 to 1867, representatives of Nova Scotia, New Brunswick and the Province of Canada worked together to establish a new country. These men are known as the Fathers of Confederation."},
+  35:{page:18,text:"The British Parliament passed the British North America Act in 1867. The Dominion of Canada was officially born on July 1, 1867."},
+  36:{page:21,text:"The Canadian Corps captured Vimy Ridge in April 1917, with 10,000 killed or wounded, securing the Canadians' reputation for valour as the 'shock troops of the British Empire.'"},
+  37:{page:19,text:"Expansion of the Dominion: 1949 — Newfoundland and Labrador joined Canada, making it the last province to join Confederation."},
+  38:{page:19,text:"Expansion of the Dominion: 1949 — Newfoundland and Labrador. This was the last province to join Canada."},
+  39:{page:24,text:"After much negotiation, in 1982 the Constitution was amended. The Canadian Charter of Rights and Freedoms was enacted and the Constitution was patriated by Prime Minister Pierre Trudeau."},
+  40:{page:18,text:"Sir George-Étienne Cartier was the key architect of Confederation from Quebec and close ally of Macdonald."},
+  41:{page:16,text:"Thousands of slaves escaped from the United States, followed 'the North Star' and settled in Canada via the Underground Railroad, a Christian anti-slavery network."},
+  42:{page:20,text:"After many years of heroic work, the CPR's 'ribbons of steel' fulfilled a national dream, connecting Canada coast to coast and enabling westward settlement."},
+  43:{page:21,text:"At the time of Confederation, the vote was limited to property-owning adult white males. The effort by women to achieve the right to vote is known as the women's suffrage movement. In 1929 women were declared persons eligible for the Senate."},
+  44:{page:21,text:"Most Canadians were proud to be part of the British Empire. Over 7,000 volunteered to fight in the South African War (1899–1902), popularly known as the Boer War. Canada's military first gained international recognition in World War I."},
+  45:{page:17,text:"Believing it would be easy to conquer Canada, the United States launched an invasion in June 1812. The Americans were mistaken. Canadian volunteers and First Nations supported British soldiers in Canada's defence."},
+  46:{page:24,text:"Quebec experienced an era of rapid change in the 1960s known as the Quiet Revolution. French-Canadian society and culture flourished in the postwar years."},
+  47:{page:20,text:"Afterwards the Chinese were subject to discrimination, including the Head Tax, a race-based entry fee. The Government of Canada apologized in 2006 for this discriminatory policy."},
+  48:{page:15,text:"More than 40,000 people loyal to the Crown, called 'Loyalists,' fled the oppression of the American Revolution to settle in Nova Scotia and Quebec. They were American colonists who remained loyal to Britain."},
+  49:{page:24,text:"Like Australia, New Zealand and other countries, Canada developed its autonomy gradually. The Statute of Westminster in 1931 gave Canada full legislative independence from Britain."},
+  50:{page:10,text:"From the 1800s until the 1980s, the federal government placed many Aboriginal children in residential schools to educate and assimilate them into mainstream Canadian culture."},
+  51:{page:19,text:"When Canada took over the northwest region, the 12,000 Métis of the Red River were not consulted. In response, Louis Riel led an armed uprising. Riel is seen by many as a hero, a defender of Métis rights."},
+  52:{page:19,text:"Ottawa sent soldiers to retake Fort Garry in 1870. Riel fled to the United States and Canada established a new province: Manitoba. Riel helped create Manitoba."},
+  53:{page:21,text:"In 1917, the federal government of Sir Robert Borden gave women the right to vote in federal elections. In 1918, most Canadian female citizens aged 21 and over were granted the right to vote federally."},
+  54:{page:18,text:"Responsible government means that the Crown must have the support of a majority of the elected representatives in order to govern. If the government loses a confidence vote in the assembly it must resign."},
+  55:{page:24,text:"Quebec experienced an era of rapid change in the 1960s. William Lyon Mackenzie King was Canada's longest-serving Prime Minister."},
+  56:{page:20,text:"Thousands of miners came to the Yukon during the Gold Rush of the 1890s — a major gold rush that drew thousands of prospectors to the Klondike in Yukon."},
+  57:{page:24,text:"Canada joined international organizations such as the United Nations. It participated in the UN operation defending South Korea in the Korean War (1950–53), with 500 dead and 1,000 wounded."},
+  58:{page:25,text:"Lester B. Pearson became a world champion for peace, winning the Nobel Peace Prize for his UN peacekeeping plan during the Suez Crisis."},
+  59:{page:24,text:"In 1970, the FLQ crisis occurred where Quebec separatists kidnapped officials. Prime Minister Trudeau invoked the War Measures Act during the October Crisis."},
+  60:{page:24,text:"After much negotiation, in 1982 the Constitution was amended. The Canadian Charter of Rights and Freedoms was introduced by Prime Minister Pierre Elliott Trudeau."},
+  61:{page:14,text:"In 1604, the first European settlement north of Florida was established by French explorers. This colony, known as New France, was established in the 1500s to 1763."},
+  62:{page:15,text:"In the 1700s France and Great Britain battled for control of North America. In 1759, the British defeated the French in the Battle of the Plains of Abraham at Québec City — marking the end of France's empire in America."},
+  63:{page:23,text:"In the epic invasion of Normandy in northern France on June 6, 1944, known as D-Day, 15,000 Canadian troops stormed and captured Juno Beach from the German Army."},
+  64:{page:10,text:"Aboriginal and treaty rights are in the Canadian Constitution. Territorial rights were first guaranteed through the Royal Proclamation of 1763, establishing the basis for negotiating treaties with newcomers."},
+  65:{page:38,text:"A new Canadian flag was raised for the first time in 1965. The red-white-red pattern with the maple leaf became the national flag."},
+  66:{page:24,text:"Quebec experienced rapid change in the 1960s. Canada hosted Expo 67, a world's fair in Montreal celebrating Canada's centennial."},
+  67:{page:10,text:"From the 1800s until the 1980s, the federal government placed many Aboriginal children in residential schools to educate and assimilate them. The Indian Act of 1876 controlled many aspects of First Nations life."},
+  68:{page:21,text:"Over 7,000 Canadians volunteered to fight in the South African War. Many Black Canadians served with distinction during WWI despite discrimination, including in No. 2 Construction Battalion."},
+  69:{page:22,text:"Canadians remember the sacrifices of our veterans and brave fallen each year on November 11: Remembrance Day. Canadians observe a moment of silence at the 11th hour of the 11th day of the 11th month."},
+  70:{page:24,text:"The movement for Quebec sovereignty gained strength. The Oka Crisis of 1990 was a land claim dispute between Mohawk people and the Quebec government that escalated into a standoff."},
+  71:{page:20,text:"Sir Wilfrid Laurier became the first French-Canadian prime minister since Confederation and encouraged immigration to the West."},
+  72:{page:15,text:"Following the war, Great Britain renamed the colony the 'Province of Quebec.' The French-speaking Catholic people strove to preserve their way of life, representing the cultural divide between English and French Canada."},
+  73:{page:20,text:"Sir John A. Macdonald's National Policy included a protective tariff, transcontinental railway, and western settlement to build Canada."},
+  74:{page:24,text:"Canada developed its autonomy gradually. Canada became fully independent from Britain through the Statute of Westminster in 1931 and the Constitution Act of 1982."},
+  75:{page:26,text:"Canadian advances in science and technology are world renowned. The Truth and Reconciliation Commission addressed the harms of Residential Schools on Indigenous peoples."},
+  76:{page:20,text:"The project was financed by British and American investors and built by both European and Chinese labour. The Chinese labourers built the majority of the Canadian Pacific Railway."},
+  77:{page:10,text:"Aboriginal and treaty rights are in the Canadian Constitution. Territorial rights were first guaranteed through the Royal Proclamation of 1763 by King George III, which recognized Indigenous land rights in North America."},
+  78:{page:14,text:"In 1608 Champlain built a fortress at what is now Québec City. Samuel de Champlain founded New France and established Quebec City in 1608."},
+  79:{page:23,text:"The Second World War began in 1939 when Adolf Hitler, the National Socialist (Nazi) dictator of Germany, invaded Poland and conquered much of Europe. Canada joined its democratic allies to fight."},
+  80:{page:24,text:"The movement for Quebec sovereignty gained strength. The Meech Lake Accord was a failed 1987 constitutional amendment that would have recognized Quebec as a 'distinct society.'"},
+  // Government
+  81:{page:28,text:"There are three key facts about Canada's system of government: our country is a federal state, a parliamentary democracy and a constitutional monarchy."},
+  82:{page:28,text:"The interplay between the three branches of government — the Executive, Legislative and Judicial — which work together but also sometimes in creative tension, helps to secure the rights and freedoms of Canadians."},
+  83:{page:29,text:"The Sovereign is represented in Canada by the Governor General, who is appointed by the Sovereign on the advice of the Prime Minister. The Governor General grants Royal Assent to bills and swears in the PM."},
+  84:{page:30,text:"Canada is divided into 308 electoral districts, also known as ridings or constituencies. The citizens in each electoral district elect one MP who sits in the House of Commons."},
+  85:{page:28,text:"Both the House of Commons and the Senate consider and review bills (proposals for new laws). The Senate reviews, debates, and votes on legislation passed by the House of Commons."},
+  86:{page:28,text:"Senators are appointed by the Governor General on the advice of the Prime Minister and serve until age 75."},
+  87:{page:28,text:"In the federal government, the Prime Minister selects the Cabinet ministers and is responsible for the operations and policy of the government."},
+  88:{page:31,text:"If the party in power holds at least half of the seats in the House of Commons, this is called a majority government."},
+  89:{page:31,text:"If the party in power holds less than half of the seats in the House of Commons, this is called a minority government."},
+  90:{page:28,text:"Cabinet ministers are responsible to the elected representatives, which means they must retain the 'confidence of the House' and have to resign if they are defeated in a non-confidence vote."},
+  91:{page:30,text:"Members of the House of Commons are also known as members of Parliament or MPs. An MP is an elected representative in the federal House of Commons."},
+  92:{page:30,text:"An electoral district is a geographical area represented by a member of Parliament (MP). Canada is divided into 308 electoral districts, also known as ridings or constituencies."},
+  93:{page:31,text:"The Prime Minister chooses the ministers of the Crown, most of them from among members of the House of Commons. Cabinet ministers are responsible for running the federal government departments."},
+  94:{page:31,text:"The other parties that are not in power are known as opposition parties. The role of opposition parties is to peacefully oppose or try to improve government proposals."},
+  95:{page:31,text:"There are three major political parties currently represented in the House of Commons: the Conservative Party, the New Democratic Party, and the Liberal Party."},
+  96:{page:30,text:"Under legislation passed by Parliament, federal elections must be held on the third Monday in October every four years following the most recent general election."},
+  97:{page:30,text:"The candidate who receives the most votes becomes the MP for that electoral district. This is the 'first-past-the-post' system where the candidate with the most votes in a riding wins."},
+  98:{page:30,text:"The voters' lists used during federal elections and referendums are produced from the National Register of Electors by a neutral agency of Parliament called Elections Canada."},
+  99:{page:30,text:"The Prime Minister may ask the Governor General to call an earlier election. A by-election is held between general elections to fill a vacant seat."},
+  100:{page:32,text:"The Speaker is elected by MPs to preside over House of Commons debates, maintain order, and protect parliamentary rules."},
+  101:{page:37,text:"The Supreme Court of Canada is our country's highest court. It is the final authority on constitutional questions."},
+  102:{page:37,text:"The Supreme Court of Canada is our country's highest court. Nine judges sit on the Supreme Court of Canada."},
+  103:{page:33,text:"The Auditor General audits government spending and reports to Parliament on waste and mismanagement, holding the government accountable."},
+  104:{page:32,text:"Their decisions can be questioned by all members of the House of Commons. Question Period is a daily session where MPs question Cabinet ministers on government actions."},
+  105:{page:28,text:"Cabinet ministers are responsible to the elected representatives, which means they must retain the 'confidence of the House.' This is the principle of responsible government."},
+  106:{page:28,text:"In our federal state, the federal government takes responsibility for matters of national and international concern. Crown corporations are government-owned enterprises delivering public services."},
+  107:{page:29,text:"In each of the ten provinces, the Sovereign is represented by the Lieutenant Governor, who is appointed by the Governor General on the advice of the Prime Minister."},
+  108:{page:33,text:"There are three major political parties currently represented in the House of Commons: the Conservative Party, the New Democratic Party, and the Liberal Party."},
+  109:{page:28,text:"There are three key facts about Canada's system of government: our country is a federal state, a parliamentary democracy and a constitutional monarchy."},
+  110:{page:28,text:"There are three key facts about Canada's system of government: our country is a federal state, a parliamentary democracy and a constitutional monarchy."},
+  111:{page:29,text:"The Supreme Court of Canada is made up of nine judges appointed by the Governor General. It is the final court of appeal and interprets the Constitution."},
+  112:{page:29,text:"In each province, the Premier has a role similar to that of the Prime Minister in the federal government."},
+  113:{page:29,text:"In the three territories, the Commissioner represents the federal government and plays a ceremonial role."},
+  114:{page:29,text:"Each provincial and territorial government has an elected legislature where provincial and territorial laws are passed."},
+  115:{page:30,text:"Canadian citizens who are 18 years old or older may run in a federal election. The people who run for office are called candidates."},
+  116:{page:30,text:"Canadian law secures the right to a secret ballot. This means that no one can watch you vote and no one should look at how you voted."},
+  117:{page:30,text:"The people in each electoral district vote for the candidate and political party of their choice."},
+  118:{page:30,text:"Once an election has been called, Elections Canada mails a voter information card to each elector whose name is in the National Register of Electors."},
+  119:{page:33,text:"The federal government takes responsibility for matters of national concern including Aboriginal Affairs."},
+  120:{page:33,text:"The provinces are responsible for municipal government, education, health, natural resources, property and civil rights, and highways."},
+  121:{page:33,text:"The federal government and the provinces share jurisdiction over agriculture and immigration."},
+  122:{page:33,text:"Municipal or local government plays an important role in the lives of our citizens. Municipal governments usually have a council that passes laws called 'by-laws.'"},
+  123:{page:33,text:"The First Nations have band chiefs and councillors who have major responsibilities on First Nations reserves, including housing, schools and other services."},
+  124:{page:36,text:"The Canadian justice system guarantees everyone due process under the law. Our judicial system is founded on the presumption of innocence in criminal matters, meaning everyone is innocent until proven guilty."},
+  125:{page:36,text:"The Canadian justice system guarantees everyone due process under the law. Our judicial system is founded on the presumption of innocence."},
+  126:{page:36,text:"Canada's legal system is based on a heritage that includes the rule of law, freedom under the law, democratic principles and due process."},
+  127:{page:37,text:"The police are there to keep people safe and to enforce the law. You can ask the police for help in all kinds of situations. The Royal Canadian Mounted Police (RCMP) enforce federal laws throughout Canada."},
+  128:{page:37,text:"You can also question the police about their service or conduct if you feel you need to. Almost all police forces in Canada have a process by which you can bring your concerns to the police and seek action."},
+  129:{page:37,text:"Lawyers can help you with legal problems and act for you in court. If you cannot pay for a lawyer, in most communities there are legal aid services available free of charge or at a low cost."},
+  130:{page:36,text:"The Canadian justice system guarantees everyone due process under the law. Our judicial system is founded on the presumption of innocence in criminal matters, meaning everyone is innocent until proven guilty."},
+  // Geography
+  131:{page:44,text:"Canada is the second largest country on earth — 10 million square kilometres."},
+  132:{page:44,text:"Canada has ten provinces and three territories. Each province and territory has its own capital city."},
+  133:{page:44,text:"Ottawa, located on the Ottawa River, was chosen as the capital in 1857 by Queen Victoria. Today it is Canada's fourth largest metropolitan area."},
+  134:{page:44,text:"Three oceans line Canada's frontiers: the Pacific Ocean in the west, the Atlantic Ocean in the east, and the Arctic Ocean to the north."},
+  135:{page:44,text:"Canada includes many different geographical areas and five distinct regions: The Atlantic Provinces, Central Canada, The Prairie Provinces, The West Coast, and The Northern Territories."},
+  136:{page:46,text:"Atlantic Canada's coasts and natural resources, including fishing, farming, forestry and mining, have made these provinces an important part of Canada's history and development."},
+  137:{page:47,text:"More than half the people in Canada live in cities and towns near the Great Lakes and the St. Lawrence River in southern Quebec and Ontario, known as Central Canada and the industrial and manufacturing heartland."},
+  138:{page:48,text:"Manitoba, Saskatchewan and Alberta are the Prairie Provinces, rich in energy resources and some of the most fertile farmland in the world."},
+  139:{page:48,text:"Saskatchewan, once known as the 'breadbasket of the world' and the 'wheat province,' has 40% of the arable land in Canada and is the country's largest producer of grains and oilseeds."},
+  140:{page:49,text:"Alberta is the most populous Prairie province and the largest producer of oil and gas. The oil sands in the north are being developed as a major energy source."},
+  141:{page:48,text:"At more than 12 million, the people of Ontario make up more than one-third of Canadians. Toronto is the largest city in Canada and the country's main financial centre."},
+  142:{page:48,text:"There are five Great Lakes located between Ontario and the United States: Lake Ontario, Lake Erie, Lake Huron, Lake Michigan (in the U.S.A.) and Lake Superior, the largest freshwater lake in the world."},
+  143:{page:49,text:"British Columbia (B.C.), on the Pacific coast, is Canada's westernmost province. The Port of Vancouver is our gateway to the Asia-Pacific."},
+  144:{page:44,text:"Canada has a population of about 34 million people. While the majority live in cities, Canadians also live in small towns, rural areas and everywhere in between."},
+  145:{page:48,text:"Founded by United Empire Loyalists, Ontario also has the largest French-speaking population outside of Quebec, with a proud history of preserving their language and culture."},
+  146:{page:46,text:"Newfoundland and Labrador is the most easterly point in North America and has its own time zone."},
+  147:{page:46,text:"Nova Scotia is the most populous Atlantic Province, with a rich history as the gateway to Canada. As Canada's largest east coast port, deep-water and ice-free, the capital, Halifax, has played an important role in Atlantic trade and defence."},
+  148:{page:46,text:"Prince Edward Island (P.E.I.) is the smallest province, known for its beaches, red soil and agriculture, especially potatoes. P.E.I. is the birthplace of Confederation."},
+  149:{page:48,text:"At more than 12 million, the people of Ontario make up more than one-third of Canadians. Toronto is the largest city in Canada."},
+  150:{page:49,text:"British Columbia is known for its majestic mountains and as Canada's Pacific gateway. The Port of Vancouver, Canada's largest and busiest, handles billions of dollars in goods traded around the world."},
+  151:{page:46,text:"Prince Edward Island (P.E.I.) is the smallest province, known for its beaches, red soil and agriculture."},
+  152:{page:47,text:"Nearly eight million people live in Quebec, the vast majority along or near the St. Lawrence River. More than three-quarters speak French as their first language."},
+  153:{page:48,text:"Manitoba, Saskatchewan and Alberta are the Prairie Provinces, rich in energy resources and some of the most fertile farmland in the world."},
+  154:{page:48,text:"At more than 12 million, the people of Ontario make up more than one-third of Canadians. Toronto is the largest city in Canada and the country's main financial centre."},
+  155:{page:48,text:"Founded by United Empire Loyalists, Ontario also has the largest French-speaking population outside of Quebec."},
+  156:{page:49,text:"Alberta is the most populous Prairie province and the largest producer of oil and gas, and the oil sands in the north are being developed as a major energy source."},
+  157:{page:48,text:"Manitoba's most populous city is Winnipeg. Manitoba is also an important centre of Ukrainian culture, with 14% reporting Ukrainian origins, and the largest Aboriginal population of any province, at over 15%."},
+  158:{page:46,text:"Nova Scotia is the most populous Atlantic Province with a rich history. The province's Celtic and Gaelic traditions sustain a vibrant culture."},
+  159:{page:48,text:"Saskatchewan, once known as the 'breadbasket of the world,' has 40% of the arable land in Canada."},
+  160:{page:48,text:"Manitoba's economy is based on agriculture, mining and hydro-electric power generation. Louis Riel helped create Manitoba."},
+  161:{page:47,text:"New Brunswick is the only officially bilingual province, and about one-third of the population lives and works in French."},
+  162:{page:46,text:"Nova Scotia is known for the world's highest tides in the Bay of Fundy. The province's Celtic and Gaelic traditions sustain a vibrant culture."},
+  163:{page:47,text:"New Brunswick is the only officially bilingual province, and about one-third of the population lives and works in French."},
+  164:{page:46,text:"Prince Edward Island (P.E.I.) is the smallest province and is known as the birthplace of Confederation. The 1864 Charlottetown Conference launched the road to Confederation."},
+  165:{page:46,text:"Newfoundland and Labrador is the most easterly point in North America and has its own time zone. The oldest colony of the British Empire, the province has long been known for its fisheries."},
+  166:{page:50,text:"Thousands of miners came to the Yukon during the Gold Rush of the 1890s. Yukon holds the record for the coldest temperature ever recorded in Canada (-63°C)."},
+  167:{page:50,text:"The Northwest Territories (N.W.T.) capital, Yellowknife, is called the 'diamond capital of North America.' More than half the population is Aboriginal."},
+  168:{page:51,text:"Nunavut, meaning 'our land' in Inuktitut, was established in 1999 from the eastern part of the Northwest Territories. The population is about 85% Inuit."},
+  169:{page:44,text:"Canada is the second largest country on earth — 10 million square kilometres. Three oceans line Canada's frontiers."},
+  170:{page:48,text:"There are five Great Lakes located between Ontario and the United States. Lake Superior is the largest freshwater lake in the world."},
+  171:{page:50,text:"The Northwest Territories, Nunavut and Yukon contain one-third of Canada's land mass. The Mackenzie River, at 4,200 kilometres, is the second-longest river system in North America after the Mississippi."},
+  172:{page:48,text:"At more than 12 million, the people of Ontario make up more than one-third of Canadians. Toronto is the largest city and main financial centre."},
+  173:{page:47,text:"More than half the people in Canada live in cities and towns near the Great Lakes and the St. Lawrence River in southern Quebec and Ontario, known as Central Canada."},
+  174:{page:47,text:"New Brunswick is the only officially bilingual province in Canada."},
+  175:{page:48,text:"At more than 12 million, the people of Ontario make up more than one-third of Canadians."},
+  176:{page:48,text:"Manitoba, Saskatchewan and Alberta are the Prairie Provinces. Manitoba's economy is based on agriculture, mining and hydro-electric power generation."},
+  177:{page:48,text:"Manitoba, Saskatchewan and Alberta are the Prairie Provinces. Saskatchewan is the country's largest producer of grains and oilseeds."},
+  178:{page:48,text:"There are five Great Lakes located between Ontario and the United States."},
+  179:{page:47,text:"Nearly eight million people live in Quebec, the vast majority along or near the St. Lawrence River."},
+  180:{page:46,text:"Atlantic Canada's coasts and natural resources have made these provinces an important part of Canada's history. The Atlantic provinces are: New Brunswick, Nova Scotia, Prince Edward Island, and Newfoundland and Labrador."},
+  181:{page:49,text:"Alberta is the most populous Prairie province and the largest producer of oil and gas."},
+  182:{page:44,text:"Canada has ten provinces and three territories. Each province and territory has its own capital city."},
+  // Economy & Symbols
+  183:{page:38,text:"A new Canadian flag was raised for the first time in 1965. The red-white-red pattern comes from the flag of the Royal Military College, Kingston, founded in 1876."},
+  184:{page:38,text:"The maple leaf is Canada's best-known symbol. Maple leaves were adopted as a symbol by French Canadians in the 1700s."},
+  185:{page:39,text:"Hockey is Canada's most popular spectator sport and is considered to be the national winter sport. Lacrosse, an ancient sport first played by Aboriginals, is the official summer sport."},
+  186:{page:42,text:"Today, Canada has one of the ten largest economies in the world and is part of the G8 group of leading industrialized countries."},
+  187:{page:42,text:"In 1988, Canada enacted free trade with the United States. Mexico became a partner in 1994 in the broader North American Free Trade Agreement (NAFTA)."},
+  188:{page:42,text:"Canada has always been a trading nation and commerce remains the engine of economic growth. Our largest international trading partner is the United States."},
+  189:{page:42,text:"Natural resources industries include forestry, fishing, agriculture, mining and energy. These industries have played an important part in the country's history and development."},
+  190:{page:39,text:"Hockey is Canada's most popular spectator sport. Lacrosse, an ancient sport first played by Aboriginals, is the official summer sport. Soccer has the most registered players of any game in Canada."},
+  191:{page:38,text:"Canada adopted an official coat of arms and a national motto, A mari usque ad mare, which in Latin means 'from sea to sea.'"},
+  192:{page:39,text:"Parliament passed the Official Languages Act in 1969. English and French are the two official languages and are important symbols of identity."},
+  193:{page:40,text:"O Canada was proclaimed as the national anthem in 1980. It was first sung in Québec City in 1880."},
+  194:{page:38,text:"The Crown has been a symbol of the state in Canada for 400 years. Canada has been a constitutional monarchy in its own right since Confederation in 1867."},
+  195:{page:40,text:"All countries have ways to recognize outstanding citizens. Canada started its own honours system with the Order of Canada in 1967, the centennial of Confederation."},
+  196:{page:42,text:"Service industries provide thousands of different jobs in areas like transportation, education, health care, construction, banking, communications, retail services, tourism and government. More than 75% of working Canadians now have jobs in service industries."},
+  197:{page:42,text:"Manufacturing industries make products to sell in Canada and around the world. Our largest international trading partner is the United States."},
+  198:{page:39,text:"The beaver was adopted centuries ago as a symbol of the Hudson's Bay Company. It became an emblem of French-Canadian patriotic associations and was adopted by other groups."},
+  199:{page:41,text:"National Public Holidays include Victoria Day, which honours Queen Victoria and is celebrated on the Monday preceding May 25, the Sovereign's birthday."},
+  200:{page:38,text:"Red and white had been colours of France and England since the Middle Ages and the national colours of Canada since 1921. These are the national colours seen on Canada's flag."},
+  201:{page:41,text:"National Public Holidays and important dates include Canada Day on July 1, celebrating Confederation in 1867."},
+  202:{page:41,text:"National Public Holidays and important dates include Remembrance Day on November 11, honouring fallen soldiers."},
+  203:{page:38,text:"The maple leaf is Canada's best-known symbol. Maple leaves were adopted as a symbol by French Canadians in the 1700s and have appeared on Canadian uniforms and insignia since the 1850s."},
+  204:{page:39,text:"Hockey is Canada's most popular spectator sport. The National Hockey League plays for the championship Stanley Cup, donated by Lord Stanley, the Governor General, in 1892."},
+  205:{page:39,text:"Lacrosse, an ancient sport first played by Aboriginals, is the official summer sport of Canada."},
+  206:{page:42,text:"Natural resources industries include forestry, fishing, agriculture, mining and energy. Alberta's oil sands are the largest oil reserve in the world."},
+  207:{page:49,text:"About one-half of all the goods produced in B.C. are forestry products, including lumber, newsprint, and pulp and paper products — the most valuable forestry industry in Canada."},
+  208:{page:46,text:"Prince Edward Island (P.E.I.) is the smallest province, known for its beaches, red soil and agriculture, especially potatoes."},
+  209:{page:39,text:"The beaver was adopted centuries ago as a symbol of the Hudson's Bay Company. This industrious rodent can be seen on the five-cent coin, on the coats of arms of Saskatchewan and Alberta."},
+  210:{page:42,text:"Canada has always been a trading nation and commerce remains the engine of economic growth. Canada has one of the ten largest economies in the world."},
+  211:{page:49,text:"British Columbia (B.C.), on the Pacific coast, is Canada's westernmost province, with a population of four million."},
+  212:{page:38,text:"The Union Jack is our official Royal Flag. The Canadian Red Ensign served as the Canadian flag for about 100 years."},
+  213:{page:39,text:"English and French are the two official languages and are important symbols of identity. Parliament passed the Official Languages Act in 1969."},
+  214:{page:41,text:"National Public Holidays and important dates: Canada Day is July 1 — it celebrates the birth of the Dominion of Canada in 1867."},
+  215:{page:41,text:"National Public Holidays and important dates: Remembrance Day is November 11 — Canadians wear the red poppy and observe a moment of silence to honour those who served and died."},
+  216:{page:38,text:"Canada has many important symbols — objects, events, and people that have special meaning. Together they help explain what it means to be Canadian."},
+  217:{page:42,text:"More than 75% of working Canadians now have jobs in service industries, which provide thousands of different jobs in areas like transportation, education, health care, construction, banking and government."},
+  218:{page:39,text:"English and French are the two official languages. The phrase 'True North' in O Canada symbolizes Canada's northern geography and strength."},
+  219:{page:42,text:"Today, Canada has one of the ten largest economies in the world and is part of the G8 group of leading industrialized countries."},
+  220:{page:14,text:"The French and Aboriginal people collaborated in the vast fur-trade economy, driven by the demand for beaver pelts in Europe. The beaver was essential to early Canadian commerce."},
+  221:{page:26,text:"Canadian advances in science and technology are world renowned. Museums preserve and share Canada's human history and cultural heritage."},
+  222:{page:41,text:"Victoria Day is a federal holiday honouring Queen Victoria, celebrated on the Monday before May 25."},
+  223:{page:39,text:"Hockey is Canada's most popular spectator sport and is considered to be the national winter sport. The national bird of Canada is the Common Loon, which appears on the one-dollar coin."},
+  224:{page:39,text:"The beaver was adopted centuries ago as a symbol of the Hudson's Bay Company and became the national animal of Canada. It can be seen on the five-cent coin."},
+  225:{page:51,text:"Nunavut, meaning 'our land' in Inuktitut, was established in 1999. It is Canada's newest and largest territory, created as a self-governing homeland for the Inuit."},
+  226:{page:38,text:"A new Canadian flag was raised for the first time in 1965. The white square in the centre containing the maple leaf is called the Canadian Pale."},
+};
+
 const ALL_QUESTIONS = [
   {id:1,category:"Rights & Responsibilities",q:"What are the two official languages of Canada?",options:["English and French","English and Spanish","French and Indigenous languages","English and Indigenous languages"],answer:0},
   {id:2,category:"Rights & Responsibilities",q:"Which document protects the rights and freedoms of Canadians?",options:["The Constitution Act","The Canadian Charter of Rights and Freedoms","The British North America Act","The Magna Carta"],answer:1},
@@ -1198,6 +1432,18 @@ function renderQuiz(questions, onFinish, title) {
       if(!isCorrect&&chosen!==undefined)card.appendChild(el('p',{style:{color:C.red,fontSize:13,marginBottom:4}},`Your answer: ${q.options[chosen]}`));
       if(!isCorrect&&chosen===undefined)card.appendChild(el('p',{style:{color:C.grey,fontSize:13,marginBottom:4}},'Not answered'));
       card.appendChild(el('p',{style:{color:C.green,fontSize:13,fontWeight:600}},`✓ Correct: ${q.options[q.answer]}`));
+      const rExcerpt=DC_EXCERPTS[q.id];
+      if(rExcerpt){
+        const rDc=el('div',{style:{marginTop:8,background:'#EEF2F8',borderRadius:8,padding:'8px 12px',border:'1px solid #C5D0E0',display:'flex',gap:8,alignItems:'flex-start'}});
+        rDc.appendChild(el('span',{style:{fontSize:14,flexShrink:0}},'📖'));
+        const rTxt=el('div');
+        const rHdr=el('span',{style:{fontWeight:700,fontSize:11,color:C.navy}});
+        rHdr.innerHTML='Discover Canada <span style="background:'+C.navy+';color:white;border-radius:4px;padding:1px 7px;font-size:11px">P '+rExcerpt.page+'</span> — ';
+        rTxt.appendChild(rHdr);
+        rTxt.appendChild(el('span',{style:{fontSize:12,color:C.navyMid,fontStyle:'italic'}},'"'+rExcerpt.text+'"'));
+        rDc.appendChild(rTxt);
+        card.appendChild(rDc);
+      }
       reviewDiv.appendChild(card);
     });
     wrap.appendChild(reviewDiv);
@@ -1277,15 +1523,39 @@ function renderQuiz(questions, onFinish, title) {
   });
   card.appendChild(opts);
   if(s.selected!==null){
-    const feedback=el('div',{style:{marginTop:20,display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:12}});
-    feedback.appendChild(el('span',{style:{fontSize:14,fontWeight:700,color:s.selected===q.answer?C.green:C.red}},s.selected===q.answer?'✓ Correct!':'✗ Correct: '+q.options[q.answer]));
+    const isCorrect=s.selected===q.answer;
+    // Result banner
+    const resultBanner=el('div',{style:{marginTop:18,padding:'10px 16px',borderRadius:10,background:isCorrect?C.greenLight:C.redLight,border:'1px solid '+(isCorrect?C.green:C.red),display:'flex',alignItems:'center',gap:10}});
+    resultBanner.appendChild(el('span',{style:{fontSize:18,flexShrink:0}},isCorrect?'✅':'❌'));
+    resultBanner.appendChild(el('span',{style:{fontSize:14,fontWeight:700,color:isCorrect?C.green:C.red}},isCorrect?'Correct!':'Incorrect — The correct answer is: '+q.options[q.answer]));
+    card.appendChild(resultBanner);
+    // Discover Canada handbook excerpt
+    const excerpt=DC_EXCERPTS[q.id];
+    if(excerpt){
+      const dcBox=el('div',{style:{marginTop:10,background:'#EEF2F8',borderRadius:10,padding:'14px 16px',border:'1px solid #C5D0E0',display:'flex',gap:12,alignItems:'flex-start'}});
+      const bookSide=el('div',{style:{flexShrink:0}});
+      bookSide.appendChild(el('div',{style:{fontSize:22}},'📖'));
+      dcBox.appendChild(bookSide);
+      const dcRight=el('div',{style:{flex:1,minWidth:0}});
+      const dcHeader=el('div',{style:{display:'flex',alignItems:'center',gap:8,marginBottom:6,flexWrap:'wrap'}});
+      dcHeader.appendChild(el('span',{style:{fontWeight:700,color:C.navy,fontSize:13}},'Discover Canada'));
+      dcHeader.appendChild(el('span',{style:{background:C.navy,color:'white',borderRadius:6,padding:'2px 10px',fontSize:12,fontWeight:700}},'P '+excerpt.page));
+      dcRight.appendChild(dcHeader);
+      const dcText=el('p',{style:{fontSize:13,color:C.navyMid,lineHeight:1.65,fontStyle:'italic',margin:0}});
+      dcText.textContent='"'+excerpt.text+'"';
+      dcRight.appendChild(dcText);
+      dcBox.appendChild(dcRight);
+      card.appendChild(dcBox);
+    }
+    // Next button
+    const nextRow=el('div',{style:{marginTop:12,display:'flex',justifyContent:'flex-end'}});
     const next=el('button',{style:{background:C.navy,color:C.white,border:'none',padding:'10px 24px',borderRadius:10,fontSize:15,fontWeight:600,cursor:'pointer'},onClick:()=>{
       if(s.idx+1>=s.questions.length){s.done=true;}
       else{s.idx++;s.selected=null;}
       render();
     }},s.idx+1>=s.questions.length?'See Results →':'Next →');
-    feedback.appendChild(next);
-    card.appendChild(feedback);
+    nextRow.appendChild(next);
+    card.appendChild(nextRow);
   }
   wrap.appendChild(card);
   return wrap;
