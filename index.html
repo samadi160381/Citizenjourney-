@@ -3,16 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CitizenReady — Free Canadian Citizenship Test Prep 2026</title>
+<title>MyCitizenJourney — Free Canadian Citizenship Test Prep 2026</title>
 <meta name="description" content="Prepare for your Canadian Citizenship Test with 226 practice questions, study guides, mock exams and more. Free, no signup required. Updated for 2026."/>
 <meta name="keywords" content="Canadian citizenship test, citizenship test 2026, Canada citizenship practice, citizenship study guide, citizenship mock exam"/>
-<meta property="og:title" content="CitizenReady — Free Canadian Citizenship Test Prep 2026"/>
+<meta property="og:title" content="MyCitizenJourney — Free Canadian Citizenship Test Prep 2026"/>
 <meta property="og:description" content="226 practice questions, study guides, mock exams and more. Free, no signup required."/>
 <meta property="og:url" content="https://mycitizenjourney.com"/>
 <meta name="robots" content="index, follow"/>
-<link rel="icon" type="image/x-icon" href="https://mycitizenjourney.com/favicon.ico"/>
-<link rel="icon" type="image/png" sizes="256x256" href="https://mycitizenjourney.com/favicon.png"/>
-<link rel="apple-touch-icon" sizes="256x256" href="https://mycitizenjourney.com/favicon.png"/>
+<link rel="icon" type="image/png" sizes="256x256" href="favicon.png"/>
+<link rel="apple-touch-icon" sizes="256x256" href="favicon.png"/>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1947161842433441" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -390,7 +389,7 @@ const T = {
       tagline: 'Free Canadian citizenship test prep.',
       legal: 'Legal',
       links: [['About Us','about'],['Contact Us','contact'],['Privacy Policy','privacy'],['Disclaimer','disclaimer'],['Terms & Conditions','terms']],
-      copy: '© 2026 CitizenReady. For educational use only.',
+      copy: '© 2026 MyCitizenJourney. For educational use only.',
       based: 'Based on <em>Discover Canada</em> by IRCC.',
     },
     hero: {
@@ -413,7 +412,7 @@ const T = {
       tagline: 'Préparation gratuite au test de citoyenneté canadienne.',
       legal: 'Légal',
       links: [['À propos','about'],['Contactez-nous','contact'],['Politique de confidentialité','privacy'],['Avis de non-responsabilité','disclaimer'],['Conditions d\'utilisation','terms']],
-      copy: '© 2026 CitizenReady. À des fins éducatives seulement.',
+      copy: '© 2026 MyCitizenJourney. À des fins éducatives seulement.',
       based: 'Basé sur <em>Découvrir le Canada</em> par IRCC.',
     },
     hero: {
@@ -436,8 +435,8 @@ function renderNav() {
   const nav=el('nav',{style:{background:C.navy,position:'sticky',top:0,zIndex:1000,boxShadow:'0 2px 12px rgba(0,0,0,0.2)'}});
   const inner=el('div',{style:{maxWidth:1200,margin:'0 auto',padding:'0 16px',display:'flex',alignItems:'center',justifyContent:'space-between',height:52}});
   const logo=el('div',{style:{display:'flex',alignItems:'center',gap:8,cursor:'pointer'},onClick:()=>setPage('home')});
-  logo.appendChild(mapleLeaf(22,C.red));
-  logo.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:18,fontWeight:700},html:"Citizen<span style='color:"+C.red+"'>Ready</span>"}));
+  logo.appendChild(el('img',{src:'favicon.png',alt:'icon',style:{height:'28px',width:'28px',borderRadius:'50%'}}));
+  logo.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",fontSize:18,fontWeight:700},html:"<span style='color:"+C.white+"'>My</span><span style='color:"+C.red+"'>Citizen</span><span style='color:"+C.white+"'>Journey</span>"}));
   const desktop=el('div',{class:'hide-mobile',style:{display:'flex',gap:2,flexWrap:'wrap',alignItems:'center'}});
   links.forEach(l=>{
     const btn=el('button',{class:'nav-link'+(currentPage===l.id?' active':''),onClick:()=>setPage(l.id)},l.label);
@@ -484,8 +483,8 @@ function renderFooter() {
   // Brand
   const brand=el('div');
   const bLogo=el('div',{style:{display:'flex',alignItems:'center',gap:8,marginBottom:4}});
-  bLogo.appendChild(mapleLeaf(18,C.red));
-  bLogo.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:17,fontWeight:700},html:"Citizen<span style='color:"+C.red+"'>Ready</span>"}));
+  bLogo.appendChild(el('img',{src:'favicon.png',alt:'icon',style:{height:'22px',width:'22px',borderRadius:'50%'}}));
+  bLogo.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",fontSize:16,fontWeight:700},html:"<span style='color:"+C.white+"'>My</span><span style='color:"+C.red+"'>Citizen</span><span style='color:"+C.white+"'>Journey</span>"}));
   brand.appendChild(bLogo);
   brand.appendChild(el('p',{style:{color:'rgba(250,250,248,0.45)',fontSize:12,lineHeight:1.5}},t.tagline));
   inner.appendChild(brand);
@@ -1353,21 +1352,21 @@ function legalSection(wrap, heading, ...paragraphs) {
 }
 
 function renderAbout() {
-  const wrap = legalWrap('About Us','Learn about CitizenReady and our mission.');
+  const wrap = legalWrap('About Us','Learn about MyCitizenJourney and our mission.');
   legalSection(wrap, 'Our Mission',
-    'CitizenReady is a free, independent educational resource designed to help permanent residents of Canada prepare for the Canadian Citizenship Test. Our goal is to make high-quality study materials accessible to everyone — at no cost, with no account required.',
+    'MyCitizenJourney is a free, independent educational resource designed to help permanent residents of Canada prepare for the Canadian Citizenship Test. Our goal is to make high-quality study materials accessible to everyone — at no cost, with no account required.',
     'We believe that every person on the path to Canadian citizenship deserves clear, accurate, and up-to-date preparation resources. The citizenship test is an important milestone, and we want to make sure you feel confident walking in on test day.'
   );
   legalSection(wrap, 'What We Offer',
-    'CitizenReady provides over 226 practice questions drawn from the official Discover Canada study guide published by Immigration, Refugees and Citizenship Canada (IRCC). Our platform includes topic-specific study guides, province-focused practice quizzes, interview preparation resources, and answers to frequently asked questions about the citizenship process.',
+    'MyCitizenJourney provides over 226 practice questions drawn from the official Discover Canada study guide published by Immigration, Refugees and Citizenship Canada (IRCC). Our platform includes topic-specific study guides, province-focused practice quizzes, interview preparation resources, and answers to frequently asked questions about the citizenship process.',
     'All content is organized around the five official test categories: Rights and Responsibilities, Canadian History, Government, Geography, and Economy and Symbols.'
   );
   legalSection(wrap, 'Who We Are',
-    'CitizenReady is an independent educational website. We are not affiliated with, endorsed by, or connected to the Government of Canada, Immigration, Refugees and Citizenship Canada (IRCC), or any government agency. We are a team of developers and educators passionate about civic education and making Canada\'s citizenship process more approachable.',
+    'MyCitizenJourney is an independent educational website. We are not affiliated with, endorsed by, or connected to the Government of Canada, Immigration, Refugees and Citizenship Canada (IRCC), or any government agency. We are a team of developers and educators passionate about civic education and making Canada\'s citizenship process more approachable.',
     'If you have questions or feedback, please visit our Contact page.'
   );
   legalSection(wrap, 'Our Commitment',
-    'We are committed to keeping CitizenReady free and up-to-date. We regularly review our content to reflect the latest version of the Discover Canada study guide and any changes to the citizenship test format announced by IRCC.',
+    'We are committed to keeping MyCitizenJourney free and up-to-date. We regularly review our content to reflect the latest version of the Discover Canada study guide and any changes to the citizenship test format announced by IRCC.',
     'We do not sell your data, require registration, or place your study progress behind a paywall.'
   );
   return wrap;
@@ -1451,11 +1450,11 @@ function renderContact() {
 function renderPrivacy() {
   const wrap = legalWrap('Privacy Policy','Last updated: January 1, 2026');
   legalSection(wrap, 'Introduction',
-    'This Privacy Policy explains how CitizenReady ("we", "our", or "us") collects, uses, and protects information when you visit our website. We are committed to protecting your privacy and handling your data transparently.',
-    'By using CitizenReady, you agree to the practices described in this policy. If you do not agree, please discontinue use of the site.'
+    'This Privacy Policy explains how MyCitizenJourney ("we", "our", or "us") collects, uses, and protects information when you visit our website. We are committed to protecting your privacy and handling your data transparently.',
+    'By using MyCitizenJourney, you agree to the practices described in this policy. If you do not agree, please discontinue use of the site.'
   );
   legalSection(wrap, 'Information We Collect',
-    'CitizenReady does not require you to create an account or provide personal information to use the site. However, certain data may be collected automatically when you visit, including:',
+    'MyCitizenJourney does not require you to create an account or provide personal information to use the site. However, certain data may be collected automatically when you visit, including:',
     '• IP address and general geographic region\n• Browser type and version\n• Device type and operating system\n• Pages visited and time spent on the site\n• Referring URLs',
     'This information is collected through analytics tools (such as Google Analytics) and advertising partners (such as Google AdSense) for the purposes described below.'
   );
@@ -1464,7 +1463,7 @@ function renderPrivacy() {
     'We do not sell, rent, or share your personal information with third parties for their own marketing purposes.'
   );
   legalSection(wrap, 'Cookies and Advertising',
-    'CitizenReady uses cookies — small text files stored on your device — to support analytics and advertising. Our advertising partner, Google AdSense, may use cookies to show you personalized ads based on your browsing history. You can opt out of personalized advertising through the Google Ads Settings page or by visiting aboutads.info.',
+    'MyCitizenJourney uses cookies — small text files stored on your device — to support analytics and advertising. Our advertising partner, Google AdSense, may use cookies to show you personalized ads based on your browsing history. You can opt out of personalized advertising through the Google Ads Settings page or by visiting aboutads.info.',
     'You can disable cookies in your browser settings, though doing so may affect how the site functions.'
   );
   legalSection(wrap, 'Third-Party Services',
@@ -1477,7 +1476,7 @@ function renderPrivacy() {
     'Depending on your location, you may have rights regarding your personal data, including the right to access, correct, or delete data we hold about you. Canadian residents may also have rights under the Personal Information Protection and Electronic Documents Act (PIPEDA). To make a request, contact us at the email listed on our Contact page.'
   );
   legalSection(wrap, 'Children\'s Privacy',
-    'CitizenReady is not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe a child has provided us with personal information, please contact us immediately.'
+    'MyCitizenJourney is not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe a child has provided us with personal information, please contact us immediately.'
   );
   legalSection(wrap, 'Changes to This Policy',
     'We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated revision date. We encourage you to review this page periodically.'
@@ -1486,26 +1485,26 @@ function renderPrivacy() {
 }
 
 function renderDisclaimer() {
-  const wrap = legalWrap('Disclaimer','Please read this disclaimer carefully before using CitizenReady.');
+  const wrap = legalWrap('Disclaimer','Please read this disclaimer carefully before using MyCitizenJourney.');
   legalSection(wrap, 'Educational Purpose Only',
-    'CitizenReady is an independent educational resource created to help individuals prepare for the Canadian Citizenship Test. All content on this website is provided for informational and educational purposes only. It is not intended as legal advice, immigration advice, or a substitute for professional consultation.'
+    'MyCitizenJourney is an independent educational resource created to help individuals prepare for the Canadian Citizenship Test. All content on this website is provided for informational and educational purposes only. It is not intended as legal advice, immigration advice, or a substitute for professional consultation.'
   );
   legalSection(wrap, 'No Affiliation with the Government of Canada',
-    'CitizenReady is not affiliated with, endorsed by, sponsored by, or connected to the Government of Canada, Immigration, Refugees and Citizenship Canada (IRCC), or any federal, provincial, or municipal government agency. Use of government-related terminology, content from Discover Canada, and references to official processes is purely for educational illustration.',
+    'MyCitizenJourney is not affiliated with, endorsed by, sponsored by, or connected to the Government of Canada, Immigration, Refugees and Citizenship Canada (IRCC), or any federal, provincial, or municipal government agency. Use of government-related terminology, content from Discover Canada, and references to official processes is purely for educational illustration.',
     'For official and authoritative information about the Canadian citizenship process, please visit the IRCC website at canada.ca/citizenship.'
   );
   legalSection(wrap, 'Accuracy of Content',
-    'While we make every effort to ensure that the content on CitizenReady is accurate and up-to-date, we cannot guarantee that all information is complete, current, or free of error. Immigration rules, test formats, and fee structures can change. Always verify critical details with official IRCC sources before making decisions.',
-    'CitizenReady is not responsible for any errors or omissions, or for any outcomes that arise from reliance on information provided on this website.'
+    'While we make every effort to ensure that the content on MyCitizenJourney is accurate and up-to-date, we cannot guarantee that all information is complete, current, or free of error. Immigration rules, test formats, and fee structures can change. Always verify critical details with official IRCC sources before making decisions.',
+    'MyCitizenJourney is not responsible for any errors or omissions, or for any outcomes that arise from reliance on information provided on this website.'
   );
   legalSection(wrap, 'No Guarantee of Test Success',
-    'Practice questions and study guides on CitizenReady are designed to supplement your preparation but do not guarantee a passing score on the Canadian Citizenship Test. Test results depend on individual preparation, circumstances, and the discretion of IRCC.'
+    'Practice questions and study guides on MyCitizenJourney are designed to supplement your preparation but do not guarantee a passing score on the Canadian Citizenship Test. Test results depend on individual preparation, circumstances, and the discretion of IRCC.'
   );
   legalSection(wrap, 'External Links',
-    'CitizenReady may contain links to external websites for reference or additional information. We are not responsible for the content, accuracy, or privacy practices of those external sites. The inclusion of any link does not imply our endorsement of that site.'
+    'MyCitizenJourney may contain links to external websites for reference or additional information. We are not responsible for the content, accuracy, or privacy practices of those external sites. The inclusion of any link does not imply our endorsement of that site.'
   );
   legalSection(wrap, 'Limitation of Liability',
-    'To the fullest extent permitted by applicable law, CitizenReady and its operators shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising out of your use of, or inability to use, this website or its content.'
+    'To the fullest extent permitted by applicable law, MyCitizenJourney and its operators shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising out of your use of, or inability to use, this website or its content.'
   );
   return wrap;
 }
@@ -1513,28 +1512,28 @@ function renderDisclaimer() {
 function renderTerms() {
   const wrap = legalWrap('Terms and Conditions','Last updated: January 1, 2026. Please read these terms carefully.');
   legalSection(wrap, 'Acceptance of Terms',
-    'By accessing and using CitizenReady ("the Site"), you accept and agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree to these terms, please do not use the Site.'
+    'By accessing and using MyCitizenJourney ("the Site"), you accept and agree to be bound by these Terms and Conditions and our Privacy Policy. If you do not agree to these terms, please do not use the Site.'
   );
   legalSection(wrap, 'Use of the Site',
-    'CitizenReady grants you a limited, non-exclusive, non-transferable, revocable licence to access and use the Site for personal, non-commercial educational purposes only.',
-    'You agree not to: reproduce, distribute, or republish content from CitizenReady without prior written permission; use the Site for any unlawful purpose; attempt to gain unauthorized access to any part of the Site or its systems; use automated tools (bots, scrapers, crawlers) to extract content from the Site; or interfere with the operation or security of the Site.'
+    'MyCitizenJourney grants you a limited, non-exclusive, non-transferable, revocable licence to access and use the Site for personal, non-commercial educational purposes only.',
+    'You agree not to: reproduce, distribute, or republish content from MyCitizenJourney without prior written permission; use the Site for any unlawful purpose; attempt to gain unauthorized access to any part of the Site or its systems; use automated tools (bots, scrapers, crawlers) to extract content from the Site; or interfere with the operation or security of the Site.'
   );
   legalSection(wrap, 'Intellectual Property',
-    'All original content on CitizenReady — including but not limited to text, design, layout, and code — is the intellectual property of CitizenReady and is protected by applicable copyright laws.',
-    'Content derived from the official Discover Canada guide published by IRCC is used for educational purposes. CitizenReady does not claim ownership over government-produced materials.'
+    'All original content on MyCitizenJourney — including but not limited to text, design, layout, and code — is the intellectual property of MyCitizenJourney and is protected by applicable copyright laws.',
+    'Content derived from the official Discover Canada guide published by IRCC is used for educational purposes. MyCitizenJourney does not claim ownership over government-produced materials.'
   );
   legalSection(wrap, 'User Conduct',
-    'You are responsible for your own use of the Site. You agree to use CitizenReady only in a manner consistent with all applicable local, provincial, and federal laws and regulations.'
+    'You are responsible for your own use of the Site. You agree to use MyCitizenJourney only in a manner consistent with all applicable local, provincial, and federal laws and regulations.'
   );
   legalSection(wrap, 'Advertising',
-    'CitizenReady displays advertisements served by third-party advertising networks, including Google AdSense. These advertisers may use cookies and similar technologies to serve relevant ads. CitizenReady is not responsible for the content of third-party advertisements and does not endorse advertised products or services.',
+    'MyCitizenJourney displays advertisements served by third-party advertising networks, including Google AdSense. These advertisers may use cookies and similar technologies to serve relevant ads. MyCitizenJourney is not responsible for the content of third-party advertisements and does not endorse advertised products or services.',
     'By using the Site, you acknowledge and consent to the use of advertising as described in our Privacy Policy.'
   );
   legalSection(wrap, 'Disclaimer of Warranties',
-    'CitizenReady is provided "as is" and "as available" without warranties of any kind, either express or implied. We do not warrant that the Site will be uninterrupted, error-free, or free of viruses or harmful components. We make no warranty regarding the accuracy, completeness, or suitability of any content for any particular purpose.'
+    'MyCitizenJourney is provided "as is" and "as available" without warranties of any kind, either express or implied. We do not warrant that the Site will be uninterrupted, error-free, or free of viruses or harmful components. We make no warranty regarding the accuracy, completeness, or suitability of any content for any particular purpose.'
   );
   legalSection(wrap, 'Limitation of Liability',
-    'To the maximum extent permitted by law, CitizenReady and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of data, revenue, or goodwill, arising out of or related to your use of the Site, even if advised of the possibility of such damages.'
+    'To the maximum extent permitted by law, MyCitizenJourney and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of data, revenue, or goodwill, arising out of or related to your use of the Site, even if advised of the possibility of such damages.'
   );
   legalSection(wrap, 'Modifications to the Site and Terms',
     'We reserve the right to modify or discontinue the Site at any time without notice. We may also update these Terms and Conditions periodically. Continued use of the Site after changes are posted constitutes your acceptance of the revised terms.'
