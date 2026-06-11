@@ -605,15 +605,21 @@ function mapleLeaf(size=24,color=C.red,spin=false){
 }
 
 // ─── APP STATE ────────────────────────────────────────────────────────────────
-let currentPage = 'home';
+let currentPage = location.hash ? location.hash.slice(1) : 'home';
 let quizState = null;
 let lang = 'en';
 
 function setPage(page) {
   currentPage = page;
+  location.hash = page;
   window.scrollTo({top:0,behavior:'smooth'});
   render();
 }
+
+window.addEventListener('hashchange', () => {
+  currentPage = location.hash ? location.hash.slice(1) : 'home';
+  render();
+});
 
 function setLang(l) {
   lang = l;
@@ -988,7 +994,7 @@ function renderGuide2026() {
       {text:'You can take the oath: In-person at a citizenship ceremony, Virtually (in some circumstances)'},
       {text:'After the ceremony: You receive your Certificate of Canadian Citizenship, You\'re eligible to apply for a Canadian passport, You have full rights and responsibilities as a Canadian citizen'},
       {text:'Apply for your Canadian passport:',link:{label:'Canadian Passport Services',url:'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports.html'}},
-      {text:'🍁 Congratulations — you are now a Canadian citizen!',bold:true},
+      {text:'🍁 Congratulations — you are now a Canadian citizen!',bold:true,celebrate:true},
     ]},
   ];
   const wrap=el('div',{style:{maxWidth:860,margin:'0 auto',padding:'32px 16px'}});
@@ -1027,6 +1033,20 @@ function renderGuide2026() {
         fontStyle:(!isStr&&item.italic)?'italic':'normal',
       }},text);
       content.appendChild(p);
+      if(!isStr&&item.celebrate){
+        const cel=el('div',{style:{textAlign:'center',padding:'32px 16px 16px',borderTop:'1px solid '+C.greyLight,marginTop:8}});
+        const img=el('img',{style:{width:140,height:'auto',marginBottom:16,display:'block',margin:'0 auto 16px'}});
+        img.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/24701-nature-natural-beauty.jpg/800px-24701-nature-natural-beauty.jpg';
+        img.onerror=function(){this.style.display='none';};
+        // Use an emoji maple leaf as fallback that looks great
+        const leafEl=el('div',{style:{fontSize:100,lineHeight:1,marginBottom:8}});
+        leafEl.textContent='🍁';
+        cel.appendChild(leafEl);
+        cel.appendChild(el('h2',{style:{fontFamily:"'Playfair Display',serif",fontSize:36,color:C.red,fontWeight:900,margin:'8px 0 4px',lineHeight:1.2}},'Congratulations'));
+        cel.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",fontSize:26,color:'#111',fontWeight:700,margin:'0 0 8px',lineHeight:1.3}},'you are now a Canadian citizen!'));
+        body.appendChild(cel);
+        return;
+      }
       if(!isStr&&item.note){
         content.appendChild(el('p',{style:{color:C.grey,fontSize:12,fontStyle:'italic',margin:'2px 0 0'}},'→ '+item.note));
       }
