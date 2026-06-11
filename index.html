@@ -922,13 +922,74 @@ function renderHome() {
 // ─── 2026 GUIDE ──────────────────────────────────────────────────────────────
 function renderGuide2026() {
   const steps=[
-    {n:'1',title:'Check Your Eligibility',icon:'✅',items:['You must be a permanent resident (PR) of Canada','You must have been physically present in Canada for at least 1,095 days (3 years) in the last 5 years','You must have filed income taxes for at least 3 years in the last 5 years (if required)','You must be 18 or older to apply on your own (minors can be included in a parent\'s application)','You must not be prohibited from applying due to criminal history or immigration violations']},
-    {n:'2',title:'Gather Documents',icon:'📄',items:['Valid passport and travel history documents (all passports from last 5 years)','PR card (both sides)','Travel history outside Canada for the last 5 years','Tax filing documents from the CRA','Two passport-quality photos','If applicable: legal name change documents, court records, police certificates']},
-    {n:'3',title:'Complete the Application',icon:'📝',items:['Apply online through the IRCC (Immigration, Refugees and Citizenship Canada) portal','Complete form CIT 0002 (Application for Canadian Citizenship) accurately','List all absences from Canada over the last 5 years with exact dates','Pay the application fee (as of 2026: $630 for adults; $100 for minors under 18)','Submit all required supporting documents digitally']},
-    {n:'4',title:'Biometrics & Processing',icon:'🔍',items:['You may be required to provide biometrics (fingerprints and photo) if not previously given','IRCC will acknowledge receipt of your application','Processing times vary — check the IRCC website for current estimates','You may receive requests for additional information','Keep your contact information updated with IRCC during this time']},
-    {n:'5',title:'Take the Citizenship Test',icon:'📋',items:['You\'ll be invited to a test centre (or online) to take the citizenship knowledge test','The test has 20 multiple-choice questions from the Discover Canada study guide','You need 15/20 (75%) to pass','The test covers: rights & responsibilities, history, government, geography, economy & symbols','You have 30 minutes to complete the test','If you\'re between 55–64, you may still be required to take the test; those 65+ are exempt']},
-    {n:'6',title:'Attend an Interview (if required)',icon:'🗣️',items:['Some applicants are called for an in-person interview with a citizenship officer','This can happen if your application raises questions, if you failed the test, or if you\'re in a specific age group','You may be asked about your background, travels, and knowledge of Canada','Bring all original documents requested in your interview letter','Dress appropriately and answer questions honestly']},
-    {n:'7',title:'Take the Oath of Citizenship',icon:'🍁',items:['If approved, you\'ll be invited to a citizenship ceremony','You\'ll take the Oath of Citizenship, pledging allegiance to Canada','Ceremonies may be in-person or virtual','You\'ll receive your Certificate of Canadian Citizenship','Congratulations — you are now a Canadian citizen!']},
+    {n:'1',title:'Check Your Eligibility',icon:'✅',items:[
+      'You must be a permanent resident (PR) of Canada',
+      'You must have been physically present in Canada for at least 1,095 days (3 years) in the last 5 years',
+      'You must have filed income taxes for at least 3 years in the last 5 years (if required)',
+      'You must be 18 or older to apply on your own (minors can be included in a parent\'s application)',
+      'You must not be prohibited from applying due to criminal history or immigration violations',
+    ]},
+    {n:'2',title:'Gather Your Documents',icon:'📄',intro:'Prepare these documents before applying online:',items:[
+      {text:'Valid PR card and PR status proof — Your Permanent Resident card (both sides)'},
+      {text:'Passport/travel documents — Valid passport for all countries where you held citizenship (covers last 5 years)'},
+      {text:'Travel history outside Canada — List of all countries visited during the last 5 years with dates',link:{label:"Use IRCC's Physical Presence Calculator tool",url:'https://eservices.canada.ca/en/rescalc/index.do'}},
+      {text:'Tax filing documents — Notice of Assessment from Canada Revenue Agency (CRA) for 3 years in the last 5 years',link:{label:'Obtain from: Canada Revenue Agency (CRA)',url:'https://www.canada.ca/en/revenue-agency.html'}},
+      {text:'Identification documents — Driver\'s licence, birth certificate, or other government-issued ID'},
+      {text:'Language proof (if required) — Official English or French language test results (CELPIP, IELTS, TEF, or DELF)',note:'Note: Ages 18–54 can satisfy this through the citizenship test instead'},
+      {text:'Passport photos — Must meet official photo specifications'},
+      {text:'Police certificate (if applicable) — Required if you have lived outside Canada for more than 6 months consecutively'},
+      {text:'✅ Important: All documents must be uploaded as PDF files (less than 4 MB each)',bold:true},
+    ]},
+    {n:'3',title:'Complete Your Application',icon:'📝',items:[
+      {text:'Apply online through IRCC:',link:{label:'Apply for Canadian Citizenship Online Portal',url:'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/become-canadian-citizen/apply.html'}},
+      {text:'You\'ll need a Sign-In Partner account or My IRCC Account (GCKey or Bank ID)'},
+      {text:'Complete Form CIT 0002: Application for Canadian Citizenship (Adults)',link:{label:'Download form: CIT 0002 on Canada.ca',url:'https://www.canada.ca/en/immigration-refugees-citizenship/services/application/application-forms-guides/guide-0400-application-canadian-citizenship-adults.html'}},
+      {text:'List all absences from Canada in the last 5 years with exact dates and reasons'},
+      {text:'Upload all required supporting documents in PDF format: Passport (all pages), PR card (both sides), Travel history documentation, Tax notices of assessment, Police certificate (if applicable), Language test results (if applicable), Passport photos'},
+      {text:'Pay the application fee (as of March 31, 2026):',fees:[
+        {color:'#c0392b',text:'Adults (18+): CAD$75 ($530 processing fee + $100 right of citizenship fee + $25 administrative fee)'},
+        {color:'#27ae60',text:'Minors (under 18): CAD$100 (processing fee only)'},
+      ]},
+      {text:'Note: The right-of-citizenship fee is refundable if your application is refused. Processing fee is non-refundable.',italic:true},
+      {text:'Payment methods: Credit card (Visa, Mastercard, American Express) only — accepted online'},
+      {text:'Submit your application online — You\'ll receive immediate confirmation'},
+      {text:'⏱ Processing Timeline: Standard processing is 12–18 months from acknowledgement of receipt to citizenship ceremony',italic:true},
+      {text:'For detailed step-by-step instructions:',link:{label:'How to apply for Canadian citizenship on Canada.ca',url:'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/become-canadian-citizen/apply.html'}},
+    ]},
+    {n:'4',title:'Biometrics & Background Processing',icon:'🔍',items:[
+      {text:'You may be required to provide biometrics (fingerprints and photo) if you haven\'t done so recently for another IRCC application. IRCC will notify you if this is required'},
+      {text:'IRCC will acknowledge receipt of your application within a few weeks'},
+      {text:'You will receive an Acknowledgement of Receipt (AOR) letter with your unique client identifier (UCI) for tracking'},
+      {text:'Background verification takes place — IRCC conducts: Criminal record checks, Security screening, Tax filing verification, Physical presence validation'},
+      {text:'Note: This is typically the longest stage and happens silently — you won\'t receive updates',italic:true},
+      {text:'Processing times vary —',link:{label:'Check current IRCC processing times',url:'https://www.canada.ca/en/immigration-refugees-citizenship/services/application/check-processing-times.html'}},
+      {text:'Keep your contact information updated with IRCC throughout processing'},
+    ]},
+    {n:'5',title:'Take the Citizenship Test',icon:'📋',intro:'Who takes the test? Applicants aged 18–54 must take the citizenship test. Those 55+ are exempt.',items:[
+      {text:'You\'ll receive an official invitation to take the test (typically 12–15 months after application). You cannot cancel. You can reschedule except in emergency situations with documentation'},
+      {text:'Test format and content: 20 multiple-choice questions, Pass mark: 15/20 (75%), Time allowed: 30 minutes, Language choice: English or French'},
+      {text:'Test covers: Canadian rights and responsibilities, History and heritage, Government and symbols, Geography and economy, Canadian values and multiculturalism'},
+      {text:'Official study materials:',link:{label:'"Discover Canada: The Rights and Responsibilities of Citizenship" (free from IRCC)',url:'https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/discover-canada.html'}},
+      {text:'Practice note: You\'re here! Use MyCitizenJourney\'s free practice questions and mock exams to prepare'},
+      {text:'Test location: At an IRCC office or approved testing centre (in-person or online options may be available). Note: Check with IRCC for current testing arrangements'},
+      {text:'Pro Tip: Start practicing now with our 220+ practice questions at no cost. Most successful applicants spend 2–4 weeks preparing',bold:true},
+    ]},
+    {n:'6',title:'Attend an Interview (if required)',icon:'🗣️',intro:'Not all applicants are called for an interview, but you should be prepared if IRCC requests one.',items:[
+      {text:'You may be required to meet with a citizenship officer if: Your application raises questions that need clarification, You failed the citizenship test (you may retake it), You belong to a specific age group (55+) assessed for knowledge of Canada, Verification of background information is needed'},
+      {text:'Interview location: In-person at an IRCC office or by video conference'},
+      {text:'What to expect: Questions about your background and travels, Questions testing your knowledge of Canada, Questions about your rights and responsibilities as a citizen, Language assessment (conversational English or French)'},
+      {text:'Bring all original documents referenced in your citizenship application'},
+      {text:'Dress appropriately and answer questions honestly'},
+      {text:'If you fail the test: You can retake it after 28 days. You have up to 4 attempts over a 3-year period',bold:true},
+    ]},
+    {n:'7',title:'Take the Oath of Citizenship',icon:'🎉',intro:'Final step! Congratulations — you\'re about to become a Canadian citizen.',items:[
+      {text:'You\'ll receive an official invitation to attend a citizenship ceremony. Ceremonies are held regularly at IRCC offices across Canada'},
+      {text:'The ceremony includes: Taking the Oath of Allegiance to Canada, Receiving your Certificate of Canadian Citizenship, Official recognition as a Canadian citizen, Often includes celebration with other new citizens'},
+      {text:'You can take the oath: In-person at a citizenship ceremony, Virtually (in some circumstances)'},
+      {text:'After the ceremony: You receive your Certificate of Canadian Citizenship, You\'re eligible to apply for a Canadian passport, You have full rights and responsibilities as a Canadian citizen'},
+      {text:'Apply for your Canadian passport:',link:{label:'Canadian Passport Services',url:'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports.html'}},
+      {text:'🍁 Congratulations — you are now a Canadian citizen!',bold:true},
+    ]},
   ];
   const wrap=el('div',{style:{maxWidth:860,margin:'0 auto',padding:'32px 16px'}});
   const hdr=el('div',{style:{textAlign:'center',marginBottom:32}});
@@ -948,19 +1009,165 @@ function renderGuide2026() {
     hd.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:18}},s.title));
     card.appendChild(hd);
     const body=el('div',{style:{padding:'16px 20px'}});
+    if(s.intro){
+      body.appendChild(el('p',{style:{color:C.navy,fontSize:14,fontWeight:600,marginBottom:12,fontStyle:'italic'}},s.intro));
+    }
     s.items.forEach(item=>{
-      const row=el('div',{style:{display:'flex',gap:10,marginBottom:8,alignItems:'flex-start'}});
+      const isStr=typeof item==='string';
+      const text=isStr?item:item.text;
+      const row=el('div',{style:{display:'flex',gap:10,marginBottom:10,alignItems:'flex-start'}});
       row.appendChild(el('div',{style:{color:C.red,fontWeight:700,fontSize:16,flexShrink:0,marginTop:1}},'•'));
-      row.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.65}},item));
+      const content=el('div',{style:{flex:1}});
+      const p=el('p',{style:{
+        color:C.navyMid,
+        fontSize:14,
+        lineHeight:1.65,
+        margin:0,
+        fontWeight:(!isStr&&item.bold)?700:400,
+        fontStyle:(!isStr&&item.italic)?'italic':'normal',
+      }},text);
+      content.appendChild(p);
+      if(!isStr&&item.note){
+        content.appendChild(el('p',{style:{color:C.grey,fontSize:12,fontStyle:'italic',margin:'2px 0 0'}},'→ '+item.note));
+      }
+      if(!isStr&&item.link){
+        const a=el('a',{style:{color:C.red,fontSize:13,fontWeight:600,textDecoration:'none',display:'block',marginTop:2}},item.link.label+' →');
+        a.href=item.link.url;
+        a.target='_blank';
+        a.rel='noopener noreferrer';
+        content.appendChild(a);
+      }
+      if(!isStr&&item.fees){
+        item.fees.forEach(fee=>{
+          const fb=el('div',{style:{display:'flex',gap:8,alignItems:'flex-start',marginTop:4}});
+          fb.appendChild(el('div',{style:{width:10,height:10,borderRadius:'50%',background:fee.color,flexShrink:0,marginTop:3}}));
+          fb.appendChild(el('p',{style:{color:C.navyMid,fontSize:13,margin:0,lineHeight:1.5}},fee.text));
+          content.appendChild(fb);
+        });
+      }
+      row.appendChild(content);
       body.appendChild(row);
     });
     card.appendChild(body);
+    if(i===0){
+      const learnMore=el('div',{style:{padding:'0 20px 16px'}});
+      const lmBtn=el('button',{style:{background:C.red,color:C.white,border:'none',padding:'10px 20px',borderRadius:8,fontSize:13,fontWeight:700,cursor:'pointer'},onClick:()=>setPage('checkEligibility')},'Learn More About Eligibility →');
+      learnMore.appendChild(lmBtn);
+      card.appendChild(learnMore);
+    }
     wrap.appendChild(card);
   });
   const cta=el('div',{style:{background:C.navy,borderRadius:14,padding:'24px',textAlign:'center',marginTop:8}});
   cta.appendChild(mapleLeaf(28,C.red));
   cta.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:22,margin:'12px 0 8px'}},'Ready to Practice?'));
   cta.appendChild(el('p',{style:{color:'rgba(255,255,255,0.7)',fontSize:14,marginBottom:16}},'The most important step: know your material.'));
+  const btn=el('button',{style:{background:C.red,color:C.white,border:'none',padding:'12px 28px',borderRadius:10,fontSize:15,fontWeight:700,cursor:'pointer'},onClick:()=>setPage('practice')},'Start Practice Test →');
+  cta.appendChild(btn);
+  wrap.appendChild(cta);
+  return wrap;
+}
+
+// ─── CHECK YOUR ELIGIBILITY ───────────────────────────────────────────────────
+function renderCheckEligibility() {
+  const wrap=el('div',{style:{maxWidth:860,margin:'0 auto',padding:'32px 16px'}});
+  // Header
+  const hdr=el('div',{style:{textAlign:'center',marginBottom:32}});
+  hdr.appendChild(el('div',{style:{fontSize:48,marginBottom:8}},'✅'));
+  hdr.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:36,color:C.navy,marginBottom:8}},'Check Your Eligibility'));
+  hdr.appendChild(el('p',{style:{color:C.grey,fontSize:16,maxWidth:620,margin:'0 auto'}},'Before applying for Canadian citizenship, make sure you meet all the requirements set by Immigration, Refugees and Citizenship Canada (IRCC).'));
+  wrap.appendChild(hdr);
+
+  // Quick checklist
+  const ql=el('div',{style:{background:'linear-gradient(135deg,'+C.navy+','+C.navyMid+')',borderRadius:14,padding:'20px 24px',marginBottom:24}});
+  ql.appendChild(el('h2',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:20,marginBottom:14}},'✅ Quick Eligibility Checklist'));
+  [
+    'You are a permanent resident (PR) of Canada',
+    'You have been physically present in Canada for at least 1,095 days (3 years) in the last 5 years',
+    'You have filed income taxes for at least 3 years in the last 5 years (if required by law)',
+    'You are 18 or older (minors can be included in a parent\'s application)',
+    'You are not prohibited from applying due to criminal history or immigration violations',
+    'You have adequate knowledge of English or French (ages 18–54)',
+    'You have knowledge of Canada\'s history, values, and institutions',
+  ].forEach(item=>{
+    const row=el('div',{style:{display:'flex',gap:10,marginBottom:8,alignItems:'flex-start'}});
+    row.appendChild(el('div',{style:{color:C.red,fontWeight:700,fontSize:16,flexShrink:0}},'•'));
+    row.appendChild(el('p',{style:{color:'rgba(255,255,255,0.9)',fontSize:14,lineHeight:1.65,margin:0}},item));
+    ql.appendChild(row);
+  });
+  wrap.appendChild(ql);
+
+  // Sections from document
+  const sections=[
+    {title:'Basic Eligibility Requirements',content:'To be eligible for Canadian citizenship, you must first be a permanent resident of Canada — this is non-negotiable. You cannot apply on a visitor visa, work permit, or study permit. You must also demonstrate intent to continue residing in Canada, with genuine ties such as employment, property ownership, family, or community involvement.'},
+    {title:'Physical Presence & Residency Requirements',content:'You must have been physically present in Canada for at least 1,095 days (3 years) within the five-year period immediately before applying. Days spent outside Canada count against your total. Timing your application strategically matters — the IRCC provides a calculator at ircc.canada.ca to help you track your eligible days. Only days as a permanent resident count; time on a study or work permit generally does not.'},
+    {title:'Age Requirements',content:'You must be 18 or older to apply on your own. Children under 18 can be included in a parent\'s application or may already be citizens if born in Canada. Special provisions exist for minors depending on their circumstances and when they became permanent residents.'},
+    {title:'Language Requirements',content:'You must demonstrate adequate knowledge of English or French. For applicants aged 18–54, this is assessed through the citizenship test itself. Applicants 55 or older are exempt from the language requirement. The test assesses functional communication — not native-speaker proficiency. You need to understand questions and communicate answers about Canadian civics.'},
+    {title:'Knowledge of Canada',content:'Applicants aged 18–54 must pass the citizenship test covering Canadian history, government, rights and responsibilities, geography, and symbols. The official study guide is "Discover Canada: The Rights and Responsibilities of Citizenship," available free at ircc.canada.ca. Applicants 55 or older demonstrate knowledge through a conversation with a citizenship official instead of a formal test.'},
+    {title:'Criminal Record & Security',content:'Serious crimes — particularly involving violence, human rights violations, or organized crime — can disqualify you. The IRCC conducts security checks as part of every application. If you have a criminal record, consult an immigration lawyer before applying. Routine security screening passes without issue for most applicants.'},
+    {title:'Outstanding Debts & Immigration Compliance',content:'You cannot have ignored outstanding debts to the Canadian government (unpaid taxes, immigration repayments, etc.). Having a payment plan in place is generally acceptable. You must also be in compliance with Canadian immigration law, including meeting your permanent resident obligations.'},
+  ];
+  sections.forEach(s=>{
+    const card=el('div',{style:{background:C.white,borderRadius:14,marginBottom:16,border:'1px solid '+C.greyLight,overflow:'hidden'}});
+    const hd=el('div',{style:{background:'linear-gradient(90deg,'+C.navy+','+C.navyMid+')',padding:'14px 20px'}});
+    hd.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:17,margin:0}},s.title));
+    card.appendChild(hd);
+    const body=el('div',{style:{padding:'16px 20px'}});
+    body.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.75,margin:0}},s.content));
+    card.appendChild(body);
+    wrap.appendChild(card);
+  });
+
+  // FAQ
+  const faqCard=el('div',{style:{background:C.white,borderRadius:14,marginBottom:16,border:'1px solid '+C.greyLight,overflow:'hidden'}});
+  const faqHd=el('div',{style:{background:'linear-gradient(90deg,'+C.navy+','+C.navyMid+')',padding:'14px 20px'}});
+  faqHd.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:17,margin:0}},'❓ Common Eligibility Questions'));
+  faqCard.appendChild(faqHd);
+  const faqBody=el('div',{style:{padding:'16px 20px'}});
+  [
+    {q:"Can I apply if I'm still working on my permanent residence?",a:"No. You must be a permanent resident before applying. Once you receive PR status, you can start counting days immediately."},
+    {q:"Does time as a temporary resident (student or worker) count?",a:"Generally no. Only days as a permanent resident count, though limited credit may apply in specific circumstances."},
+    {q:"I'm 60 years old — do I still need to take the citizenship test?",a:"If you're 55 or older, you don't need to take the test. You'll still demonstrate knowledge of Canada through your interview."},
+    {q:"What if I have a criminal record from my home country?",a:"Foreign convictions don't automatically disqualify you, but serious crimes may. Consult an immigration lawyer to review your specific situation."},
+    {q:"Can I keep my original citizenship if I become Canadian?",a:"Yes. Canada permits dual citizenship. However, your home country's laws vary — some don't allow dual citizenship."},
+  ].forEach(f=>{
+    const item=el('div',{style:{marginBottom:16,paddingBottom:16,borderBottom:'1px solid '+C.greyLight}});
+    item.appendChild(el('p',{style:{color:C.navy,fontSize:14,fontWeight:700,marginBottom:4}},f.q));
+    item.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.65,margin:0}},f.a));
+    faqBody.appendChild(item);
+  });
+  faqCard.appendChild(faqBody);
+  wrap.appendChild(faqCard);
+
+  // IRCC Links
+  const linksCard=el('div',{style:{background:C.white,borderRadius:14,marginBottom:24,border:'1px solid '+C.greyLight,overflow:'hidden'}});
+  const linksHd=el('div',{style:{background:'linear-gradient(90deg,'+C.navy+','+C.navyMid+')',padding:'14px 20px'}});
+  linksHd.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:17,margin:0}},'🔗 Official IRCC Government Links'));
+  linksCard.appendChild(linksHd);
+  const linksBody=el('div',{style:{padding:'16px 20px'}});
+  [
+    {label:'Check if you\'re eligible for citizenship',url:'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/become-canadian-citizen/eligibility.html'},
+    {label:'Apply for Canadian citizenship (adults)',url:'https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-citizenship/become-canadian-citizen/apply.html'},
+    {label:'Physical presence calculator',url:'https://eservices.canada.ca/en/rescalc/index.do'},
+    {label:'Citizenship test & study guide (Discover Canada)',url:'https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/discover-canada.html'},
+    {label:'Check application processing times',url:'https://www.canada.ca/en/immigration-refugees-citizenship/services/application/check-processing-times.html'},
+    {label:'IRCC official website',url:'https://www.canada.ca/en/immigration-refugees-citizenship.html'},
+  ].forEach(link=>{
+    const row=el('div',{style:{marginBottom:10}});
+    const a=el('a',{style:{color:C.red,fontSize:14,fontWeight:600,textDecoration:'none',display:'flex',alignItems:'center',gap:6}},link.label+' →');
+    a.href=link.url;
+    a.target='_blank';
+    a.rel='noopener noreferrer';
+    row.appendChild(a);
+    linksBody.appendChild(row);
+  });
+  linksCard.appendChild(linksBody);
+  wrap.appendChild(linksCard);
+
+  // CTA
+  const cta=el('div',{style:{background:C.navy,borderRadius:14,padding:'24px',textAlign:'center'}});
+  cta.appendChild(mapleLeaf(28,C.red));
+  cta.appendChild(el('h3',{style:{fontFamily:"'Playfair Display',serif",color:C.white,fontSize:22,margin:'12px 0 8px'}},'Ready to Start Preparing?'));
+  cta.appendChild(el('p',{style:{color:'rgba(255,255,255,0.7)',fontSize:14,marginBottom:16}},'Once you confirm your eligibility, start practicing for the citizenship test.'));
   const btn=el('button',{style:{background:C.red,color:C.white,border:'none',padding:'12px 28px',borderRadius:10,fontSize:15,fontWeight:700,cursor:'pointer'},onClick:()=>setPage('practice')},'Start Practice Test →');
   cta.appendChild(btn);
   wrap.appendChild(cta);
@@ -1918,6 +2125,7 @@ function render() {
   const pages={
     home:renderHome,
     guide2026:renderGuide2026,
+    checkEligibility:renderCheckEligibility,
     'how-to-pass':renderHowToPass,
     rights:renderRights,
     'government-explained':renderGovernment,
