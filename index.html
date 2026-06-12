@@ -1622,62 +1622,158 @@ function renderProvinces() {
 // ─── INTERVIEW PAGE ──────────────────────────────────────────────────────────
 function renderInterview() {
   const qas=[
-    {q:"Why do you want to become a Canadian citizen?",a:"I want to fully commit to Canada — to participate in democracy, vote in elections, and contribute to the country I call home. Citizenship means belonging and responsibility."},
-    {q:"Can you tell me about Canada's system of government?",a:"Canada is a constitutional monarchy, federal state, and parliamentary democracy. The King is Head of State, represented by the Governor General. The Prime Minister is Head of Government. Parliament includes the Senate and House of Commons."},
-    {q:"What are your responsibilities as a Canadian citizen?",a:"To obey the laws of Canada, pay taxes, vote in elections, serve on jury duty if called, respect the rights of others, and contribute to the community."},
-    {q:"When did Canada become a country?",a:"Canada became a country on July 1, 1867, through the British North America Act. This is celebrated as Canada Day."},
-    {q:"What is the Charter of Rights and Freedoms?",a:"The Canadian Charter of Rights and Freedoms is part of the Constitution Act, 1982. It guarantees fundamental freedoms, democratic rights, mobility rights, legal rights, equality rights, and language rights to all people in Canada."},
-    {q:"Who are Aboriginal peoples of Canada?",a:"The three main groups are First Nations, Métis, and Inuit. They are the original inhabitants of Canada and have unique cultures, histories, and rights recognized in the Constitution."},
-    {q:"What does the maple leaf on Canada's flag represent?",a:"The maple leaf is a symbol of Canada as a nation and has been associated with Canadian identity since the 1700s."},
-    {q:"What is the significance of November 11 in Canada?",a:"November 11 is Remembrance Day. Canadians wear poppies and observe a moment of silence at 11 a.m. to honour those who died in service to Canada, beginning with WWI."},
-    {q:"Name the three levels of government in Canada.",a:"Federal (national) government in Ottawa, provincial/territorial governments, and municipal (local) governments. Each has different responsibilities."},
-    {q:"What are the two official languages of Canada?",a:"English and French are Canada's two official languages, protected by the Official Languages Act and the Charter of Rights and Freedoms."},
-    {q:"How long did you need to live in Canada to apply for citizenship?",a:"You must have been physically present in Canada for at least 1,095 days (3 years) within the 5 years before applying."},
-    {q:"Have you been outside Canada? Tell me about your travels.",a:"Answer honestly and specifically. List the countries you visited, approximate dates, and the reason for each trip. Have your travel history prepared and consistent with your application."},
+    // Personal Commitment
+    {q:"Why do you want to become a Canadian citizen?",cat:"Personal",a:"I want to fully commit to Canada — to participate in democracy, vote in elections, and contribute to the country I call home. Citizenship means belonging and responsibility. It is the deepest way to show that Canada is not just where I live, but who I am."},
+    {q:"How long have you lived in Canada, and where have you lived?",cat:"Personal",a:"Be specific and honest. Mention your arrival date, every city or province you have lived in, and any extended absences. IRCC will cross-reference your answer with your travel history — inconsistencies can raise concerns."},
+    {q:"Have you been outside Canada? Tell me about your travels.",cat:"Personal",a:"Answer honestly and specifically. List the countries you visited, approximate dates, and the reason for each trip (vacation, work, family emergency, etc.). Keep a printed travel log ready and make sure it matches the days you reported on your application exactly."},
+    {q:"Do you have a criminal record in Canada or in any other country?",cat:"Personal",a:"Answer truthfully. If you have had any charges, convictions, or interactions with law enforcement — anywhere in the world — disclose them. IRCC can verify criminal history internationally. Failing to disclose is itself grounds for refusal."},
+    {q:"Are you currently employed or studying?",cat:"Personal",a:"Briefly describe your current occupation, employer or school, and how long you have been there. Officers ask this to confirm your ties to Canada and your integration into Canadian society."},
+    // Knowledge of Canada
+    {q:"Can you tell me about Canada's system of government?",cat:"Knowledge",a:"Canada is a constitutional monarchy, a federal state, and a parliamentary democracy. The King is Head of State, represented federally by the Governor General and provincially by Lieutenant Governors. The Prime Minister is Head of Government. Parliament is made up of the Senate and the elected House of Commons. Three levels of government — federal, provincial/territorial, and municipal — share different responsibilities."},
+    {q:"When did Canada become a country?",cat:"Knowledge",a:"Canada became a country on July 1, 1867, when the British North America Act united Ontario, Quebec, Nova Scotia, and New Brunswick into the Dominion of Canada. This date is now celebrated as Canada Day. Sir John A. Macdonald became the first Prime Minister."},
+    {q:"What is the Charter of Rights and Freedoms?",cat:"Knowledge",a:"The Canadian Charter of Rights and Freedoms is entrenched in the Constitution Act, 1982. It protects fundamental freedoms (such as freedom of expression and religion), democratic rights, mobility rights, legal rights (such as the presumption of innocence), equality rights, and official language rights. It applies to all government actions and cannot easily be changed."},
+    {q:"Who are the Aboriginal peoples of Canada?",cat:"Knowledge",a:"The three main groups are First Nations, Métis, and Inuit. They are the original inhabitants of Canada with distinct cultures, languages, and histories. Their rights — including treaty rights and land rights first recognized in the Royal Proclamation of 1763 — are protected in Section 35 of the Constitution Act, 1982."},
+    {q:"What are your responsibilities as a Canadian citizen?",cat:"Knowledge",a:"Citizens are responsible for: obeying Canadian law, paying taxes, voting in elections (federal, provincial, and municipal), serving on a jury if called, respecting the rights of others, protecting the environment, and taking responsibility for oneself and one's family. Rights and responsibilities go hand in hand in Canada."},
+    {q:"What are the two official languages of Canada?",cat:"Knowledge",a:"English and French are Canada's two official languages. They have equal status in Parliament, federal courts, and federal government services across the country. The Official Languages Act (1969) and the Charter of Rights and Freedoms both protect these rights. Francophone communities exist across Canada, not just in Quebec."},
+    {q:"What is the significance of November 11 in Canada?",cat:"Knowledge",a:"November 11 is Remembrance Day. It honours all Canadians who have served or died in military conflicts, from the First World War to present-day peacekeeping missions. At 11 a.m. — the 11th hour of the 11th day of the 11th month — Canadians observe a moment of silence. Wearing a red poppy is a tradition symbolizing the fallen, inspired by the poem 'In Flanders Fields.'"},
+    {q:"Name the three levels of government in Canada.",cat:"Knowledge",a:"1. Federal government (Ottawa) — responsible for national defence, foreign policy, criminal law, currency, immigration, and Indigenous affairs. 2. Provincial and territorial governments — responsible for health care, education, natural resources, highways, and civil law. 3. Municipal (local) governments — responsible for local services like roads, water, garbage collection, fire services, and zoning. Each level has its own elected representatives."},
+    {q:"What does the maple leaf on Canada's flag represent?",cat:"Knowledge",a:"The maple leaf has symbolized Canadian identity since the 1700s, when French Canadians adopted it. The current flag — a red maple leaf on a white square between two red bars — was raised for the first time on February 15, 1965. The red and white colours have been Canada's national colours since 1921, derived from the colours of France and England."},
+    {q:"Can you recite the first line of O Canada?",cat:"Knowledge",a:"'O Canada! Our home and native land!' — O Canada was proclaimed Canada's official national anthem on July 1, 1980, though it was first sung in Quebec City in 1880. You may be asked to sing or recite it, especially at the citizenship ceremony."},
+    {q:"What is the role of the Governor General?",cat:"Knowledge",a:"The Governor General represents the King in Canada at the federal level. Key duties include: granting Royal Assent to bills passed by Parliament (making them law), swearing in the Prime Minister and Cabinet, reading the Speech from the Throne, and dissolving Parliament before elections. The current Governor General is Mary Simon, appointed in 2021 — the first Indigenous person to hold the role."},
+    // Physical Presence
+    {q:"How long did you need to live in Canada to apply for citizenship?",cat:"Eligibility",a:"You must have been physically present in Canada for at least 1,095 days (3 years) within the 5 years immediately before signing your application. Days as a permanent resident count in full. Days spent in Canada as a temporary resident (student, worker, visitor) before becoming a PR count at half value, up to a maximum of 365 days."},
+    {q:"Did you file your taxes in Canada?",cat:"Eligibility",a:"Yes — applicants must have filed income taxes for at least 3 tax years within the 5 years before applying, if required to do so under the Income Tax Act. Even if you owed nothing, failing to file when required can make you ineligible. Have your Notice of Assessment ready."},
+    {q:"Have you ever been convicted of a crime or been charged with an offence?",cat:"Eligibility",a:"Disclose everything honestly — in Canada or abroad. Certain convictions (such as indictable offences) create a waiting period before you can apply, or may bar citizenship entirely. Misrepresenting your criminal history is a serious offence that can result in permanent inadmissibility."},
+    // What to Expect
+    {q:"What happens at a citizenship interview?",cat:"Process",a:"A citizenship officer will review your application, verify your identity, confirm your physical presence days, assess your language ability in English or French, and may test your knowledge of Canada. The interview usually lasts 20–40 minutes. Bring all original documents listed in your interview notice."},
+    {q:"What is the Oath of Citizenship and when do you take it?",cat:"Process",a:"The Oath of Citizenship is: 'I swear (or affirm) that I will be faithful and bear true allegiance to His Majesty King Charles the Third, King of Canada, His Heirs and Successors, and that I will faithfully observe the laws of Canada and fulfil my duties as a Canadian citizen.' You take the Oath at a citizenship ceremony — the final and official step to becoming Canadian."},
   ];
+
+  const CATEGORIES = ["Personal","Knowledge","Eligibility","Process"];
+  const CAT_COLORS = {Personal:C.navy, Knowledge:C.red, Eligibility:C.green, Process:C.gold};
   let openIndex=null;
+  let activeCategory="All";
+
   const wrap=el('div',{style:{maxWidth:860,margin:'0 auto',padding:'32px 16px'}});
+
+  // Header
   const hdr=el('div',{style:{textAlign:'center',marginBottom:32}});
   hdr.appendChild(el('div',{style:{fontSize:44,marginBottom:8}},'🗣️'));
   hdr.appendChild(el('h1',{style:{fontFamily:"'Playfair Display',serif",fontSize:36,color:C.navy,marginBottom:8}},'Citizenship Interview Prep'));
   hdr.appendChild(el('p',{style:{color:C.grey,fontSize:16}},'Practice your answers to common questions asked at the citizenship interview.'));
   wrap.appendChild(hdr);
+
+  // Who gets an interview info box
   const info=el('div',{style:{background:'linear-gradient(90deg,'+C.navy+','+C.navyMid+')',borderRadius:12,padding:'16px 20px',marginBottom:20}});
-  info.appendChild(el('p',{style:{color:C.white,fontSize:14,lineHeight:1.7},html:"<strong style='color:"+C.red+"'>Who gets an interview?</strong> Not everyone is called. IRCC may request an interview if they need to verify information, if you failed the test, or for applicants in certain age groups. Always bring your original documents."}));
+  info.appendChild(el('p',{style:{color:C.white,fontSize:14,lineHeight:1.7},html:"<strong style='color:"+C.red+"'>Who gets an interview?</strong> Not everyone is called. IRCC may request an interview if they need to verify information in your application, if you failed the citizenship test twice, or if you are in a special age group (under 18 or 55+). You will receive a written notice with the date, time, and list of documents to bring. Always bring originals."}));
   wrap.appendChild(info);
+
+  // What to Bring box
+  const bringBox=el('div',{style:{background:C.white,borderRadius:12,padding:'16px 20px',marginBottom:20,border:'2px solid '+C.greyLight}});
+  const bringTitle=el('div',{style:{display:'flex',alignItems:'center',gap:10,marginBottom:12}});
+  bringTitle.appendChild(el('span',{style:{fontSize:22}},'📂'));
+  bringTitle.appendChild(el('strong',{style:{color:C.navy,fontSize:15}},'What to Bring to Your Interview'));
+  bringBox.appendChild(bringTitle);
+  const bringGrid=el('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'6px 20px'}});
+  ["Valid passport(s) — all passports held in the past 5 years","Permanent Resident card (original)","Interview notice letter from IRCC","Proof of physical presence (travel log, employment records, lease agreements)","Tax Notices of Assessment for the required years","Two pieces of photo ID","Any name change documents (marriage certificate, court order)","Language proficiency documents, if applicable","Any other documents specifically requested in your interview notice"].forEach(doc=>{
+    const row=el('div',{style:{display:'flex',gap:8,alignItems:'flex-start',padding:'4px 0'}});
+    row.appendChild(el('span',{style:{color:C.green,fontWeight:700,flexShrink:0,marginTop:1}},'✓'));
+    row.appendChild(el('span',{style:{color:C.navyMid,fontSize:13,lineHeight:1.5}},doc));
+    bringGrid.appendChild(row);
+  });
+  bringBox.appendChild(bringGrid);
+  wrap.appendChild(bringBox);
+
+  // Category filter
+  const filterRow=el('div',{style:{display:'flex',flexWrap:'wrap',gap:8,marginBottom:16}});
+  const allBtn=el('button',{style:{padding:'6px 16px',borderRadius:20,border:'2px solid '+C.navy,background:activeCategory==='All'?C.navy:'transparent',color:activeCategory==='All'?C.white:C.navy,fontWeight:600,fontSize:13,cursor:'pointer',fontFamily:'inherit'},onClick:()=>{activeCategory='All';openIndex=null;refreshFilter();}}, 'All ('+qas.length+')');
+  filterRow.appendChild(allBtn);
+  CATEGORIES.forEach(cat=>{
+    const count=qas.filter(q=>q.cat===cat).length;
+    const col=CAT_COLORS[cat]||C.navy;
+    const btn=el('button',{style:{padding:'6px 16px',borderRadius:20,border:'2px solid '+col,background:activeCategory===cat?col:'transparent',color:activeCategory===cat?C.white:col,fontWeight:600,fontSize:13,cursor:'pointer',fontFamily:'inherit'},onClick:()=>{activeCategory=cat;openIndex=null;refreshFilter();}},cat+' ('+count+')');
+    filterRow.appendChild(btn);
+  });
+  wrap.appendChild(filterRow);
+
   const list=el('div');
+  function refreshFilter(){
+    // rebuild filter buttons
+    filterRow.innerHTML='';
+    const ab=el('button',{style:{padding:'6px 16px',borderRadius:20,border:'2px solid '+C.navy,background:activeCategory==='All'?C.navy:'transparent',color:activeCategory==='All'?C.white:C.navy,fontWeight:600,fontSize:13,cursor:'pointer',fontFamily:'inherit'},onClick:()=>{activeCategory='All';openIndex=null;refreshFilter();}}, 'All ('+qas.length+')');
+    filterRow.appendChild(ab);
+    CATEGORIES.forEach(cat=>{
+      const count=qas.filter(q=>q.cat===cat).length;
+      const col=CAT_COLORS[cat]||C.navy;
+      const btn=el('button',{style:{padding:'6px 16px',borderRadius:20,border:'2px solid '+col,background:activeCategory===cat?col:'transparent',color:activeCategory===cat?C.white:col,fontWeight:600,fontSize:13,cursor:'pointer',fontFamily:'inherit'},onClick:()=>{activeCategory=cat;openIndex=null;refreshFilter();}},cat+' ('+count+')');
+      filterRow.appendChild(btn);
+    });
+    renderList();
+  }
   function renderList(){
     list.innerHTML='';
-    qas.forEach((item,i)=>{
+    const filtered=activeCategory==='All'?qas:qas.filter(q=>q.cat===activeCategory);
+    filtered.forEach((item,i)=>{
+      const col=CAT_COLORS[item.cat]||C.red;
       const card=el('div',{style:{background:C.white,borderRadius:12,marginBottom:10,border:'1px solid '+C.greyLight,overflow:'hidden'}});
       const hd=el('div',{style:{padding:'14px 20px',display:'flex',alignItems:'center',gap:12,cursor:'pointer'},onClick:()=>{openIndex=openIndex===i?null:i;renderList();}});
-      const num=el('div',{style:{background:C.red,color:C.white,borderRadius:'50%',width:26,height:26,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:13,flexShrink:0}},(i+1)+'');
+      const num=el('div',{style:{background:col,color:C.white,borderRadius:'50%',width:26,height:26,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:13,flexShrink:0}},(i+1)+'');
       hd.appendChild(num);
-      hd.appendChild(el('p',{style:{color:C.navy,fontSize:15,fontWeight:600,flex:1,lineHeight:1.4}},item.q));
+      const textCol=el('div',{style:{flex:1}});
+      textCol.appendChild(el('p',{style:{color:C.navy,fontSize:15,fontWeight:600,lineHeight:1.4,marginBottom:2}},item.q));
+      textCol.appendChild(el('span',{style:{fontSize:11,fontWeight:700,color:col,background:col+'18',borderRadius:10,padding:'2px 8px'}},item.cat));
+      hd.appendChild(textCol);
       hd.appendChild(el('span',{style:{color:C.grey,fontSize:18,flexShrink:0}},openIndex===i?'−':'+'));
       card.appendChild(hd);
       if(openIndex===i){
-        const body=el('div',{class:'fade-up',style:{padding:'4px 20px 16px 58px',borderTop:'1px solid '+C.greyLight}});
-        const row=el('div',{style:{display:'flex',gap:10,alignItems:'flex-start'}});
+        const body=el('div',{class:'fade-up',style:{padding:'4px 20px 16px 20px',borderTop:'1px solid '+C.greyLight}});
+        const row=el('div',{style:{display:'flex',gap:10,alignItems:'flex-start',background:C.greenLight,borderRadius:10,padding:'12px 14px'}});
         const icon=el('div',{style:{background:C.green,color:C.white,borderRadius:'50%',width:26,height:26,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:13,flexShrink:0,marginTop:2}},'A');
         row.appendChild(icon);
-        row.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.7}},item.a));
+        row.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.8}},item.a));
         body.appendChild(row);
         card.appendChild(body);
       }
       list.appendChild(card);
     });
+    if(filtered.length===0){
+      list.appendChild(el('p',{style:{color:C.grey,textAlign:'center',padding:24}},'No questions in this category.'));
+    }
   }
   renderList();
   wrap.appendChild(list);
-  const tips=el('div',{style:{background:C.redLight,borderRadius:12,padding:'16px 20px',marginTop:16,border:'1px solid rgba(213,43,30,0.15)'}});
-  tips.appendChild(el('strong',{style:{color:C.red}},'💡 Interview Tips:'));
-  const ul=el('ul',{style:{marginTop:8,paddingLeft:18}});
-  ["Answer questions honestly and directly — don't over-explain","Bring originals of all documents listed in your interview letter","It's okay to say 'I don't understand the question' and ask for clarification","If asked about your physical presence, refer to your documented travel history"].forEach(item=>{
-    ul.appendChild(el('li',{style:{color:C.navyMid,fontSize:14,lineHeight:1.7,marginBottom:4}},item));
+
+  // Language Assessment note
+  const langBox=el('div',{style:{background:'linear-gradient(135deg,'+C.navyLight+','+C.navy+')',borderRadius:12,padding:'16px 20px',marginTop:16,marginBottom:16}});
+  langBox.appendChild(el('p',{style:{color:C.white,fontSize:14,lineHeight:1.7,marginBottom:0},html:"<strong style='color:#FFD580'>🗣️ Language Assessment:</strong> If you are between 18 and 54, the officer will assess your English or French during the interview. They look for your ability to understand questions and give clear answers — not perfect grammar. Speak confidently, ask for clarification if needed, and answer in full sentences. This is the same standard used on the citizenship test."}));
+  wrap.appendChild(langBox);
+
+  // Tips section
+  const tips=el('div',{style:{background:C.redLight,borderRadius:12,padding:'16px 20px',marginTop:4,border:'1px solid rgba(213,43,30,0.15)'}});
+  tips.appendChild(el('strong',{style:{color:C.red,fontSize:15}},'💡 Interview Tips'));
+  const ul=el('ul',{style:{marginTop:10,paddingLeft:18}});
+  [
+    "Answer questions honestly and directly — do not over-explain or volunteer unrelated information.",
+    "Bring originals of all documents listed in your interview letter plus extra copies.",
+    "It is perfectly okay to say 'I don't understand the question' and ask the officer to repeat or rephrase.",
+    "If asked about physical presence, refer to your documented travel history — do not guess dates.",
+    "Arrive 10–15 minutes early. Bring water and something to read while you wait.",
+    "Dress neatly and professionally — first impressions matter.",
+    "Review the Oath of Citizenship so you can read it confidently at your ceremony.",
+    "Know your application number and the date you submitted your application.",
+    "If the interview is conducted via phone or video, ensure you are in a quiet, private space with good connection.",
+  ].forEach(item=>{
+    ul.appendChild(el('li',{style:{color:C.navyMid,fontSize:14,lineHeight:1.7,marginBottom:6}},item));
   });
   tips.appendChild(ul);
   wrap.appendChild(tips);
+
+  // CTA
+  const cta=el('div',{style:{background:C.navy,borderRadius:12,padding:'20px',textAlign:'center',marginTop:16}});
+  cta.appendChild(el('p',{style:{color:C.white,fontSize:14,lineHeight:1.7,marginBottom:14},html:"<strong>Ready to test your knowledge?</strong> Try our 226 practice questions to prepare for both the test and the interview."}));
+  cta.appendChild(el('button',{style:{background:C.red,color:C.white,border:'none',padding:'12px 24px',borderRadius:10,fontSize:15,fontWeight:700,cursor:'pointer'},onClick:()=>setPage('practice')},'Practice Questions →'));
+  wrap.appendChild(cta);
+
   return wrap;
 }
 
