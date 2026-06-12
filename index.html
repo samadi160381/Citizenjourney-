@@ -1291,7 +1291,6 @@ function renderRights() {
 }
 
 function renderAccordionPage(title, icon, subtitle, sections, introText) {
-  let openIndex=null;
   const wrap=el('div',{style:{maxWidth:860,margin:'0 auto',padding:'32px 16px'}});
   const hdr=el('div',{style:{textAlign:'center',marginBottom:32}});
   hdr.appendChild(el('div',{style:{fontSize:44,marginBottom:8}},icon));
@@ -1305,28 +1304,49 @@ function renderAccordionPage(title, icon, subtitle, sections, introText) {
   }
   sections.forEach((sec,i)=>{
     const card=el('div',{style:{background:C.white,borderRadius:14,marginBottom:12,border:'1px solid '+C.greyLight,overflow:'hidden'}});
-    const header=el('div',{style:{padding:'16px 20px',display:'flex',alignItems:'center',gap:12,cursor:'pointer',background:openIndex===i?(sec.color||C.navy):C.white}});
-    header.appendChild(el('span',{style:{fontSize:22}},sec.icon||''));
-    header.appendChild(el('span',{style:{fontFamily:"'Playfair Display',serif",fontSize:18,fontWeight:700,flex:1,color:openIndex===i?C.white:C.navy}},sec.title));
-    header.appendChild(el('span',{style:{color:openIndex===i?C.white:C.grey,fontSize:20}},openIndex===i?'−':'+'));
-    let body=null;
-    header.addEventListener('click',()=>{
-      openIndex=openIndex===i?null:i;
-      render();
+    const header=el('div',{style:{padding:'16px 20px',display:'flex',alignItems:'center',gap:12,cursor:'pointer',background:C.white}});
+    const iconSpan=el('span',{style:{fontSize:22}},sec.icon||'');
+    const titleSpan=el('span',{style:{fontFamily:"'Playfair Display',serif",fontSize:18,fontWeight:700,flex:1,color:C.navy}},sec.title);
+    const toggle=el('span',{style:{color:C.grey,fontSize:20}},'+');
+    header.appendChild(iconSpan);
+    header.appendChild(titleSpan);
+    header.appendChild(toggle);
+
+    // Build body immediately but hidden
+    const body=el('div',{style:{padding:'0 20px',maxHeight:'0',overflow:'hidden',transition:'max-height 0.4s ease, padding 0.3s ease'}});
+    const inner=el('div',{style:{paddingTop:'16px',paddingBottom:'16px'}});
+    (sec.content||sec.items||[]).forEach((item,j)=>{
+      const itemDiv=el('div',{style:{marginBottom:14,paddingBottom:14,borderBottom:j<(sec.content||sec.items).length-1?'1px solid '+C.greyLight:'none'}});
+      if(item.h)itemDiv.appendChild(el('h4',{style:{color:sec.color||C.red,fontSize:14,fontWeight:700,marginBottom:4}},item.h));
+      if(item.b)itemDiv.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.65}},item.b));
+      if(typeof item==='string')itemDiv.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.65}},item));
+      inner.appendChild(itemDiv);
     });
+    if(sec.content_text)inner.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.7}},sec.content_text));
+    body.appendChild(inner);
+
+    let isOpen=false;
+    header.addEventListener('click',()=>{
+      isOpen=!isOpen;
+      if(isOpen){
+        body.style.maxHeight=body.scrollHeight+2000+'px';
+        body.style.paddingTop='0';
+        header.style.background=sec.color||C.navy;
+        titleSpan.style.color=C.white;
+        iconSpan.style.color=C.white;
+        toggle.textContent='−';
+        toggle.style.color=C.white;
+      } else {
+        body.style.maxHeight='0';
+        header.style.background=C.white;
+        titleSpan.style.color=C.navy;
+        toggle.textContent='+';
+        toggle.style.color=C.grey;
+      }
+    });
+
     card.appendChild(header);
-    if(openIndex===i){
-      body=el('div',{class:'fade-up',style:{padding:'16px 20px'}});
-      (sec.content||sec.items||[]).forEach((item,j)=>{
-        const itemDiv=el('div',{style:{marginBottom:14,paddingBottom:14,borderBottom:j<(sec.content||sec.items).length-1?'1px solid '+C.greyLight:'none'}});
-        if(item.h)itemDiv.appendChild(el('h4',{style:{color:sec.color||C.red,fontSize:14,fontWeight:700,marginBottom:4}},item.h));
-        if(item.b)itemDiv.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.65}},item.b));
-        if(typeof item==='string')itemDiv.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.65}},item));
-        body.appendChild(itemDiv);
-      });
-      if(sec.content_text)body.appendChild(el('p',{style:{color:C.navyMid,fontSize:14,lineHeight:1.7}},sec.content_text));
-      card.appendChild(body);
-    }
+    card.appendChild(body);
     wrap.appendChild(card);
   });
   return wrap;
